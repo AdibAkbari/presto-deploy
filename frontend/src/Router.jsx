@@ -5,6 +5,7 @@ import Register from './page/Register';
 import Login from './page/Login';
 import Dashboard from './page/Dashboard';
 import Logout from './component/Logout';
+import NavBar from './component/NavBar';
 
 function App() {
 
@@ -28,14 +29,7 @@ function App() {
   return (
     <>
       <div>
-        {token ? (<> <Link to="/dashboard">Dashboard</Link></>
-        ) : (
-          <>
-            <Link to="/register">Register</Link>
-            &nbsp;|&nbsp;
-            <Link to="/login">Login</Link>
-          </>
-        )}
+      <NavBar token={token} setToken={setToken} />
       </div>
       <Routes>
         <Route path="/" element={<Navigate to="/register" />} />
@@ -43,12 +37,6 @@ function App() {
         <Route path="/register" element={<Register handleSuccess={handleNewToken} />} />
         <Route path="/login" element={<Login handleSuccess={handleNewToken} />} />
       </Routes>
-      {token && (
-        <>
-          <hr />
-          <Logout token={token} setToken={setToken} />
-        </>
-      )}
     </>
   )
 }

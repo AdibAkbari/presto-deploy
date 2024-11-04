@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Logout = ({token, setToken}) => {
   const navigate = useNavigate();
@@ -16,11 +18,19 @@ const Logout = ({token, setToken}) => {
         navigate('/login');
       })
       .catch((error) => {
-        alert(error.response.data.error);
+        console.log(error);
+        alert(error.message);
       });
   }
 
-  return <button onClick={logout}>Logout</button>;
+  return <Button
+            variant="outlined"
+            color="white"
+            startIcon={<LogoutIcon />}
+            onClick={logout}
+            >
+            Logout
+          </Button>;
 }
 
 export default Logout;
