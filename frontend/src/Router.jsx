@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Navigate, useLocation, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, Routes, Route, useNavigate } from 'react-router-dom';
 
 import Register from './page/Register';
 import Login from './page/Login';
 import Dashboard from './page/Dashboard';
-import Logout from './component/Logout';
 import NavBar from './component/NavBar';
 
 function App() {
@@ -25,11 +24,11 @@ function App() {
     } if (!token && !(['/login', '/register'].includes(location.pathname))) {
       navigate('/login');
     }
-  }, [token, location.pathname]);
+  }, [token, location.pathname, navigate]);
   return (
     <>
       <div>
-      <NavBar token={token} setToken={setToken} />
+        <NavBar token={token} setToken={setToken} />
       </div>
       <Routes>
         <Route path="/" element={<Navigate to="/register" />} />

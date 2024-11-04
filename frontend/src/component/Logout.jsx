@@ -24,13 +24,13 @@ const Logout = ({token, setToken}) => {
   }
 
   return <Button
-            variant="outlined"
-            color="white"
-            startIcon={<LogoutIcon />}
-            onClick={logout}
-            >
+    variant="outlined"
+    color="white"
+    startIcon={<LogoutIcon />}
+    onClick={logout}
+  >
             Logout
-          </Button>;
+  </Button>;
 }
 
 export default Logout;

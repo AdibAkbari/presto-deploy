@@ -66,21 +66,20 @@ function Login({handleSuccess}) {
           Login
         </Button>
         <Box textAlign='center'>
-        <Button
-          component={Link}
-          to="/register"
-          variant="contained"
-          color="secondary"
-          sx={{
-            width: "80%",
-            height: "50%"
-          }}
-        >
-        <Typography textTransform={'none'}>
-          Don't have an account? Register here
-        </Typography>
-
-        </Button>
+          <Button
+            component={Link}
+            to="/register"
+            variant="contained"
+            color="inherit"
+            sx={{
+              width: "80%",
+              height: "50%"
+            }}
+          >
+            <Typography textTransform={'none'} sx={{fontSize: '0.9rem'}}>
+              Don&apos;t have an account? Register here
+            </Typography>
+          </Button>
         </Box>
       </Box>
     </>
