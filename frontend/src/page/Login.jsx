@@ -1,11 +1,23 @@
 import { useState } from 'react';
+import axios from 'axios';
 
-function Login() {
+function Login({handleSuccess}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const login = () => {
     console.log('logging in:')
-  }
+    axios.post('http://localhost:5005/admin/auth/login', {
+      email: email,
+      password: password
+    })
+      .then((response) => {
+        handleSuccess(response.data.token);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error.response.data.error);
+      });
+    }
   return (
     <>
       <h2>Login</h2>

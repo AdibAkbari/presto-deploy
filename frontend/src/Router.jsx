@@ -41,7 +41,7 @@ function App() {
         <Route path="/" element={<Navigate to="/register" />} />
         <Route path="/dashboard" element={<Dashboard token={token} />} />
         <Route path="/register" element={<Register handleSuccess={handleNewToken} />} />
-        <Route path="/login" element={<Login token={token} handleSuccess={handleNewToken} />} />
+        <Route path="/login" element={<Login handleSuccess={handleNewToken} />} />
       </Routes>
       {token && (
         <>
