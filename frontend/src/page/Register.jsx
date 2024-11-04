@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import axios from 'axios';
 
-function Register() {
+function Register({handleSuccess}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -8,6 +9,17 @@ function Register() {
   const register = () => {
     console.log('registering:')
     console.log(email, password, name);
+    axios.post('http://localhost:5005/admin/auth/register', {
+      email: email,
+      password: password,
+      name: name,
+    })
+      .then((response) => {
+        handleSuccess(response.data.token);
+      })
+      .catch((error) => {
+        alert(error.response.data.error);
+      });
   }
 
   return (

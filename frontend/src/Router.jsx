@@ -25,7 +25,6 @@ function App() {
       navigate('/login');
     }
   }, [token, location.pathname]);
-  
   return (
     <>
       <div>
@@ -41,7 +40,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/register" />} />
         <Route path="/dashboard" element={<Dashboard token={token} />} />
-        <Route path="/register" element={<Register token={token} handleSuccess={handleNewToken} />} />
+        <Route path="/register" element={<Register handleSuccess={handleNewToken} />} />
         <Route path="/login" element={<Login token={token} handleSuccess={handleNewToken} />} />
       </Routes>
       {token && (
