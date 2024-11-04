@@ -28,14 +28,20 @@ function App() {
   return (
     <>
       <div>
-        {token ? (<> <Link to="/dashboard">Dashboard</Link></>
-        ) : (
-          <>
-            <Link to="/register">Register</Link>
-            &nbsp;|&nbsp;
-            <Link to="/login">Login</Link>
-          </>
-        )}
+        {token 
+          ? (
+            <> 
+              <Link to="/dashboard">Dashboard</Link>
+              &nbsp;|&nbsp;
+              <Logout token={token} setToken={setToken} />
+            </>
+          ) : (
+            <>
+              <Link to="/register">Register</Link>
+              &nbsp;|&nbsp;
+              <Link to="/login">Login</Link>
+            </>
+          )}
       </div>
       <Routes>
         <Route path="/" element={<Navigate to="/register" />} />
@@ -43,12 +49,6 @@ function App() {
         <Route path="/register" element={<Register handleSuccess={handleNewToken} />} />
         <Route path="/login" element={<Login handleSuccess={handleNewToken} />} />
       </Routes>
-      {token && (
-        <>
-          <hr />
-          <Logout token={token} setToken={setToken} />
-        </>
-      )}
     </>
   )
 }
