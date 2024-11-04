@@ -17,7 +17,7 @@ function Login({handleSuccess}) {
         console.log(error);
         alert(error.response.data.error);
       });
-    }
+  }
   return (
     <>
       <h2>Login</h2>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+
 const Logout = ({token, setToken}) => {
   const navigate = useNavigate();
 
@@ -10,14 +10,14 @@ const Logout = ({token, setToken}) => {
       {
         headers: { Authorization: `Bearer ${token}` }
       })
-        .then(() => {
-          localStorage.removeItem('token');
-          setToken(undefined);
-          navigate('/login');
-        })
-        .catch((error) => {
-          alert(error.response.data.error);
-        });
+      .then(() => {
+        localStorage.removeItem('token');
+        setToken(undefined);
+        navigate('/login');
+      })
+      .catch((error) => {
+        alert(error.response.data.error);
+      });
   }
 
   return <button onClick={logout}>Logout</button>;
