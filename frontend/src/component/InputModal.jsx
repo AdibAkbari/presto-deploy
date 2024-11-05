@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import {Box, Button, Typography, Modal, TextField } from '@mui/material';
-import CreateIcon from '@mui/icons-material/Create';
+import { useState, useEffect } from 'react';
+import { Box, Button, Typography, Modal, TextField } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -14,46 +13,49 @@ const style = {
   p: 4,
 };
 
-const InputModal = ({instruction, nameOfInput, token}) => {
-  const [open, setOpen] = useState(false);
-  const [presName, setPresName] = useState('');
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+const InputModal = ({ instruction, nameOfInput, onSubmit, open, onClose }) => {
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    if (!open) {
+      setInputValue(''); // Clear input when the modal is closed
+    }
+  }, [open]);
+
+  const handleCreate = () => {
+    if (inputValue.trim()) {
+      onSubmit(inputValue); // Trigger the parent’s submit function
+      onClose(); // Close the modal
+    }
+  };
 
   return (
-    <div>
-      <Button onClick={handleOpen} variant="contained" sx={{position: "fixed", bottom: "12px", right: "12px"}} endIcon={<CreateIcon/>}>
-        New Presentation
-      </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="subtitle1">
-            {instruction}
-          </Typography>
-          <TextField
-            label={nameOfInput}
-            type="text"
-            variant="outlined"
-            value={presName}
-            onChange={(e) => setPresName(e.target.value)}
-            fullWidth
-          />
-          <br/>
-          <br/>
-          <Box sx={{display: "flex", justifyContent: "right"}}>
-            <Button variant="contained" onClick={() => console.log('Presentation is created.')}>
-              Create
-            </Button>
-          </Box>
+    <Modal
+      open={open}
+      onClose={onClose}
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
+    >
+      <Box sx={style}>
+        <Typography id="modal-title" variant="subtitle1">
+          {instruction}
+        </Typography>
+        <TextField
+          label={nameOfInput}
+          type="text"
+          variant="outlined"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          fullWidth
+        />
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+          <Button variant="contained" onClick={handleCreate}>
+            Create
+          </Button>
         </Box>
-      </Modal>
-    </div>
+      </Box>
+    </Modal>
   );
-}
+};
 
 export default InputModal;
