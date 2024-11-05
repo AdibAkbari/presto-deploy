@@ -1,6 +1,12 @@
-const Dashboard = function () {
+import InputModal from '../component/InputModal.jsx';
+
+function Dashboard({token}) {
   return <>
-    ALL YOUR STUFF!<br />
+    <InputModal
+      instruction={'Enter the name for your presentation'}
+      nameOfInput={'Presentation Name'}
+      token={token}
+    />
   </>;
 };
 
