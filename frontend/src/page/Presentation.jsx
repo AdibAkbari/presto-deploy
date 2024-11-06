@@ -10,6 +10,7 @@ function Presentation({ token }) {
   const { presentationId } = useParams();
   const [presentation, setPresentation] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Controls the Edit PopupModal
+  const [isUpdateThumbnailOpen, setIsUpdateThumbnailOpen] = useState(false); // Controls the Update Thumbnail PopupModal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Controls the Delete Thumbnail PopupModal
   const [presentations, setPresentations] = useState([]);
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ function Presentation({ token }) {
   };
 
   const updateThumbnail = (newThumbnail) => {
+    console.log(newThumbnail);
     const currentPresentations = [...presentations];
     const presentationToEdit = currentPresentations.find(p => p.presentationId === presentationId);
     presentationToEdit.thumbnail = newThumbnail;
@@ -117,8 +119,23 @@ function Presentation({ token }) {
             onSubmit={editPresentationTitle}
             confirmMsg={"Edit"}
           />
+        <Button
+          onClick={() => setIsUpdateThumbnailOpen(true)}
+          variant="contained"
+          color="secondary"
+          endIcon={<EditIcon/>}
+        >
+          Update Thumbnail
+        </Button>
+        <PopupModal
+          open={isUpdateThumbnailOpen}
+          onClose={() => setIsUpdateThumbnailOpen(false)}
+          instruction="Put the URL of the image"
+          nameOfInput="Thumbnail"
+          onSubmit={updateThumbnail}
+          confirmMsg={"Update"}
+        />
         </Box>
-
         <Button
           variant="contained"
           color="error"

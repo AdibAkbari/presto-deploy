@@ -1,7 +1,7 @@
 // Dashboard.jsx
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Typography, Card, CardContent, Box, Button } from '@mui/material';
+import { Typography, Card, CardContent, Box, Button, CardMedia } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid2';
 import PopupModal from '../component/PopupModal';
@@ -63,7 +63,7 @@ function Dashboard({ token }) {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={4} sx={{ mt: 3 }}>
           {presentations.map(presentation => (
-            <Grid 
+            <Grid
               item = "true"
               size={{xs: 12, sm: 6, md:4}} 
               key={presentation.presentationId}
@@ -75,7 +75,12 @@ function Dashboard({ token }) {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: presentation.thumbnail || 'grey' }}
+                  backgroundColor: 'grey',
+                  backgroundImage:`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${presentation.thumbnail})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                  color: 'white'
+                }}
               >
                 <CardContent>
                   <Typography variant="h6">{presentation.title}</Typography>
