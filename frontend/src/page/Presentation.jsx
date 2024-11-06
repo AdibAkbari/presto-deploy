@@ -17,21 +17,29 @@ function Presentation({ token }) {
 
   // Function to handle editing the title of a presentation
   const editPresentationTitle = (newTitle) => {
-    const currentPresentations = [...presentations];
-    const presentationToEdit = currentPresentations.find(p => p.presentationId === presentationId);
-    presentationToEdit.title = newTitle;
-    setPresentations(currentPresentations);
-    savePresentationsToStore(currentPresentations);
+    if (presentation) {
+      const updatedPresentation = { ...presentation, title: newTitle };
+      setPresentation(updatedPresentation);
+      savePresentationsToStore(
+        presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
+      );
+    }
   };
 
   const updateThumbnail = (newThumbnail) => {
-    console.log(newThumbnail);
-    const currentPresentations = [...presentations];
-    const presentationToEdit = currentPresentations.find(p => p.presentationId === presentationId);
-    presentationToEdit.thumbnail = newThumbnail;
-    setPresentations(currentPresentations);
-    savePresentationsToStore(currentPresentations);
+    if (presentation) {
+      const updatedPresentation = { ...presentation, thumbnail: newThumbnail };
+      setPresentation(updatedPresentation);
+      savePresentationsToStore(
+        presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
+      );
+    }
   }
+
+  // const createNewSlide = () => {
+  //   const currentPresentations = [...presentations];
+
+  // }
 
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
@@ -80,7 +88,7 @@ function Presentation({ token }) {
       <Box sx={{
         display: 'flex',
         width: '100%'
-        }}>
+      }}>
         <Button
           variant="contained"
           onClick={() => navigate('/dashboard')}
@@ -88,11 +96,11 @@ function Presentation({ token }) {
           Back
         </Button>
         <Box sx={{
-        display: 'flex',
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '24px'
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '24px'
         }}
         >
           <Typography
@@ -119,22 +127,22 @@ function Presentation({ token }) {
             onSubmit={editPresentationTitle}
             confirmMsg={"Edit"}
           />
-        <Button
-          onClick={() => setIsUpdateThumbnailOpen(true)}
-          variant="contained"
-          color="secondary"
-          endIcon={<EditIcon/>}
-        >
-          Update Thumbnail
-        </Button>
-        <PopupModal
-          open={isUpdateThumbnailOpen}
-          onClose={() => setIsUpdateThumbnailOpen(false)}
-          instruction="Put the URL of the image"
-          nameOfInput="Thumbnail"
-          onSubmit={updateThumbnail}
-          confirmMsg={"Update"}
-        />
+          <Button
+            onClick={() => setIsUpdateThumbnailOpen(true)}
+            variant="contained"
+            color="secondary"
+            endIcon={<EditIcon/>}
+          >
+            Update Thumbnail
+          </Button>
+          <PopupModal
+            open={isUpdateThumbnailOpen}
+            onClose={() => setIsUpdateThumbnailOpen(false)}
+            instruction="Put the URL of the image"
+            nameOfInput="Thumbnail"
+            onSubmit={updateThumbnail}
+            confirmMsg={"Update"}
+          />
         </Box>
         <Button
           variant="contained"
@@ -158,6 +166,22 @@ function Presentation({ token }) {
       {presentation && presentation.slides && presentation.slides.length > 0 && (
         <Slide slide={presentation.slides[0]} />
       )}
+      {/* Footer controls */}
+      <Box 
+        sx={{ p: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
+      >
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => createNewSlide()}
+        >
+          New Slide
+        </Button>
+      </Box>
     </Box>
   );
 

@@ -1,7 +1,7 @@
 // Dashboard.jsx
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Typography, Card, CardContent, Box, Button, CardMedia } from '@mui/material';
+import { Typography, Card, CardContent, Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid2';
 import PopupModal from '../component/PopupModal';
