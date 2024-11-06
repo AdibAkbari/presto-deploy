@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box, Typography, Button } from '@mui/material';
 import InputModal from '../component/InputModal';
+import Slide from '../component/Slide';
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -73,7 +74,11 @@ function Presentation({ token }) {
         confirmMsg="Yes"
         cancelMsg="No"
       />
-  
+ 
+      {/* Displaying first slide */}
+      {presentation && presentation.slides && presentation.slides.length > 0 && (
+        <Slide slide={presentation.slides[0]} />
+      )}
     </Box>
   );
 
