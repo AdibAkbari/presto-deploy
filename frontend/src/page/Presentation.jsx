@@ -13,6 +13,7 @@ function Presentation({ token }) {
   const [isUpdateThumbnailOpen, setIsUpdateThumbnailOpen] = useState(false); // Controls the Update Thumbnail PopupModal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Controls the Delete Thumbnail PopupModal
   const [presentations, setPresentations] = useState([]);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const navigate = useNavigate();
 
   // Function to handle editing the title of a presentation
@@ -36,10 +37,19 @@ function Presentation({ token }) {
     }
   }
 
-  // const createNewSlide = () => {
-  //   const currentPresentations = [...presentations];
-
-  // }
+  const createNewSlide = () => {
+    if (presentation) {
+      const newSlide = {
+        slideId: `slide_${presentation.slides.length + 1}`,
+        elements: []
+      }
+      const updatedPresentation = { ...presentation, slides: [...presentation.slides, newSlide] };
+      setPresentation(updatedPresentation);
+      savePresentationsToStore(
+        presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
+      );
+    }
+  }
 
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
@@ -164,22 +174,47 @@ function Presentation({ token }) {
       />
       {/* Displaying first slide */}
       {presentation && presentation.slides && presentation.slides.length > 0 && (
-        <Slide slide={presentation.slides[0]} />
+        <Slide slide={presentation.slides[currentSlideIndex]} />
       )}
       {/* Footer controls */}
       <Box 
         sx={{ p: 3,
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
+          width: '1000px',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-evenly',
+          alignContent: 'center' 
         }}
       >
+        <Button
+          variant="contained"
+          disabled={presentation && currentSlideIndex === 0}
+          onClick={
+            () => setCurrentSlideIndex(
+              (currentSlideIndex - 1)
+            )
+          }
+        >
+          Previous
+        </Button>
         <Button
           variant="contained"
           color="success"
           onClick={() => createNewSlide()}
         >
           New Slide
+        </Button>
+        <Button
+          disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
+          variant="contained"
+          onClick={
+            () => setCurrentSlideIndex(
+              (currentSlideIndex + 1)
+            )
+          }
+        >
+          Next
         </Button>
       </Box>
     </Box>
