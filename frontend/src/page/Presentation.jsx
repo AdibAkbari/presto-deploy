@@ -14,8 +14,8 @@ function Presentation({ token }) {
   const [presentations, setPresentations] = useState([]);
   const navigate = useNavigate();
 
-   // Function to handle editing the title of a presentation
-  const editPresentationTitle = (newTitle) => {f
+  // Function to handle editing the title of a presentation
+  const editPresentationTitle = (newTitle) => {
     const currentPresentations = [...presentations];
     const presentationToEdit = currentPresentations.find(p => p.presentationId === presentationId);
     presentationToEdit.title = newTitle;
