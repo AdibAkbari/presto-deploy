@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Typography, Card, CardContent, Box, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid2';
 import InputModal from '../component/InputModal';
 import CreateIcon from '@mui/icons-material/Create';
@@ -9,7 +10,7 @@ import CreateIcon from '@mui/icons-material/Create';
 function Dashboard({ token }) {
   const [presentations, setPresentations] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // Controls the InputModal
-
+  const navigate = useNavigate();
   // Load presentations when component mounts
   useEffect(() => {
     if (token) {
@@ -63,7 +64,12 @@ function Dashboard({ token }) {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={4} sx={{ mt: 3 }}>
           {presentations.map(presentation => (
-            <Grid item size={{xs: 12, sm: 6, md:4}} key={presentation.presentationId}>
+            <Grid 
+              item 
+              size={{xs: 12, sm: 6, md:4}} 
+              key={presentation.presentationId}
+              onClick={() => navigate(`/presentation/${presentation.presentationId}`)}
+            >
               <Card
                 sx={{ width: '100%',
                   aspectRatio: '2 / 1',
