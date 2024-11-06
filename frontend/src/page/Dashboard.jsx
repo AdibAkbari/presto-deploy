@@ -17,7 +17,6 @@ function Dashboard({ token }) {
       axios
         .get('http://localhost:5005/store', { headers: { Authorization: `Bearer ${token}` } })
         .then(response => {
-          console.log(response.data.store);
           let newPresentations;
           if (!response.data.store || Object.keys(response.data.store).length === 0) {
             newPresentations = [];
@@ -65,7 +64,7 @@ function Dashboard({ token }) {
         <Grid container spacing={4} sx={{ mt: 3 }}>
           {presentations.map(presentation => (
             <Grid 
-              item 
+              item = "true"
               size={{xs: 12, sm: 6, md:4}} 
               key={presentation.presentationId}
               onClick={() => navigate(`/presentation/${presentation.presentationId}`)}
@@ -103,7 +102,7 @@ function Dashboard({ token }) {
       <PopupModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        instruction="Enter the name of your new presentation"
+        instruction="Enter the title of your new presentation"
         nameOfInput="Presentation Title"
         onSubmit={addPresentation}
         confirmMsg={"Create"}

@@ -38,7 +38,6 @@ const PopupModal = ({ instruction, nameOfInput, onSubmit, open, onClose, confirm
         <Typography id="modal-title" variant="subtitle1">
           {instruction}
         </Typography>
-        
         {nameOfInput && (
           <TextField
             label={nameOfInput}
@@ -50,7 +49,7 @@ const PopupModal = ({ instruction, nameOfInput, onSubmit, open, onClose, confirm
             sx={{ mt: 2 }}
           />
         )}
-  
+
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
           <Button variant="contained" onClick={handleAction}>
             {confirmMsg}
