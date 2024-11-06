@@ -1,10 +1,12 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, IconButton } from '@mui/material';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import PopupModal from '../component/PopupModal';
 import Slide from '../component/Slide';
 import EditIcon from '@mui/icons-material/Edit';
+
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -58,6 +60,20 @@ function Presentation({ token }) {
       .then(() => console.log("Presentation edited successfully"))
       .catch(error => console.error("Error editing presentations:", error));
   };
+  
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowLeft" && currentSlideIndex > 0) {
+        setCurrentSlideIndex(currentSlideIndex - 1);
+      } else if (event.key === "ArrowRight" && currentSlideIndex < presentation.slides.length - 1) {
+        setCurrentSlideIndex(currentSlideIndex + 1);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentSlideIndex, presentation?.slides?.length]);
+
 
   useEffect(() => {
     if (token) {
@@ -178,7 +194,8 @@ function Presentation({ token }) {
       )}
       {/* Footer controls */}
       <Box 
-        sx={{ p: 3,
+        sx={{ 
+          p: 3,
           display: 'flex',
           width: '1000px',
           flexDirection: 'row',
@@ -187,17 +204,14 @@ function Presentation({ token }) {
           alignContent: 'center' 
         }}
       >
-        <Button
-          variant="contained"
-          disabled={presentation && currentSlideIndex === 0}
-          onClick={
-            () => setCurrentSlideIndex(
-              (currentSlideIndex - 1)
-            )
-          }
+        <IconButton
+          disabled={currentSlideIndex === 0}
+          onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
+          sx={{fontSize: '2rem'}}
         >
-          Previous
-        </Button>
+          <ArrowBack fontSize="inherit" />
+        </IconButton>
+
         <Button
           variant="contained"
           color="success"
@@ -205,17 +219,13 @@ function Presentation({ token }) {
         >
           New Slide
         </Button>
-        <Button
+        <IconButton
           disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
-          variant="contained"
-          onClick={
-            () => setCurrentSlideIndex(
-              (currentSlideIndex + 1)
-            )
-          }
+          onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
+          sx={{fontSize: '2rem'}}
         >
-          Next
-        </Button>
+          <ArrowForward fontSize="inherit" />
+        </IconButton>
       </Box>
     </Box>
   );
