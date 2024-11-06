@@ -1,7 +1,8 @@
 // Dashboard.jsx
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Typography, Grid, Card, CardContent, Box, Button } from '@mui/material';
+import { Typography, Card, CardContent, Box, Button } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import InputModal from '../component/InputModal';
 import CreateIcon from '@mui/icons-material/Create';
 
@@ -58,6 +59,29 @@ function Dashboard({ token }) {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>Dashboard</Typography>
+      {/* List of presentations  */}
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={4} sx={{ mt: 3 }}>
+          {presentations.map(presentation => (
+            <Grid item size={{xs: 12, sm: 6, md:4}} key={presentation.presentationId}>
+              <Card
+                sx={{ width: '100%',
+                  aspectRatio: '2 / 1',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: presentation.thumbnail || 'grey' }}
+              >
+                <CardContent>
+                  <Typography variant="h6">{presentation.title}</Typography>
+                  <Typography variant="body2">{presentation.description}</Typography>
+                  <Typography variant="caption">Slides: {presentation.slides.length}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
 
       {/* New Presentation Button */}
       <Button
