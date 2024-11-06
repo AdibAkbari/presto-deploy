@@ -2,12 +2,20 @@ import { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
+import PopupModal from '../component/PopupModal';
 
 function Login({handleSuccess}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const login = () => {
-    console.log('logging in:')
+    if (!email || !password) {
+      setErrorMessage('Please fill in all fields');
+      setIsErrorModalOpen(true);
+      return;
+    }
     axios.post('http://localhost:5005/admin/auth/login', {
       email: email,
       password: password
@@ -17,9 +25,11 @@ function Login({handleSuccess}) {
       })
       .catch((error) => {
         console.log(error);
-        alert(error.response.data.error);
+        setErrorMessage(error.response.data.error);
+        setIsErrorModalOpen(true);
       });
   }
+
   return (
     <>
       <Box
@@ -82,6 +92,13 @@ function Login({handleSuccess}) {
           </Button>
         </Box>
       </Box>
+      <PopupModal
+        open={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+        instruction={errorMessage}
+        onSubmit={() => setIsErrorModalOpen(false)}
+        confirmMsg="OK"
+      />
     </>
   )
 }

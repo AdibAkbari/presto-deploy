@@ -4,12 +4,12 @@ import axios from 'axios';
 import { Typography, Card, CardContent, Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid2';
-import InputModal from '../component/InputModal';
+import PopupModal from '../component/PopupModal';
 import CreateIcon from '@mui/icons-material/Create';
 
 function Dashboard({ token }) {
   const [presentations, setPresentations] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Controls the InputModal
+  const [isModalOpen, setIsModalOpen] = useState(false); // Controls the PopupModal
   const navigate = useNavigate();
   // Load presentations when component mounts
   useEffect(() => {
@@ -99,13 +99,14 @@ function Dashboard({ token }) {
         New Presentation
       </Button>
 
-      {/* InputModal for creating a new presentation */}
-      <InputModal
+      {/* PopupModal for creating a new presentation */}
+      <PopupModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         instruction="Enter the name of your new presentation"
         nameOfInput="Presentation Title"
         onSubmit={addPresentation}
+        confirmMsg={"Create"}
       />
     </Box>
   );

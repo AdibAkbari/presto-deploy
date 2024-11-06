@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box, Typography, Button } from '@mui/material';
-import InputModal from '../component/InputModal';
+import PopupModal from '../component/PopupModal';
 import Slide from '../component/Slide';
 
 function Presentation({ token }) {
@@ -66,7 +66,7 @@ function Presentation({ token }) {
       </Box>
 
       {/* Delete confirmation modal */}
-      <InputModal
+      <PopupModal
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         instruction="Are you sure you want to delete this presentation?"

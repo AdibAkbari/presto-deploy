@@ -13,7 +13,7 @@ const style = {
   p: 4,
 };
 
-const InputModal = ({ instruction, nameOfInput, onSubmit, open, onClose, confirmMsg, cancelMsg}) => {
+const PopupModal = ({ instruction, nameOfInput, onSubmit, open, onClose, confirmMsg, cancelMsg}) => {
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
@@ -66,4 +66,4 @@ const InputModal = ({ instruction, nameOfInput, onSubmit, open, onClose, confirm
   );
 };
 
-export default InputModal;
+export default PopupModal;

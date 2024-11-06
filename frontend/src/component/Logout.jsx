@@ -19,7 +19,6 @@ const Logout = ({token, setToken}) => {
       })
       .catch((error) => {
         console.log(error);
-        alert(error.message);
       });
   }
 
@@ -29,7 +28,7 @@ const Logout = ({token, setToken}) => {
     startIcon={<LogoutIcon />}
     onClick={logout}
   >
-            Logout
+    Logout
   </Button>;
 }
 
