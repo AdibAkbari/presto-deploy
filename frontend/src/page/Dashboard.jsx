@@ -85,7 +85,7 @@ function Dashboard({ token }) {
                 <CardContent>
                   <Typography variant="h6">{presentation.title}</Typography>
                   <Typography variant="body2">{presentation.description}</Typography>
-                  <Typography variant="caption">Slides: {presentation.slides.length}</Typography>
+                  <Typography variant="caption">Slides: {presentation.slides?.length}</Typography>
                 </CardContent>
               </Card>
             </Grid>

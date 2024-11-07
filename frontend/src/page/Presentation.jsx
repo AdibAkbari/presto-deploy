@@ -50,6 +50,28 @@ function Presentation({ token }) {
       savePresentationsToStore(
         presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
       );
+      setCurrentSlideIndex(updatedPresentation.slides.length - 1);
+    }
+  }
+
+  const deleteSlide = () => {
+    if (presentation) {
+      // Check if the user is deleting the last slide in the presentation.
+      if (presentation.slides.length === 1) {
+        // Delete the presentation
+        setIsDeleteModalOpen(true);
+      } else {
+        // Delete current slide
+        const updatedSlides = [...presentation.slides];
+        updatedSlides.splice(currentSlideIndex, 1);
+        const updatedPresentation = {...presentation, slides: updatedSlides};
+        setPresentation(updatedPresentation);
+        savePresentationsToStore(
+          presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
+        );
+        // Show the previous slide
+        setCurrentSlideIndex(currentSlideIndex - 1);
+      }
     }
   }
 
@@ -60,7 +82,6 @@ function Presentation({ token }) {
       .then(() => console.log("Presentation edited successfully"))
       .catch(error => console.error("Error editing presentations:", error));
   };
-  
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "ArrowLeft" && currentSlideIndex > 0) {
@@ -193,15 +214,15 @@ function Presentation({ token }) {
         <Slide slide={presentation.slides[currentSlideIndex]} />
       )}
       {/* Footer controls */}
-      <Box 
-        sx={{ 
+      <Box
+        sx={{
           p: 3,
           display: 'flex',
           width: '1000px',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-evenly',
-          alignContent: 'center' 
+          alignContent: 'center'
         }}
       >
         <IconButton
@@ -226,6 +247,26 @@ function Presentation({ token }) {
         >
           <ArrowForward fontSize="inherit" />
         </IconButton>
+      </Box>
+      {/* Sub-footer controls */}
+      <Box
+        sx={{
+          p: 3,
+          display: 'flex',
+          width: '1000px',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'right',
+          alignContent: 'center'
+        }}
+      >
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => deleteSlide()}
+        >
+          Delete Slide
+        </Button>
       </Box>
     </Box>
   );
