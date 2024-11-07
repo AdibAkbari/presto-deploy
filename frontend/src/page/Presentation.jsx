@@ -195,8 +195,8 @@ function Presentation({ token }) {
             presentation={presentation}
             setPresentation={setPresentation}
             currentSlideIndex={currentSlideIndex}
-            setCurrentSlideIndex={setCurrentSlideIndex}
             savePresentationsToStore={savePresentationsToStore}
+            presentations={presentations}
           />
         </Box>
         <Button

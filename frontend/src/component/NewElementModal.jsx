@@ -27,6 +27,7 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide}) => {
 
   const handleAction = () => {
     const newElement = {
+      elementId: `element_${Date.now()}`,
       type: elementType,
       size: blockSizeValue,
       content: contentValue,
@@ -35,7 +36,10 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide}) => {
       position: { x: 0, y: 0 }
     }
     addElementToSlide(newElement);
-
+    setBlockSizeValue(50);
+    setFontSizeValue(1);
+    setContentValue('');
+    setFontColorValue('#000000');
     onClose(); // Close the modal
   };
 
@@ -50,7 +54,6 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide}) => {
         <Typography id="modal-title" variant="subtitle1">
           New Text Box
         </Typography>
-        
         <Box sx={{ display: "flex", justifyContent: "space-between"}}>
           <TextField
             label='Box size (%)'
@@ -58,7 +61,7 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide}) => {
             variant="outlined"
             value={blockSizeValue}
             onChange={(e) => setBlockSizeValue(e.target.value)}
-
+            required
             sx={{ mt: 2 }}
           />
           <TextField
@@ -77,11 +80,9 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide}) => {
             variant="outlined"
             value={fontColorValue}
             onChange={(e) => setFontColorValue(e.target.value)}
-          
             sx={{ mt: 2 }}
           />
         </Box>
-        
 
         <TextField
           label='Content'
@@ -102,7 +103,6 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide}) => {
           <Button variant="contained" color="error" onClick={onClose}>
             Cancel
           </Button>
-          
         </Box>
       </Box>
     </Modal>
