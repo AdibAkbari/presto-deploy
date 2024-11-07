@@ -6,6 +6,7 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import PopupModal from '../component/PopupModal';
 import Slide from '../component/Slide';
 import EditIcon from '@mui/icons-material/Edit';
+import NewElement from '../component/NewElement';
 
 
 function Presentation({ token }) {
@@ -189,6 +190,13 @@ function Presentation({ token }) {
             nameOfInput="Thumbnail"
             onSubmit={updateThumbnail}
             confirmMsg={"Update"}
+          />
+          <NewElement
+            presentation={presentation}
+            setPresentation={setPresentation}
+            currentSlideIndex={currentSlideIndex}
+            setCurrentSlideIndex={setCurrentSlideIndex}
+            savePresentationsToStore={savePresentationsToStore}
           />
         </Box>
         <Button
