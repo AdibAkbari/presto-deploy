@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Typography, Modal, TextField } from '@mui/material';
+import { Box, Button, Typography, Modal, TextField, FormControlLabel, Checkbox } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -18,9 +18,10 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
   const [contentValue, setContentValue] = useState('');
   const [fontSizeValue, setFontSizeValue] = useState(1);
   const [fontColorValue, setFontColorValue] = useState('#000000');
-  const [imageUrl, setImageUrl] = useState('');
+  const [mediaUrl, setMediaUrl] = useState('');
   const [altText, setAltText] = useState('');
-  
+  const [autoPlay, setAutoPlay] = useState(false);
+
   const modalTitle = () => {
     switch (elementType) {
     case 'text':
@@ -43,8 +44,9 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
       setContentValue('');
       setFontSizeValue(1);
       setFontColorValue('#000000');
-      setImageUrl('');
+      setMediaUrl('');
       setAltText('');
+      setAutoPlay(false);
     }
   }, [open]);
 
@@ -68,8 +70,22 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
     case 'image':
       newElement = {
         ...newElement,
-        url: imageUrl,
+        url: mediaUrl,
         altText: altText,
+      };
+      break;
+    case 'video':
+      newElement = {
+        ...newElement,
+        url: mediaUrl,
+        autoPlay: autoPlay
+      };
+      break;
+    case 'code':
+      newElement = {
+        ...newElement,
+        content: contentValue,
+        fontSize: fontSizeValue,
       };
       break;
     default:
@@ -115,22 +131,24 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
               fullWidth
               sx={{ mt: 2 }}
             />
-            <TextField
-              label="Font size (em)"
-              type="number"
-              variant="outlined"
-              value={fontSizeValue}
-              onChange={(e) => setFontSizeValue(e.target.value)}
-              sx={{ mt: 2, width: '45%' }}
-            />
-            <TextField
-              label="Font color (hex)"
-              type="text"
-              variant="outlined"
-              value={fontColorValue}
-              onChange={(e) => setFontColorValue(e.target.value)}
-              sx={{ mt: 2, ml: 2, width: '45%' }}
-            />
+            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+              <TextField
+                label="Font size (em)"
+                type="number"
+                variant="outlined"
+                value={fontSizeValue}
+                onChange={(e) => setFontSizeValue(e.target.value)}
+                sx={{ mt: 2, width: '45%' }}
+              />
+              <TextField
+                label="Font color (hex)"
+                type="text"
+                variant="outlined"
+                value={fontColorValue}
+                onChange={(e) => setFontColorValue(e.target.value)}
+                sx={{ mt: 2, ml: 2, width: '45%' }}
+              />
+            </Box>
           </>
         )}
         
@@ -140,8 +158,8 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
               label="Image URL"
               type="text"
               variant="outlined"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
+              value={mediaUrl}
+              onChange={(e) => setMediaUrl(e.target.value)}
               fullWidth
               sx={{ mt: 2 }}
             />
@@ -159,13 +177,50 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
 
         {elementType === 'video' && (
           <>
-          Complete
+            <TextField
+              label="Video URL"
+              type="text"
+              variant="outlined"
+              value={mediaUrl}
+              onChange={(e) => setMediaUrl(e.target.value)}
+              fullWidth
+              sx={{ mt: 2 }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={autoPlay}
+                  onChange={(e) => setAutoPlay(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Autoplay"  // This is the label text
+              sx={{ mt: 2 }}
+            />
           </>
         )}
 
         {elementType === 'code' && (
           <>
-          Complete
+            <TextField
+              label="Code Content"
+              type="text"
+              variant="outlined"
+              value={contentValue}
+              onChange={(e) => setContentValue(e.target.value)}
+              multiline
+              rows={4}
+              fullWidth
+              sx={{ mt: 2 }}
+            />
+            <TextField
+              label="Font size (em)"
+              type="number"
+              variant="outlined"
+              value={fontSizeValue}
+              onChange={(e) => setFontSizeValue(e.target.value)}
+              sx={{ mt: 2, width: '45%' }}
+            />
           </>
         )}
 
