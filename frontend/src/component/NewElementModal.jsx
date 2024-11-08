@@ -70,7 +70,6 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide}) => {
             variant="outlined"
             value={fontSizeValue}
             onChange={(e) => setFontSizeValue(e.target.value)}
-
             sx={{ mt: 2 }}
           />
 

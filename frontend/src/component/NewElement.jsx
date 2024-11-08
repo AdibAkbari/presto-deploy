@@ -28,12 +28,10 @@ export default function NewElement({presentation, setPresentation, currentSlideI
     console.log('addingElementToSlide', element);
     const updatedPresentation = { ...presentation};
     updatedPresentation.slides[currentSlideIndex].elements.push(element);
-    console.log(updatedPresentation);
     setPresentation(updatedPresentation);
     savePresentationsToStore(
       presentations.map(p => p.presentationId === presentation.presentationId ? updatedPresentation : p)
     );
-    console.log(presentation);
   }
 
   return (
