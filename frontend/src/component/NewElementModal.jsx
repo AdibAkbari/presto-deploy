@@ -13,34 +13,71 @@ const style = {
   p: 4,
 };
 
-const NewElementModal = ({ open, onClose, elementType, addElementToSlide}) => {
+const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
   const [blockSizeValue, setBlockSizeValue] = useState(50);
   const [contentValue, setContentValue] = useState('');
   const [fontSizeValue, setFontSizeValue] = useState(1);
   const [fontColorValue, setFontColorValue] = useState('#000000');
+  const [imageUrl, setImageUrl] = useState('');
+  const [altText, setAltText] = useState('');
+  
+  const modalTitle = () => {
+    switch (elementType) {
+    case 'text':
+      return 'New Text Box';
+    case 'image':
+      return 'Add Image';
+    case 'video':
+      return 'Add Video';
+    case 'code':
+      return 'Add Code Box';
+    default:
+      return 'New Element';
+    }
+  }
 
   useEffect(() => {
     if (!open) {
-      setBlockSizeValue(''); // Clear input when the modal is closed
+      // Clear inputs when modal closes
+      setBlockSizeValue(50);
+      setContentValue('');
+      setFontSizeValue(1);
+      setFontColorValue('#000000');
+      setImageUrl('');
+      setAltText('');
     }
   }, [open]);
 
   const handleAction = () => {
-    const newElement = {
+    let newElement = {
       elementId: `element_${Date.now()}`,
       type: elementType,
       size: blockSizeValue,
-      content: contentValue,
-      fontSize: fontSizeValue,
-      color: fontColorValue,
-      position: { x: 0, y: 0 }
+      position: { x: 0, y: 0 },
+    };
+
+    switch (elementType) {
+    case 'text':
+      newElement = {
+        ...newElement,
+        content: contentValue,
+        fontSize: fontSizeValue,
+        color: fontColorValue,
+      };
+      break;
+    case 'image':
+      newElement = {
+        ...newElement,
+        url: imageUrl,
+        altText: altText,
+      };
+      break;
+    default:
+      break;
     }
+
     addElementToSlide(newElement);
-    setBlockSizeValue(50);
-    setFontSizeValue(1);
-    setContentValue('');
-    setFontColorValue('#000000');
-    onClose(); // Close the modal
+    onClose();
   };
 
   return (
@@ -52,50 +89,87 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide}) => {
     >
       <Box sx={style}>
         <Typography id="modal-title" variant="subtitle1">
-          New Text Box
+          {modalTitle()}
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-between"}}>
-          <TextField
-            label='Box size (%)'
-            type="number"
-            variant="outlined"
-            value={blockSizeValue}
-            onChange={(e) => setBlockSizeValue(e.target.value)}
-            required
-            sx={{ mt: 2 }}
-          />
-          <TextField
-            label='Font size (em)'
-            type="number"
-            variant="outlined"
-            value={fontSizeValue}
-            onChange={(e) => setFontSizeValue(e.target.value)}
-            sx={{ mt: 2 }}
-          />
-
-          <TextField
-            label='Font colour (hex)'
-            type="text"
-            variant="outlined"
-            value={fontColorValue}
-            onChange={(e) => setFontColorValue(e.target.value)}
-            sx={{ mt: 2 }}
-          />
-        </Box>
-
+        
         <TextField
-          label='Content'
-          type="text"
+          label="Block size (%)"
+          type="number"
           variant="outlined"
-          multiline
-          rows={4}
-          value={contentValue}
-          onChange={(e) => setContentValue(e.target.value)}
-          fullWidth
-          sx={{ mt: 2 }}
+          value={blockSizeValue}
+          onChange={(e) => setBlockSizeValue(e.target.value)}
+          sx={{ mt: 2, width: '45%' }}
         />
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+        {/* Conditional fields based on element type */}
+        {elementType === 'text' && (
+          <>
+            <TextField
+              label="Content"
+              type="text"
+              variant="outlined"
+              value={contentValue}
+              onChange={(e) => setContentValue(e.target.value)}
+              multiline
+              rows={4}
+              fullWidth
+              sx={{ mt: 2 }}
+            />
+            <TextField
+              label="Font size (em)"
+              type="number"
+              variant="outlined"
+              value={fontSizeValue}
+              onChange={(e) => setFontSizeValue(e.target.value)}
+              sx={{ mt: 2, width: '45%' }}
+            />
+            <TextField
+              label="Font color (hex)"
+              type="text"
+              variant="outlined"
+              value={fontColorValue}
+              onChange={(e) => setFontColorValue(e.target.value)}
+              sx={{ mt: 2, ml: 2, width: '45%' }}
+            />
+          </>
+        )}
+        
+        {elementType === 'image' && (
+          <>
+            <TextField
+              label="Image URL"
+              type="text"
+              variant="outlined"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              fullWidth
+              sx={{ mt: 2 }}
+            />
+            <TextField
+              label="Image Description"
+              type="text"
+              variant="outlined"
+              value={altText}
+              onChange={(e) => setAltText(e.target.value)}
+              fullWidth
+              sx={{ mt: 2 }}
+            />
+          </>
+        )}
+
+        {elementType === 'video' && (
+          <>
+          Complete
+          </>
+        )}
+
+        {elementType === 'code' && (
+          <>
+          Complete
+          </>
+        )}
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
           <Button variant="contained" onClick={handleAction}>
             Confirm
           </Button>

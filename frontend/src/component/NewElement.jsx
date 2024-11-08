@@ -1,16 +1,13 @@
-import { useState, useEffect } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import { useState } from 'react';
+import {Menu, Button, MenuItem} from '@mui/material/';
 import NewElementModal from './NewElementModal';
-import { Menu, Button } from '@mui/material';
 
-export default function NewElement({presentation, setPresentation, currentSlideIndex, savePresentationsToStore, presentations}) {
+export default function NewElement({ presentation, setPresentation, currentSlideIndex, savePresentationsToStore, presentations }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const [modalOpen, setModalOpen] = useState(false);
+  const [elementType, setElementType] = useState('');
 
+  const open = Boolean(anchorEl);
   const elementTypes = ['text', 'image', 'video', 'code'];
 
   const handleClick = (event) => {
@@ -19,6 +16,7 @@ export default function NewElement({presentation, setPresentation, currentSlideI
 
   const handleClose = (event) => {
     if (elementTypes.includes(event.currentTarget.dataset.myValue)) {
+      setElementType(event.currentTarget.dataset.myValue);
       setModalOpen(true);
     }
     setAnchorEl(null);
@@ -56,33 +54,20 @@ export default function NewElement({presentation, setPresentation, currentSlideI
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem
-          onClick={handleClose}
-          data-my-value={'text'}
-        >
-          Text
-        </MenuItem>
-        <MenuItem
-          onClick={handleClose}
-          data-my-value={'image'}
-        >
-          Image
-        </MenuItem><MenuItem
-          onClick={handleClose}
-          data-my-value={'video'}
-        >
-          Video
-        </MenuItem><MenuItem
-          onClick={handleClose}
-          data-my-value={'code'}
-        >
-          Code
-        </MenuItem>
+        {elementTypes.map((type) => (
+          <MenuItem
+            key={type}
+            onClick={handleClose}
+            data-my-value={type}
+          >
+            {type.charAt(0).toUpperCase() + type.slice(1)}
+          </MenuItem>
+        ))}
       </Menu>
       <NewElementModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        elementType={anchorEl}
+        elementType={elementType}
         addElementToSlide={addElementToSlide}
       />
     </>
