@@ -1,4 +1,4 @@
-// Could we combine this with NewElementModal somehow? Would be tricky though
+// Need to combine this with NewElementModal to avoid repeating inputs
 import { useState, useEffect } from 'react';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import defaultBlockSize from './NewElementModal';

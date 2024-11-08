@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
 import EditElementModal from './EditElementModal';
+import TextElement from '../elements/TextElement';
 
 function Slide({ slide, slideIndex, onUpdateElement }) {
   const [selectedElement, setSelectedElement] = useState(null); // Track the element to edit
@@ -31,27 +32,13 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
     >
       {/* Render text elements on the slide */}
       {slide.elements &&
-        slide.elements.map((element) =>
+        slide.elements.map((element, index) =>
           element.type === 'text' ? (
-            <Box
-              key={element.elementId}
-              onDoubleClick={() => handleDoubleClick(element)}
-              sx={{
-                position: 'absolute',
-                top: `${element.position.y}%`,
-                left: `${element.position.x}%`,
-                width: `${element.width}%`,
-                height: `${element.height}%`,
-                color: element.color,
-                fontSize: `${element.fontSize}em`,
-                border: '1px solid grey',
-                padding: 1,
-                overflow: 'hidden',
-                textAlign: 'left',
-              }}
-            >
-              {element.content}
-            </Box>
+            <TextElement 
+              key={`${element.id}-${index}`} 
+              element={element} 
+              doubleClickFunc={handleDoubleClick}
+            />
           ) : null
         )}
 
