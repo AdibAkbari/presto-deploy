@@ -30,6 +30,23 @@ function Presentation({ token }) {
     }
   };
 
+  // updates element of current slide in presentation
+  const updateElement = (updatedElement) => {
+    const updatedSlides = [...presentation.slides];
+    const currentSlide = { ...updatedSlides[currentSlideIndex] };
+    currentSlide.elements = currentSlide.elements.map((el) =>
+      el.elementId === updatedElement.elementId ? updatedElement : el
+    );
+    updatedSlides[currentSlideIndex] = currentSlide;
+    const updatedPresentation = { ...presentation, slides: updatedSlides };
+    setPresentation(updatedPresentation);
+    savePresentationsToStore(
+      presentations.map((p) =>
+        p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
+      )
+    );
+  };
+
   const updateThumbnail = (newThumbnail) => {
     if (presentation) {
       const updatedPresentation = { ...presentation, thumbnail: newThumbnail };
@@ -219,7 +236,7 @@ function Presentation({ token }) {
       />
       {/* Displaying first slide */}
       {presentation && presentation.slides && presentation.slides.length > 0 && (
-        <Slide slide={presentation.slides[currentSlideIndex]} slideIndex={currentSlideIndex} />
+        <Slide slide={presentation.slides[currentSlideIndex]} slideIndex={currentSlideIndex} onUpdateElement={updateElement}/>
       )}
       {/* Footer controls */}
       <Box
