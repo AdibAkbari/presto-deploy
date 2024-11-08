@@ -20,6 +20,8 @@
     "axios": "^1.7.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-draggable": "^4.4.6",
+    "react-resizable": "^3.0.5",
     "react-rnd": "^10.4.13",
     "react-router-dom": "^6.27.0"
   },
