@@ -1,7 +1,7 @@
 // Could we combine this with NewElementModal somehow? Would be tricky though
 import { useState, useEffect } from 'react';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-
+import defaultBlockSize from './NewElementModal';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -15,7 +15,8 @@ const style = {
 };
 
 function EditElementModal({ open, element, onClose, onSave }) {
-  const [size, setSize] = useState(element.size || 50);
+  const [blockWidth, setBlockWidth] = useState(element.width || defaultBlockSize);
+  const [blockHeight, setBlockHeight] = useState(element.height || defaultBlockSize);
   const [content, setContent] = useState(element.content || '');
   const [fontSize, setFontSize] = useState(element.fontSize || 1);
   const [color, setColor] = useState(element.color || '#000000');
@@ -23,7 +24,8 @@ function EditElementModal({ open, element, onClose, onSave }) {
 
   useEffect(() => {
     if (!open) {
-      setSize(element.size || 50);
+      setBlockWidth(element.width || defaultBlockSize);
+      setBlockHeight(element.height || defaultBlockSize);
       setContent(element.content || '');
       setFontSize(element.fontSize || 1);
       setColor(element.color || '#000000');
@@ -34,7 +36,8 @@ function EditElementModal({ open, element, onClose, onSave }) {
   const handleSave = () => {
     const updatedElement = {
       ...element,
-      size,
+      width: blockWidth,
+      height: blockHeight,
       content,
       fontSize,
       color,
@@ -47,14 +50,24 @@ function EditElementModal({ open, element, onClose, onSave }) {
     <Modal open={open} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h6">Edit Text Box</Typography>
-        <TextField
-          label="Box size (%)"
-          type="number"
-          value={size}
-          onChange={(e) => setSize(Number(e.target.value))}
-          fullWidth
-          sx={{ mt: 2 }}
-        />
+        <Box fullWidth sx={{display: 'flex', justifyContent: 'space-between'}}>
+          <TextField
+            label="Block width (%)"
+            type="number"
+            variant="outlined"
+            value={blockWidth}
+            onChange={(e) => setBlockWidth(e.target.value)}
+            sx={{ mt: 2, width: '45%' }}
+          />
+          <TextField
+            label="Block height (%)"
+            type="number"
+            variant="outlined"
+            value={blockHeight}
+            onChange={(e) => setBlockHeight(e.target.value)}
+            sx={{ mt: 2, width: '45%' }}
+          />
+        </Box>
         <TextField
           label="Content"
           value={content}

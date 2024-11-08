@@ -13,8 +13,11 @@ const style = {
   p: 4,
 };
 
+export const defaultBlockSize = 30;
+
 const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
-  const [blockSizeValue, setBlockSizeValue] = useState(50);
+  const [blockWidth, setBlockWidth] = useState(defaultBlockSize);
+  const [blockHeight, setBlockHeight] = useState(defaultBlockSize);
   const [contentValue, setContentValue] = useState('');
   const [fontSizeValue, setFontSizeValue] = useState(1);
   const [fontColorValue, setFontColorValue] = useState('#000000');
@@ -40,7 +43,8 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
   useEffect(() => {
     if (!open) {
       // Clear inputs when modal closes
-      setBlockSizeValue(50);
+      setBlockWidth(defaultBlockSize);
+      setBlockHeight(defaultBlockSize);
       setContentValue('');
       setFontSizeValue(1);
       setFontColorValue('#000000');
@@ -54,7 +58,8 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
     let newElement = {
       elementId: `element_${Date.now()}`,
       type: elementType,
-      size: blockSizeValue,
+      width: blockWidth,
+      height: blockHeight,
       position: { x: 0, y: 0 },
     };
 
@@ -107,15 +112,25 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
         <Typography id="modal-title" variant="subtitle1">
           {modalTitle()}
         </Typography>
+        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+          <TextField
+            label="Block width (%)"
+            type="number"
+            variant="outlined"
+            value={blockWidth}
+            onChange={(e) => setBlockWidth(e.target.value)}
+            sx={{ mt: 2, width: '45%' }}
+          />
+          <TextField
+            label="Block height (%)"
+            type="number"
+            variant="outlined"
+            value={blockHeight}
+            onChange={(e) => setBlockHeight(e.target.value)}
+            sx={{ mt: 2, width: '45%' }}
+          />
+        </Box>
         
-        <TextField
-          label="Block size (%)"
-          type="number"
-          variant="outlined"
-          value={blockSizeValue}
-          onChange={(e) => setBlockSizeValue(e.target.value)}
-          sx={{ mt: 2, width: '45%' }}
-        />
 
         {/* Conditional fields based on element type */}
         {elementType === 'text' && (
