@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Button, Typography, Modal, TextField, FormControlLabel, Checkbox } from '@mui/material';
+import PopupModal from './PopupModal';
 
 const style = {
   position: 'absolute',
@@ -24,6 +25,9 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
   const [mediaUrl, setMediaUrl] = useState('');
   const [altText, setAltText] = useState('');
   const [autoPlay, setAutoPlay] = useState(false);
+  const errorMessage = "All fields are required.";
+
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   const modalTitle = () => {
     switch (elementType) {
@@ -55,6 +59,10 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
   }, [open]);
 
   const handleAction = () => {
+    if (!blockWidth || !blockHeight) {
+      setIsErrorModalOpen(true);
+      return
+    }
     let newElement = {
       elementId: `element_${Date.now()}`,
       type: elementType,
@@ -65,6 +73,10 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
 
     switch (elementType) {
     case 'text':
+      if (!contentValue || !fontSizeValue || !fontColorValue) {
+        setIsErrorModalOpen(true);
+        return;
+      }
       newElement = {
         ...newElement,
         content: contentValue,
@@ -73,6 +85,10 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
       };
       break;
     case 'image':
+      if (!mediaUrl || !altText) {
+        setIsErrorModalOpen(true);
+        return;
+      }
       newElement = {
         ...newElement,
         url: mediaUrl,
@@ -80,6 +96,10 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
       };
       break;
     case 'video':
+      if (!mediaUrl) {
+        setIsErrorModalOpen(true);
+        return;
+      }
       newElement = {
         ...newElement,
         url: mediaUrl,
@@ -87,6 +107,10 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
       };
       break;
     case 'code':
+      if (!contentValue || !fontSizeValue) {
+        setIsErrorModalOpen(true);
+        return;
+      }
       newElement = {
         ...newElement,
         content: contentValue,
@@ -102,51 +126,133 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
-    >
-      <Box sx={style}>
-        <Typography id="modal-title" variant="subtitle1">
-          {modalTitle()}
-        </Typography>
-        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-          <TextField
-            label="Block width (%)"
-            type="number"
-            variant="outlined"
-            value={blockWidth}
-            onChange={(e) => setBlockWidth(e.target.value)}
-            sx={{ mt: 2, width: '45%' }}
-          />
-          <TextField
-            label="Block height (%)"
-            type="number"
-            variant="outlined"
-            value={blockHeight}
-            onChange={(e) => setBlockHeight(e.target.value)}
-            sx={{ mt: 2, width: '45%' }}
-          />
-        </Box>
-        
-
-        {/* Conditional fields based on element type */}
-        {elementType === 'text' && (
-          <>
+    <>
+      <Modal
+        open={open}
+        onClose={onClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-title" variant="subtitle1">
+            {modalTitle()}
+          </Typography>
+          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
             <TextField
-              label="Content"
-              type="text"
+              label="Block width (%)"
+              type="number"
               variant="outlined"
-              value={contentValue}
-              onChange={(e) => setContentValue(e.target.value)}
-              multiline
-              rows={4}
-              fullWidth
-              sx={{ mt: 2 }}
+              value={blockWidth}
+              onChange={(e) => setBlockWidth(e.target.value)}
+              sx={{ mt: 2, width: '45%' }}
             />
-            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <TextField
+              label="Block height (%)"
+              type="number"
+              variant="outlined"
+              value={blockHeight}
+              onChange={(e) => setBlockHeight(e.target.value)}
+              sx={{ mt: 2, width: '45%' }}
+            />
+          </Box>
+          
+
+          {/* Conditional fields based on element type */}
+          {elementType === 'text' && (
+            <>
+              <TextField
+                label="Content"
+                type="text"
+                variant="outlined"
+                value={contentValue}
+                onChange={(e) => setContentValue(e.target.value)}
+                multiline
+                rows={4}
+                fullWidth
+                sx={{ mt: 2 }}
+              />
+              <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                <TextField
+                  label="Font size (em)"
+                  type="number"
+                  variant="outlined"
+                  value={fontSizeValue}
+                  onChange={(e) => setFontSizeValue(e.target.value)}
+                  sx={{ mt: 2, width: '45%' }}
+                />
+                <TextField
+                  label="Font color (hex)"
+                  type="text"
+                  variant="outlined"
+                  value={fontColorValue}
+                  onChange={(e) => setFontColorValue(e.target.value)}
+                  sx={{ mt: 2, ml: 2, width: '45%' }}
+                />
+              </Box>
+            </>
+          )}
+          
+          {elementType === 'image' && (
+            <>
+              <TextField
+                label="Image URL"
+                type="text"
+                variant="outlined"
+                value={mediaUrl}
+                onChange={(e) => setMediaUrl(e.target.value)}
+                fullWidth
+                sx={{ mt: 2 }}
+              />
+              <TextField
+                label="Image Description"
+                type="text"
+                variant="outlined"
+                value={altText}
+                onChange={(e) => setAltText(e.target.value)}
+                fullWidth
+                sx={{ mt: 2 }}
+              />
+            </>
+          )}
+
+          {elementType === 'video' && (
+            <>
+              <TextField
+                label="Video URL"
+                type="text"
+                variant="outlined"
+                value={mediaUrl}
+                onChange={(e) => setMediaUrl(e.target.value)}
+                fullWidth
+                sx={{ mt: 2 }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={autoPlay}
+                    onChange={(e) => setAutoPlay(e.target.checked)}
+                    color="primary"
+                  />
+                }
+                label="Autoplay"  // This is the label text
+                sx={{ mt: 2 }}
+              />
+            </>
+          )}
+
+          {elementType === 'code' && (
+            <>
+              <TextField
+                label="Code Content"
+                type="text"
+                variant="outlined"
+                value={contentValue}
+                onChange={(e) => setContentValue(e.target.value)}
+                multiline
+                rows={4}
+                fullWidth
+                sx={{ mt: 2 }}
+              />
               <TextField
                 label="Font size (em)"
                 type="number"
@@ -155,100 +261,27 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
                 onChange={(e) => setFontSizeValue(e.target.value)}
                 sx={{ mt: 2, width: '45%' }}
               />
-              <TextField
-                label="Font color (hex)"
-                type="text"
-                variant="outlined"
-                value={fontColorValue}
-                onChange={(e) => setFontColorValue(e.target.value)}
-                sx={{ mt: 2, ml: 2, width: '45%' }}
-              />
-            </Box>
-          </>
-        )}
-        
-        {elementType === 'image' && (
-          <>
-            <TextField
-              label="Image URL"
-              type="text"
-              variant="outlined"
-              value={mediaUrl}
-              onChange={(e) => setMediaUrl(e.target.value)}
-              fullWidth
-              sx={{ mt: 2 }}
-            />
-            <TextField
-              label="Image Description"
-              type="text"
-              variant="outlined"
-              value={altText}
-              onChange={(e) => setAltText(e.target.value)}
-              fullWidth
-              sx={{ mt: 2 }}
-            />
-          </>
-        )}
+            </>
+          )}
 
-        {elementType === 'video' && (
-          <>
-            <TextField
-              label="Video URL"
-              type="text"
-              variant="outlined"
-              value={mediaUrl}
-              onChange={(e) => setMediaUrl(e.target.value)}
-              fullWidth
-              sx={{ mt: 2 }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={autoPlay}
-                  onChange={(e) => setAutoPlay(e.target.checked)}
-                  color="primary"
-                />
-              }
-              label="Autoplay"  // This is the label text
-              sx={{ mt: 2 }}
-            />
-          </>
-        )}
-
-        {elementType === 'code' && (
-          <>
-            <TextField
-              label="Code Content"
-              type="text"
-              variant="outlined"
-              value={contentValue}
-              onChange={(e) => setContentValue(e.target.value)}
-              multiline
-              rows={4}
-              fullWidth
-              sx={{ mt: 2 }}
-            />
-            <TextField
-              label="Font size (em)"
-              type="number"
-              variant="outlined"
-              value={fontSizeValue}
-              onChange={(e) => setFontSizeValue(e.target.value)}
-              sx={{ mt: 2, width: '45%' }}
-            />
-          </>
-        )}
-
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-          <Button variant="contained" onClick={handleAction}>
-            Confirm
-          </Button>
-          <Button variant="contained" color="error" onClick={onClose}>
-            Cancel
-          </Button>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+            <Button variant="contained" onClick={handleAction}>
+              Confirm
+            </Button>
+            <Button variant="contained" color="error" onClick={onClose}>
+              Cancel
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Modal>
+      </Modal>
+      <PopupModal
+        open={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+        instruction={errorMessage}
+        onSubmit={() => setIsErrorModalOpen(false)}
+        confirmMsg="OK"
+      />
+    </>
   );
 };
 
