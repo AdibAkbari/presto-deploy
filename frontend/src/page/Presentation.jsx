@@ -32,6 +32,7 @@ function Presentation({ token }) {
 
   // updates element of current slide in presentation
   const updateElement = (updatedElement) => {
+    console.log('updating element', updatedElement);
     const updatedSlides = [...presentation.slides];
     const currentSlide = { ...updatedSlides[currentSlideIndex] };
     currentSlide.elements = currentSlide.elements.map((el) =>

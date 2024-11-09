@@ -24,10 +24,9 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
       sx={{
         position: 'relative',
         width: '70%',
-        border: '2px solid grey',
+        outline: '2px solid grey',
         aspectRatio: '2/1',
         mt: 2,
-        p: 1,
       }}
     >
       {/* Render text elements on the slide */}
@@ -38,12 +37,13 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
               key={`${element.id}-${index}`} 
               element={element} 
               doubleClickFunc={handleDoubleClick}
+              onUpdateElement={onUpdateElement}
             />
           ) : null
         )}
 
       {/* Slide number */}
-      <Typography variant="subtitle1" sx={{ position: 'absolute', bottom: '0px', fontSize: '1em' }}>
+      <Typography variant="subtitle1" sx={{ position: 'absolute', bottom: '0px', fontSize: '1em', ml: '0.8%' }}>
         {slideIndex + 1}
       </Typography>
 
