@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {Menu, Button, MenuItem} from '@mui/material/';
-import NewElementModal from './NewElementModal';
+import ElementModal from './ElementModal';
 
 export default function NewElement({ presentation, setPresentation, currentSlideIndex, savePresentationsToStore, presentations }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -64,11 +64,12 @@ export default function NewElement({ presentation, setPresentation, currentSlide
           </MenuItem>
         ))}
       </Menu>
-      <NewElementModal
+      <ElementModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         elementType={elementType}
-        addElementToSlide={addElementToSlide}
+        onSubmit={addElementToSlide}
+        mode="new"
       />
     </>
   );

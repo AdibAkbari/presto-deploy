@@ -14,33 +14,35 @@ const style = {
   p: 4,
 };
 
-export const defaultBlockSize = 30;
+const defaultBlockSize = 30;
+const errorMessage = "All fields are required.";
 
-const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
-  const [blockWidth, setBlockWidth] = useState(defaultBlockSize);
-  const [blockHeight, setBlockHeight] = useState(defaultBlockSize);
-  const [contentValue, setContentValue] = useState('');
-  const [fontSizeValue, setFontSizeValue] = useState(1);
-  const [fontColorValue, setFontColorValue] = useState('#000000');
-  const [mediaUrl, setMediaUrl] = useState('');
-  const [altText, setAltText] = useState('');
-  const [autoPlay, setAutoPlay] = useState(false);
-  const errorMessage = "All fields are required.";
+const ElementModal = ({ 
+  open, 
+  onClose, 
+  elementType, 
+  onSubmit,
+  initialData = {},
+  mode = "new" // "new" for new element, "edit" for edit element
+}) => {
+  const [blockWidth, setBlockWidth] = useState(initialData.width || defaultBlockSize);
+  const [blockHeight, setBlockHeight] = useState(initialData.height || defaultBlockSize);
+  const [contentValue, setContentValue] = useState(initialData.content || '');
+  const [fontSizeValue, setFontSizeValue] = useState(initialData.fontSize || 1);
+  const [fontColorValue, setFontColorValue] = useState(initialData.color || '#000000');
+  const [mediaUrl, setMediaUrl] = useState(initialData.url || '');
+  const [altText, setAltText] = useState(initialData.altText || '');
+  const [autoPlay, setAutoPlay] = useState(initialData.autoPlay || false);
 
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   const modalTitle = () => {
     switch (elementType) {
-    case 'text':
-      return 'New Text Box';
-    case 'image':
-      return 'Add Image';
-    case 'video':
-      return 'Add Video';
-    case 'code':
-      return 'Add Code Box';
-    default:
-      return 'New Element';
+    case 'text': return mode === 'new'? 'New Text Box': 'Edit Text Box';
+    case 'image': return mode === 'new'? 'Add Image': 'Edit Image';
+    case 'video': return mode === 'new'? 'Add Video': 'Edit Video';
+    case 'code': return mode === 'new'? 'Add Code Box': 'Edit Code Box';
+    default: return 'New Element';
     }
   }
 
@@ -58,17 +60,17 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
     }
   }, [open]);
 
-  const handleAction = () => {
-    if (!blockWidth || !blockHeight) {
+  const handleSubmit = () => {
+    if (mode === "new" && (!blockWidth || !blockHeight)) {
       setIsErrorModalOpen(true);
       return
     }
-    let newElement = {
-      elementId: `element_${Date.now()}`,
+
+    let elementData = {
       type: elementType,
       width: blockWidth,
       height: blockHeight,
-      position: { x: 0, y: 0 },
+      position: initialData.position || { x: 0, y: 0 },
     };
 
     switch (elementType) {
@@ -77,8 +79,8 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
         setIsErrorModalOpen(true);
         return;
       }
-      newElement = {
-        ...newElement,
+      elementData = {
+        ...elementData,
         content: contentValue,
         fontSize: fontSizeValue,
         color: fontColorValue,
@@ -89,8 +91,8 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
         setIsErrorModalOpen(true);
         return;
       }
-      newElement = {
-        ...newElement,
+      elementData = {
+        ...elementData,
         url: mediaUrl,
         altText: altText,
       };
@@ -100,8 +102,8 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
         setIsErrorModalOpen(true);
         return;
       }
-      newElement = {
-        ...newElement,
+      elementData = {
+        ...elementData,
         url: mediaUrl,
         autoPlay: autoPlay
       };
@@ -111,8 +113,8 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
         setIsErrorModalOpen(true);
         return;
       }
-      newElement = {
-        ...newElement,
+      elementData = {
+        ...elementData,
         content: contentValue,
         fontSize: fontSizeValue,
       };
@@ -121,7 +123,7 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
       break;
     }
 
-    addElementToSlide(newElement);
+    onSubmit(elementData),
     onClose();
   };
 
@@ -137,24 +139,28 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
           <Typography id="modal-title" variant="subtitle1">
             {modalTitle()}
           </Typography>
-          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-            <TextField
-              label="Block width (%)"
-              type="number"
-              variant="outlined"
-              value={blockWidth}
-              onChange={(e) => setBlockWidth(e.target.value)}
-              sx={{ mt: 2, width: '45%' }}
-            />
-            <TextField
-              label="Block height (%)"
-              type="number"
-              variant="outlined"
-              value={blockHeight}
-              onChange={(e) => setBlockHeight(e.target.value)}
-              sx={{ mt: 2, width: '45%' }}
-            />
-          </Box>
+
+          {/* only show width and height inputs in new element mode */}
+          {mode === "new" && (
+            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+              <TextField
+                label="Block width (%)"
+                type="number"
+                variant="outlined"
+                value={blockWidth}
+                onChange={(e) => setBlockWidth(e.target.value)}
+                sx={{ mt: 2, width: '45%' }}
+              />
+              <TextField
+                label="Block height (%)"
+                type="number"
+                variant="outlined"
+                value={blockHeight}
+                onChange={(e) => setBlockHeight(e.target.value)}
+                sx={{ mt: 2, width: '45%' }}
+              />
+            </Box>
+          )}
           
 
           {/* Conditional fields based on element type */}
@@ -234,7 +240,7 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
                     color="primary"
                   />
                 }
-                label="Autoplay"  // This is the label text
+                label="Autoplay"
                 sx={{ mt: 2 }}
               />
             </>
@@ -265,8 +271,8 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
           )}
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-            <Button variant="contained" onClick={handleAction}>
-              Confirm
+            <Button variant="contained" onClick={handleSubmit}>
+              {mode === "new" ? "Create" : "Save"}
             </Button>
             <Button variant="contained" color="error" onClick={onClose}>
               Cancel
@@ -285,4 +291,4 @@ const NewElementModal = ({ open, onClose, elementType, addElementToSlide }) => {
   );
 };
 
-export default NewElementModal;
+export default ElementModal;

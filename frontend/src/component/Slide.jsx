@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import EditElementModal from './EditElementModal';
+import ElementModal from './ElementModal';
 import TextElement from '../elements/TextElement';
 
 function Slide({ slide, slideIndex, onUpdateElement }) {
@@ -15,8 +15,6 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
       const { offsetWidth, offsetHeight } = slideRef.current;
       setSlideWidth(offsetWidth);
       setSlideHeight(offsetHeight);
-      console.log('slide width', slideWidth);
-      console.log('slide Height', slideHeight);
     }
   })
 
@@ -47,9 +45,9 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
       {slide.elements &&
         slide.elements.map((element, index) =>
           element.type === 'text' ? (
-            <TextElement 
-              key={`${element.id}-${index}`} 
-              element={element} 
+            <TextElement
+              key={`${element.id}-${index}`}
+              element={element}
               doubleClickFunc={handleDoubleClick}
               onUpdateElement={onUpdateElement}
               parentWidth={slideWidth}
@@ -65,11 +63,13 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
 
       {/* Modal to edit text box properties */}
       {isEditing && selectedElement && (
-        <EditElementModal
+        <ElementModal
           open={isEditing}
-          element={selectedElement}
           onClose={() => setIsEditing(false)}
-          onSave={handleSave}
+          elementType={selectedElement.type}
+          onSubmit={handleSave}
+          initialData={selectedElement}
+          mode="edit"
         />
       )}
     </Box>
