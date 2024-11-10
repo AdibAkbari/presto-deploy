@@ -31,6 +31,7 @@ const ElementModal = ({
   const [fontSizeValue, setFontSizeValue] = useState(initialData.fontSize || 1);
   const [fontColorValue, setFontColorValue] = useState(initialData.color || '#000000');
   const [mediaUrl, setMediaUrl] = useState(initialData.url || '');
+  const [imageFile, setImageFile] = useState(null);
   const [altText, setAltText] = useState(initialData.altText || '');
   const [autoPlay, setAutoPlay] = useState(initialData.autoPlay || false);
 
@@ -55,10 +56,24 @@ const ElementModal = ({
       setFontSizeValue(1);
       setFontColorValue('#000000');
       setMediaUrl('');
+      setImageFile(null);
       setAltText('');
       setAutoPlay(false);
     }
   }, [open]);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setImageFile(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setMediaUrl(reader.result); // set mediaUrl to base64 string
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = () => {
     if (mode === "new" && (!blockWidth || !blockHeight)) {
@@ -87,7 +102,7 @@ const ElementModal = ({
       };
       break;
     case 'image':
-      if (!mediaUrl || !altText) {
+      if ((!mediaUrl && !imageFile) || !altText) {
         setIsErrorModalOpen(true);
         return;
       }
@@ -209,6 +224,13 @@ const ElementModal = ({
                 fullWidth
                 sx={{ mt: 2 }}
               />
+              <Typography variant="body2" sx={{ mt: 2 }}>Or upload a file:</Typography>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                style={{ marginTop: '8px', marginBottom: '8px' }}
+              />``
               <TextField
                 label="Image Description"
                 type="text"

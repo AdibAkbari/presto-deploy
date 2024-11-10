@@ -3,7 +3,10 @@ import { Box } from '@mui/material';
 function TextElement({ element, doubleClickFunc, handleClick, handleBlur }) {
   return (
     <Box
-      onDoubleClick={() => doubleClickFunc(element)} tabIndex={-1} onClick={handleClick} onBlur={handleBlur}
+      onDoubleClick={() => doubleClickFunc(element)} 
+      tabIndex={-1} 
+      onClick={handleClick} 
+      onBlur={handleBlur}
       sx={{
         color: element.color,
         fontSize: `${element.fontSize}em`,
