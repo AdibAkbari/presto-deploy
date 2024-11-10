@@ -237,7 +237,11 @@ function Presentation({ token }) {
       />
       {/* Displaying first slide */}
       {presentation && presentation.slides && presentation.slides.length > 0 && (
-        <Slide slide={presentation.slides[currentSlideIndex]} slideIndex={currentSlideIndex} onUpdateElement={updateElement}/>
+        <Slide 
+          slide={presentation.slides[currentSlideIndex]} 
+          slideIndex={currentSlideIndex} 
+          onUpdateElement={updateElement}
+        />
       )}
       {/* Footer controls */}
       <Box

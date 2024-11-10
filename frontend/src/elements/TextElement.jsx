@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { Rnd } from 'react-rnd';
 import { useState, useEffect } from 'react';
 
-function TextElement({ element, doubleClickFunc, onUpdateElement }) {
+function TextElement({ element, doubleClickFunc, onUpdateElement, parentWidth, parentHeight }) {
   const [position, setPosition] = useState(element.position);
   const [size, setSize] = useState({ width: element.width, height: element.height });
 
@@ -13,8 +13,8 @@ function TextElement({ element, doubleClickFunc, onUpdateElement }) {
 
   const handleDragStop = (e, data) => {
     const updatedPosition = {
-      x: data.x,
-      y: data.y,
+      x: (data.x / parentWidth) * 100,
+      y: (data.y / parentHeight) * 100
     };
 
     setPosition(updatedPosition);
@@ -24,13 +24,13 @@ function TextElement({ element, doubleClickFunc, onUpdateElement }) {
   const handleResizeStop = (e, direction, ref, delta, newPosition) => {
     
     const updatedSize = {
-      width: (ref.offsetWidth / ref.parentElement.clientWidth) * 100,
-      height: (ref.offsetHeight / ref.parentElement.clientHeight) * 100,
+      width: (ref.offsetWidth / parentWidth) * 100,
+      height: (ref.offsetHeight / parentHeight) * 100,
     };
 
     const updatedPosition = {
-      x: newPosition.x,
-      y: newPosition.y,
+      x: (newPosition.x / parentWidth) * 100,
+      y: (newPosition.y / parentHeight) * 100,
     };
 
     setSize(updatedSize);
@@ -44,15 +44,16 @@ function TextElement({ element, doubleClickFunc, onUpdateElement }) {
     });
   };
 
+
   return (
     <Rnd
       size={{
         width: `${size.width}%`,
         height: `${size.height}%`,
       }}
-      position={{
-        x: position.x,
-        y: position.y
+      position={{ 
+        x: (position.x * parentWidth) / 100,
+        y: (position.y * parentHeight) / 100
       }}
       onDragStop={handleDragStop}
       onResizeStop={handleResizeStop}

@@ -1,11 +1,24 @@
 import { Box, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import EditElementModal from './EditElementModal';
 import TextElement from '../elements/TextElement';
 
 function Slide({ slide, slideIndex, onUpdateElement }) {
   const [selectedElement, setSelectedElement] = useState(null); // Track the element to edit
   const [isEditing, setIsEditing] = useState(false);
+  const slideRef = useRef(null);
+  const [slideWidth, setSlideWidth] = useState(0);
+  const [slideHeight, setSlideHeight] = useState(0);
+
+  useEffect(() => {
+    if (slideRef.current) {
+      const { offsetWidth, offsetHeight } = slideRef.current;
+      setSlideWidth(offsetWidth);
+      setSlideHeight(offsetHeight);
+      console.log('slide width', slideWidth);
+      console.log('slide Height', slideHeight);
+    }
+  })
 
   if (!slide) return null;
 
@@ -21,6 +34,7 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
 
   return (
     <Box
+      ref={slideRef}
       sx={{
         position: 'relative',
         width: '70%',
@@ -38,6 +52,8 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
               element={element} 
               doubleClickFunc={handleDoubleClick}
               onUpdateElement={onUpdateElement}
+              parentWidth={slideWidth}
+              parentHeight={slideHeight}
             />
           ) : null
         )}
