@@ -65,9 +65,8 @@ const ElementModal = ({
       setIsErrorModalOpen(true);
       return
     }
-
     let elementData = {
-      elementId: initialData.id || `elid_${Date.now()}`,
+      elementId: initialData.elementId || `elid_${Date.now()}`,
       type: elementType,
       width: blockWidth,
       height: blockHeight,

@@ -12,7 +12,6 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
   const [borderStyle, setborderStyle] = useState('grey');
   const elementRef = useRef(null);
 
-
   useEffect(() => {
     if (isClicked) {
       setResizeHandleDisplay('inline');
@@ -140,11 +139,11 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       ></Box>
 
       {element.type === 'text' && (
-        <TextElement element={element} editElement={doubleClickFunc} handleClick={handleClick} handleBlur={handleBlur}/>
+        <TextElement element={element} doubleClickFunc={doubleClickFunc} handleClick={handleClick} handleBlur={handleBlur}/>
       )}
 
       {element.type === 'image' && (
-        <ImageElement element={element} editElement={doubleClickFunc} handleClick={handleClick} handleBlur={handleBlur}/>
+        <ImageElement element={element} doubleClickFunc={doubleClickFunc} handleClick={handleClick} handleBlur={handleBlur}/>
       )}
     </Rnd>
   );

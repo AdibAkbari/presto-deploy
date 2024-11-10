@@ -38,6 +38,7 @@ function Presentation({ token }) {
     currentSlide.elements = currentSlide.elements.map((el) =>
       el.elementId === updatedElement.elementId ? updatedElement : el
     );
+    console.log('currentSlide', currentSlide);
     updatedSlides[currentSlideIndex] = currentSlide;
     const updatedPresentation = { ...presentation, slides: updatedSlides };
     setPresentation(updatedPresentation);
