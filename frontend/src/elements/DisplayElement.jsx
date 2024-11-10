@@ -29,11 +29,6 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
     setborderStyle('grey');
   };
   
-  useEffect(() => {
-    setPosition(element.position);
-    setSize({ width: element.width, height: element.height });
-  }, [element]);
-
   const handleDragStop = (e, data) => {
     const updatedPosition = {
       x: (data.x / parentWidth) * 100,
