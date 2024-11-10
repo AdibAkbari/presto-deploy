@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import ElementModal from './ElementModal';
-import TextElement from '../elements/TextElement';
+import DisplayElement from '../elements/DisplayElement';
 
 function Slide({ slide, slideIndex, onUpdateElement }) {
   const [selectedElement, setSelectedElement] = useState(null); // Track the element to edit
@@ -44,16 +44,14 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
       {/* Render text elements on the slide */}
       {slide.elements &&
         slide.elements.map((element, index) =>
-          element.type === 'text' ? (
-            <TextElement
-              key={`${element.id}-${index}`}
-              element={element}
-              doubleClickFunc={handleDoubleClick}
-              onUpdateElement={onUpdateElement}
-              parentWidth={slideWidth}
-              parentHeight={slideHeight}
-            />
-          ) : null
+          <DisplayElement
+            key={`${element.id}-${index}`}
+            element={element}
+            doubleClickFunc={handleDoubleClick}
+            onUpdateElement={onUpdateElement}
+            parentWidth={slideWidth}
+            parentHeight={slideHeight}
+          />
         )}
 
       {/* Slide number */}

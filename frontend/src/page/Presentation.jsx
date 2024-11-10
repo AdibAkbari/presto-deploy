@@ -98,7 +98,7 @@ function Presentation({ token }) {
   const savePresentationsToStore = (updatedData) => {
     axios
       .put('http://localhost:5005/store', { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
-      .then(() => console.log("Presentation edited successfully"))
+      .then(() => console.log("Presentation edited successfully", updatedData))
       .catch(error => console.error("Error editing presentations:", error));
   };
   useEffect(() => {

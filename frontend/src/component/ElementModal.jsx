@@ -67,6 +67,7 @@ const ElementModal = ({
     }
 
     let elementData = {
+      elementId: initialData.id || `elid_${Date.now()}`,
       type: elementType,
       width: blockWidth,
       height: blockHeight,
