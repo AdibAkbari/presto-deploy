@@ -1,12 +1,16 @@
 import { Box } from '@mui/material';
 
-function TextElement({ element, doubleClickFunc, handleClick, handleBlur }) {
+function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal }) {
   return (
     <Box
       onDoubleClick={() => doubleClickFunc(element)} 
       tabIndex={-1} 
       onClick={handleClick} 
       onBlur={handleBlur}
+      onContextMenu={(event) => {
+        event.preventDefault();
+        onOpenDeleteModal();
+      }}
       sx={{
         color: element.color,
         fontSize: `${element.fontSize}em`,

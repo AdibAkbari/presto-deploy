@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-function ImageElement({ element, doubleClickFunc, handleClick, handleBlur }) {
+function ImageElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal }) {
   return (
     <Box
       component="img"
@@ -9,6 +9,10 @@ function ImageElement({ element, doubleClickFunc, handleClick, handleBlur }) {
       onBlur={handleBlur}
       onDragStart={(e) => e.preventDefault()}
       onDoubleClick={() => doubleClickFunc(element)}
+      onContextMenu={(event) => {
+        event.preventDefault();
+        onOpenDeleteModal();
+      }}
       sx={{
         width: '100%',
         height: '100%',

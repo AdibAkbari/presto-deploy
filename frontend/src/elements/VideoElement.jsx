@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import ReactPlayer from 'react-player/lazy';
 import { useState } from 'react';
 
-function VideoElement({ element, doubleClickFunc, handleClick, handleBlur }) {
+function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal }) {
   const [resize, setResize] = useState(false);
 
   useEffect(() => {
@@ -19,6 +19,10 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur }) {
       onClick={handleClick}
       onBlur={handleBlur}
       onDoubleClick={() => doubleClickFunc(element)}
+      onContextMenu={(event) => {
+        event.preventDefault();
+        onOpenDeleteModal();
+      }}
       sx={{
         width: '100%',
         height: '100%'

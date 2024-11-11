@@ -230,7 +230,7 @@ const ElementModal = ({
                 accept="image/*"
                 onChange={handleFileChange}
                 style={{ marginTop: '8px', marginBottom: '8px' }}
-              />``
+              />
               <TextField
                 label="Image Description"
                 type="text"
