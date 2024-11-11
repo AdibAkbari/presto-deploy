@@ -3,6 +3,7 @@ import { Rnd } from 'react-rnd';
 import { useState, useEffect, useRef } from 'react';
 import TextElement from './TextElement';
 import ImageElement from './ImageElement';
+import VideoElement from './VideoElement';
 
 function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth, parentHeight }) {
   const [position, setPosition] = useState(element.position);
@@ -139,6 +140,10 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
 
       {element.type === 'image' && (
         <ImageElement element={element} doubleClickFunc={doubleClickFunc} handleClick={handleClick} handleBlur={handleBlur}/>
+      )}
+
+      {element.type === 'video' && (
+        <VideoElement element={element} doubleClickFunc={doubleClickFunc} handleClick={handleClick} handleBlur={handleBlur}/>
       )}
     </Rnd>
   );
