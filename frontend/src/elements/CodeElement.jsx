@@ -1,6 +1,4 @@
 import { Box } from '@mui/material';
-import hljs from 'highlight.js';
-import {useEffect} from 'react';
 import flourite from 'flourite';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coy } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -29,6 +27,7 @@ function CodeElement({ element, doubleClickFunc, handleClick, handleBlur, onOpen
       sx={{
         width: '100%',
         height: '100%',
+        position: 'relative'
       }}
     >
       <SyntaxHighlighter
@@ -40,6 +39,10 @@ function CodeElement({ element, doubleClickFunc, handleClick, handleBlur, onOpen
           fontSize: `${element.fontSize}em`,
           width: '100%',
           height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          margin: '0px'
         }}
       >
         {element.content}
