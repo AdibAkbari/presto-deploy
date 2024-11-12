@@ -16,9 +16,8 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpe
 
   return (
     <Box
-      ref={boxRef}
       tabIndex={-1}
-      onClick={handleVideoClick}
+      onClick={handleClick}
       onBlur={handleBlur}
       onDoubleClick={() => doubleClickFunc(element)}
       onContextMenu={(event) => {
