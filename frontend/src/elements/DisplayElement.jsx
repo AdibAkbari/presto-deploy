@@ -85,7 +85,7 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       minWidth="1%"
       minHeight="1%"
       style={{
-        border: `1px solid ${borderStyle}`
+        border: isPreview? 'none' : `1px solid ${borderStyle}`
       }}
       ref={elementRef}
     >

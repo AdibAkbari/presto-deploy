@@ -58,7 +58,7 @@ function Slide({ slide, slideIndex, onUpdateElement, deleteElement, isPreview })
       {slide.elements &&
         slide.elements.map((element, index) =>
           <DisplayElement
-            key={`${element.id}-${index}`}
+            key={`${element.elementId}-${index}`}
             element={element}
             doubleClickFunc={handleDoubleClick}
             onUpdateElement={onUpdateElement}
