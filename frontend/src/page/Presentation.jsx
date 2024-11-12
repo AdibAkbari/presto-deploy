@@ -128,6 +128,9 @@ function Presentation({ token }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentSlideIndex, presentation?.slides?.length]);
 
+  const handlePreview = () => {
+    window.open(`/preview/${presentationId}`, '_blank');
+  };
 
   useEffect(() => {
     if (token) {
@@ -230,6 +233,13 @@ function Presentation({ token }) {
             savePresentationsToStore={savePresentationsToStore}
             presentations={presentations}
           />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handlePreview}
+          >
+            Preview
+          </Button>
         </Box>
         <Button
           variant="contained"
