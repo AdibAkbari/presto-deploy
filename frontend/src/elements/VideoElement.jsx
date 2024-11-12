@@ -26,26 +26,37 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpe
       handleBlur();
     }
   }, [resize]);
+
   return (
     <Box
+      ref={boxRef}
       tabIndex={-1}
-      onClick={handleClick}
+      onClick={handleVideoClick}
       onBlur={handleBlur}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleDelete}
       sx={{
         width: '100%',
-        height: '100%'
+        height: '100%',
+        position: 'relative'
       }}
     >
       <ReactPlayer
         url={element.url}
         width='100%'
         height='100%'
-        autoPlay={element.autoplay}
-        muted={element.autoplay}
-        onPause={() => setResize(!resize)}
-        onPlay={() => setResize(!resize)}
+        playing={element.autoPlay}
+        muted={element.autoPlay}
+        controls={element.autoPlay}
+        onPause={() => setResize(false)}
+        onPlay={() => setResize(true)}
+        // According to the documentation this positioning allows for a responsive
+        // video player.
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0
+        }}
       />
     </Box>
   );
