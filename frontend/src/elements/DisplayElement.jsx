@@ -5,7 +5,7 @@ import TextElement from './TextElement';
 import ImageElement from './ImageElement';
 import VideoElement from './VideoElement';
 
-function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth, parentHeight }) {
+function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth, parentHeight, onOpenDeleteModal }) {
   const [position, setPosition] = useState(element.position);
   const [size, setSize] = useState({ width: element.width, height: element.height });
   const [isClicked, setIsClicked] = useState(false);
@@ -143,15 +143,33 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       ></Box>
 
       {element.type === 'text' && (
-        <TextElement element={element} doubleClickFunc={doubleClickFunc} handleClick={handleClick} handleBlur={handleBlur}/>
+        <TextElement 
+          element={element} 
+          doubleClickFunc={doubleClickFunc} 
+          handleClick={handleClick} 
+          handleBlur={handleBlur}
+          onOpenDeleteModal={() => onOpenDeleteModal(element)}
+        />
       )}
 
       {element.type === 'image' && (
-        <ImageElement element={element} doubleClickFunc={doubleClickFunc} handleClick={handleClick} handleBlur={handleBlur}/>
+        <ImageElement 
+          element={element} 
+          doubleClickFunc={doubleClickFunc} 
+          handleClick={handleClick} 
+          handleBlur={handleBlur}
+          onOpenDeleteModal={() => onOpenDeleteModal(element)}
+        />
       )}
 
       {element.type === 'video' && (
-        <VideoElement element={element} doubleClickFunc={doubleClickFunc} handleClick={handleClick} handleBlur={handleBlur}/>
+        <VideoElement 
+          element={element}
+          doubleClickFunc={doubleClickFunc} 
+          handleClick={handleClick} 
+          handleBlur={handleBlur}
+          onOpenDeleteModal={() => onOpenDeleteModal(element)}
+        />
       )}
     </Rnd>
   );

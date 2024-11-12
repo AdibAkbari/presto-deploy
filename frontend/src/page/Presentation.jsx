@@ -38,7 +38,20 @@ function Presentation({ token }) {
     currentSlide.elements = currentSlide.elements.map((el) =>
       el.elementId === updatedElement.elementId ? updatedElement : el
     );
-    console.log('currentSlide', currentSlide);
+    updatedSlides[currentSlideIndex] = currentSlide;
+    const updatedPresentation = { ...presentation, slides: updatedSlides };
+    setPresentation(updatedPresentation);
+    savePresentationsToStore(
+      presentations.map((p) =>
+        p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
+      )
+    );
+  };
+
+  const deleteElement = (elementId) => {
+    const updatedSlides = [...presentation.slides];
+    const currentSlide = { ...updatedSlides[currentSlideIndex] };
+    currentSlide.elements = currentSlide.elements.filter((el) => el.elementId !== elementId);
     updatedSlides[currentSlideIndex] = currentSlide;
     const updatedPresentation = { ...presentation, slides: updatedSlides };
     setPresentation(updatedPresentation);
@@ -115,6 +128,9 @@ function Presentation({ token }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentSlideIndex, presentation?.slides?.length]);
 
+  const handlePreview = () => {
+    window.open(`/preview/${presentationId}`, '_blank');
+  };
 
   useEffect(() => {
     if (token) {
@@ -217,6 +233,13 @@ function Presentation({ token }) {
             savePresentationsToStore={savePresentationsToStore}
             presentations={presentations}
           />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handlePreview}
+          >
+            Preview
+          </Button>
         </Box>
         <Button
           variant="contained"
@@ -242,6 +265,7 @@ function Presentation({ token }) {
           slide={presentation.slides[currentSlideIndex]} 
           slideIndex={currentSlideIndex} 
           onUpdateElement={updateElement}
+          deleteElement={deleteElement}
         />
       )}
       {/* Footer controls */}

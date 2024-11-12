@@ -1,32 +1,10 @@
 import { Box } from '@mui/material';
-import React, { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import ReactPlayer from 'react-player/lazy';
 import { useState } from 'react';
 
-function VideoElement({ element, doubleClickFunc, handleClick, handleBlur }) {
+function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal }) {
   const [resize, setResize] = useState(false);
-  const boxRef = useRef(null);
-  const borderWidth = 12; // Define the border width
-
-  const handleVideoClick = (event) => {
-    if (boxRef.current) {
-      const rect = boxRef.current.getBoundingClientRect();
-
-      // Check if the click is within the border area
-      if (
-        event.clientX < rect.left + borderWidth || 
-        event.clientX > rect.right - borderWidth || 
-        event.clientY < rect.top + borderWidth || 
-        event.clientY > rect.bottom - borderWidth
-      ) {
-        alert("Border clicked!");
-      } else {
-        alert("Inside area clicked!");
-      }
-    }
-  };
-
-  const elementAutoPlay = {element};
 
   useEffect(() => {
     if (resize) {
@@ -35,6 +13,7 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur }) {
       handleBlur();
     }
   }, [resize]);
+
   return (
     <Box
       ref={boxRef}
@@ -42,6 +21,10 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur }) {
       onClick={handleVideoClick}
       onBlur={handleBlur}
       onDoubleClick={() => doubleClickFunc(element)}
+      onContextMenu={(event) => {
+        event.preventDefault();
+        onOpenDeleteModal();
+      }}
       sx={{
         width: '100%',
         height: '100%',

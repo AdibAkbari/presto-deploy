@@ -2,13 +2,26 @@ import { Box, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import ElementModal from './ElementModal';
 import DisplayElement from '../elements/DisplayElement';
+import PopupModal from './PopupModal';
 
-function Slide({ slide, slideIndex, onUpdateElement }) {
+function Slide({ slide, slideIndex, onUpdateElement, deleteElement }) {
   const [selectedElement, setSelectedElement] = useState(null); // Track the element to edit
   const [isEditing, setIsEditing] = useState(false);
   const slideRef = useRef(null);
   const [slideWidth, setSlideWidth] = useState(0);
   const [slideHeight, setSlideHeight] = useState(0);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleOpenDeleteModal = (element) => {
+    setSelectedElement(element);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDelete = () => {
+    deleteElement(selectedElement.elementId);
+    setIsDeleteModalOpen(false);
+    setSelectedElement(null);
+  };
 
   useEffect(() => {
     if (slideRef.current) {
@@ -51,6 +64,7 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
             onUpdateElement={onUpdateElement}
             parentWidth={slideWidth}
             parentHeight={slideHeight}
+            onOpenDeleteModal={handleOpenDeleteModal}
           />
         )}
 
@@ -70,6 +84,14 @@ function Slide({ slide, slideIndex, onUpdateElement }) {
           mode="edit"
         />
       )}
+      <PopupModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        instruction="Are you sure you want to delete this element?"
+        onSubmit={handleDelete}
+        confirmMsg="Yes"
+        cancelMsg="No"
+      />
     </Box>
   );
 }
