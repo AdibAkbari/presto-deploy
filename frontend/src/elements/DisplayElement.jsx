@@ -5,7 +5,7 @@ import TextElement from './TextElement';
 import ImageElement from './ImageElement';
 import VideoElement from './VideoElement';
 
-function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth, parentHeight, onOpenDeleteModal }) {
+function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth, parentHeight, onOpenDeleteModal, isPreview }) {
   const [position, setPosition] = useState(element.position);
   const [size, setSize] = useState({ width: element.width, height: element.height });
   const [isClicked, setIsClicked] = useState(false);
@@ -14,7 +14,7 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
   const elementRef = useRef(null);
 
   useEffect(() => {
-    if (isClicked) {
+    if (isClicked && !isPreview) {
       setResizeHandleDisplay('inline');
       setborderStyle('blue');
     }
@@ -77,8 +77,8 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
         x: (position.x * parentWidth) / 100,
         y: (position.y * parentHeight) / 100
       }}
-      disableDragging={!isClicked}
-      enableResizing={isClicked}
+      disableDragging={isPreview || !isClicked}
+      enableResizing={!isPreview && isClicked}
       onDragStop={handleDragStop}
       onResizeStop={handleResizeStop}
       bounds="parent"
@@ -137,30 +137,33 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       {element.type === 'text' && (
         <TextElement 
           element={element} 
-          doubleClickFunc={doubleClickFunc} 
+          doubleClickFunc={doubleClickFunc}
           handleClick={handleClick} 
           handleBlur={handleBlur}
           onOpenDeleteModal={() => onOpenDeleteModal(element)}
+          isPreview={isPreview}
         />
       )}
 
       {element.type === 'image' && (
         <ImageElement 
           element={element} 
-          doubleClickFunc={doubleClickFunc} 
+          doubleClickFunc={doubleClickFunc}
           handleClick={handleClick} 
           handleBlur={handleBlur}
           onOpenDeleteModal={() => onOpenDeleteModal(element)}
+          isPreview={isPreview}
         />
       )}
 
       {element.type === 'video' && (
         <VideoElement 
           element={element}
-          doubleClickFunc={doubleClickFunc} 
+          doubleClickFunc={doubleClickFunc}
           handleClick={handleClick} 
           handleBlur={handleBlur}
           onOpenDeleteModal={() => onOpenDeleteModal(element)}
+          isPreview={isPreview}
         />
       )}
     </Rnd>

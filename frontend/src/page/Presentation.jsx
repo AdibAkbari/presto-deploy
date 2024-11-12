@@ -115,6 +115,7 @@ function Presentation({ token }) {
       .then(() => console.log("Presentation edited successfully", updatedData))
       .catch(error => console.error("Error editing presentations:", error));
   };
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "ArrowLeft" && currentSlideIndex > 0) {
@@ -266,6 +267,7 @@ function Presentation({ token }) {
           slideIndex={currentSlideIndex} 
           onUpdateElement={updateElement}
           deleteElement={deleteElement}
+          isPreview={false}
         />
       )}
       {/* Footer controls */}

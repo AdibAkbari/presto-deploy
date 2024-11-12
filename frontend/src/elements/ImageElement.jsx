@@ -1,6 +1,18 @@
 import { Box } from '@mui/material';
 
-function ImageElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal }) {
+function ImageElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
+  const handleDoubleClick = () => {
+    if (!isPreview) {
+      doubleClickFunc(element);
+    }
+  };
+
+  const handleDelete = (event) => {
+    if (!isPreview) {
+      event.preventDefault();
+      onOpenDeleteModal();
+    }
+  };
   return (
     <>
       <Box
@@ -8,11 +20,8 @@ function ImageElement({ element, doubleClickFunc, handleClick, handleBlur, onOpe
         onClick={handleClick}
         onBlur={handleBlur}
         onDragStart={(e) => e.preventDefault()}
-        onDoubleClick={() => doubleClickFunc(element)}
-        onContextMenu={(event) => {
-          event.preventDefault();
-          onOpenDeleteModal();
-        }}
+        onDoubleClick={handleDoubleClick}
+        onContextMenu={handleDelete}
         sx={{
           width: '100%',
           height: '100%',

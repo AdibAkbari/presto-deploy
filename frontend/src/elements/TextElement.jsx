@@ -1,16 +1,26 @@
 import { Box } from '@mui/material';
 
-function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal }) {
+function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
+  const handleDoubleClick = () => {
+    if (!isPreview) {
+      doubleClickFunc(element);
+    }
+  };
+
+  const handleDelete = (event) => {
+    if (!isPreview) {
+      event.preventDefault();
+      onOpenDeleteModal();
+    }
+  };
+
   return (
     <Box
-      onDoubleClick={() => doubleClickFunc(element)} 
+      onDoubleClick={handleDoubleClick}
       tabIndex={-1} 
       onClick={handleClick} 
       onBlur={handleBlur}
-      onContextMenu={(event) => {
-        event.preventDefault();
-        onOpenDeleteModal();
-      }}
+      onContextMenu={handleDelete}
       sx={{
         color: element.color,
         fontSize: `${element.fontSize}em`,

@@ -67,12 +67,17 @@ function PreviewPresentation({ token }) {
   }
 
   return (
-    <Box>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
       {presentation.slides && presentation.slides.length > 0 && (
         <Slide
           slide={presentation.slides[currentSlideIndex]}
           slideIndex={currentSlideIndex}
-          isPreview={true} // Indicate preview mode
+          isPreview={true}
         />
       )}
     </Box>

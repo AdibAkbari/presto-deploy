@@ -3,8 +3,21 @@ import { useEffect } from 'react';
 import ReactPlayer from 'react-player/lazy';
 import { useState } from 'react';
 
-function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal }) {
+function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
   const [resize, setResize] = useState(false);
+
+  const handleDoubleClick = () => {
+    if (!isPreview) {
+      doubleClickFunc(element);
+    }
+  };
+
+  const handleDelete = (event) => {
+    if (!isPreview) {
+      event.preventDefault();
+      onOpenDeleteModal();
+    }
+  };
 
   useEffect(() => {
     if (resize) {
@@ -18,11 +31,8 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpe
       tabIndex={-1}
       onClick={handleClick}
       onBlur={handleBlur}
-      onDoubleClick={() => doubleClickFunc(element)}
-      onContextMenu={(event) => {
-        event.preventDefault();
-        onOpenDeleteModal();
-      }}
+      onDoubleClick={handleDoubleClick}
+      onContextMenu={handleDelete}
       sx={{
         width: '100%',
         height: '100%'
