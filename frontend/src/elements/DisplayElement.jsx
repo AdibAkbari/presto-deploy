@@ -11,6 +11,7 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
   const [isClicked, setIsClicked] = useState(false);
   const [resizeHandleDisplay, setResizeHandleDisplay] = useState('none');
   const [borderStyle, setborderStyle] = useState('grey');
+  const [borderSize, setBorderSize] = useState('');
   const elementRef = useRef(null);
 
   useEffect(() => {
@@ -18,10 +19,18 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       setResizeHandleDisplay('inline');
       setborderStyle('blue');
     }
-  }, [isClicked])
+  }, [isClicked]);
+
+  useEffect(() => {
+    if (element.type === 'video') {
+      setBorderSize('12px');
+    } else {
+      setBorderSize('1px');
+    }
+  }, []);
 
   const handleClick = () => {
-    setIsClicked(true)
+    setIsClicked(true);
   }
 
   const handleBlur = () => {
@@ -29,7 +38,7 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
     setResizeHandleDisplay('none');
     setborderStyle('grey');
   };
-  
+
   const handleDragStop = (e, data) => {
     const updatedPosition = {
       x: (data.x / parentWidth) * 100,
@@ -53,7 +62,6 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       x: (newPosition.x / parentWidth) * 100,
       y: (newPosition.y / parentHeight) * 100
     };
-    console.log('setting isClicked to be false in handleResizeStop');
     setIsClicked(false);
     setSize(updatedSize);
     setPosition(updatedPosition);
@@ -85,7 +93,7 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       minWidth="1%"
       minHeight="1%"
       style={{
-        border: `1px solid ${borderStyle}`,
+        border: `${borderSize} solid ${borderStyle}`
       }}
       ref={elementRef}
     >
