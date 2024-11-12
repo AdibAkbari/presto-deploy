@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import ReactPlayer from 'react-player/lazy';
+import {useRef} from 'react';
 
 function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
   const handleDoubleClick = () => {
@@ -34,6 +35,7 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpe
         url={element.url}
         width='100%'
         height='100%'
+        onPlay={() => console.log(playerRef)}
         playing={element.autoPlay}
         muted={element.autoPlay}
         controls={element.autoPlay}

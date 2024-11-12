@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import TextElement from './TextElement';
 import ImageElement from './ImageElement';
 import VideoElement from './VideoElement';
+import CodeElement from './CodeElement';
 
 function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth, parentHeight, onOpenDeleteModal, isPreview }) {
   const [position, setPosition] = useState(element.position);
@@ -157,6 +158,17 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
 
       {element.type === 'video' && (
         <VideoElement 
+          element={element}
+          doubleClickFunc={doubleClickFunc}
+          handleClick={handleClick} 
+          handleBlur={handleBlur}
+          onOpenDeleteModal={() => onOpenDeleteModal(element)}
+          isPreview={isPreview}
+        />
+      )}
+
+      {element.type === 'code' && (
+        <CodeElement
           element={element}
           doubleClickFunc={doubleClickFunc}
           handleClick={handleClick} 
