@@ -1,6 +1,7 @@
 // Dashboard.jsx
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import BACKEND_PORT from '../../backend.config.json';
 import { Typography, Card, CardContent, Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid2';
@@ -15,7 +16,7 @@ function Dashboard({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get('http://localhost:5005/store', { headers: { Authorization: `Bearer ${token}` } })
+        .get(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, { headers: { Authorization: `Bearer ${token}` } })
         .then(response => {
           let newPresentations;
           if (!response.data.store || Object.keys(response.data.store).length === 0) {
@@ -51,7 +52,7 @@ function Dashboard({ token }) {
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
     axios
-      .put('http://localhost:5005/store', { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
+      .put(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
       .then(() => console.log("Presentations saved successfully"))
       .catch(error => console.error("Error saving presentations:", error));
   };

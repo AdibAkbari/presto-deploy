@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import BACKEND_PORT from '../../backend.config.json';
 import { Box, Typography } from '@mui/material';
 import Slide from '../component/Slide';
 
@@ -47,7 +48,7 @@ function PreviewPresentation({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get('http://localhost:5005/store', {
+        .get(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
