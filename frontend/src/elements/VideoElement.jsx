@@ -1,11 +1,7 @@
 import { Box } from '@mui/material';
-import { useEffect } from 'react';
 import ReactPlayer from 'react-player/lazy';
-import { useState } from 'react';
 
 function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
-  const [resize, setResize] = useState(false);
-
   const handleDoubleClick = () => {
     if (!isPreview) {
       doubleClickFunc(element);
@@ -19,14 +15,6 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpe
     }
   };
 
-  useEffect(() => {
-    if (resize) {
-      handleClick();
-    } else {
-      handleBlur();
-    }
-  }, [resize]);
-
   return (
     <Box
       tabIndex={-1}
@@ -37,7 +25,9 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpe
       sx={{
         width: '100%',
         height: '100%',
-        position: 'relative'
+        position: 'relative',
+        border: '10px solid #3b3b3b',
+        boxSizing: 'border-box'
       }}
     >
       <ReactPlayer
@@ -47,8 +37,6 @@ function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpe
         playing={element.autoPlay}
         muted={element.autoPlay}
         controls={element.autoPlay}
-        onPause={() => setResize(false)}
-        onPlay={() => setResize(true)}
         // According to the documentation this positioning allows for a responsive
         // video player.
         sx={{

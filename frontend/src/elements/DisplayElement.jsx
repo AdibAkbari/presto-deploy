@@ -11,7 +11,6 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
   const [isClicked, setIsClicked] = useState(false);
   const [resizeHandleDisplay, setResizeHandleDisplay] = useState('none');
   const [borderStyle, setborderStyle] = useState('grey');
-  const [borderSize, setBorderSize] = useState('');
   const elementRef = useRef(null);
 
   useEffect(() => {
@@ -20,14 +19,6 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       setborderStyle('blue');
     }
   }, [isClicked]);
-
-  useEffect(() => {
-    if (element.type === 'video') {
-      setBorderSize('12px');
-    } else {
-      setBorderSize('1px');
-    }
-  }, []);
 
   const handleClick = () => {
     setIsClicked(true);
@@ -93,7 +84,7 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       minWidth="1%"
       minHeight="1%"
       style={{
-        border: `${borderSize} solid ${borderStyle}`
+        border: `1px solid ${borderStyle}`
       }}
       ref={elementRef}
     >
