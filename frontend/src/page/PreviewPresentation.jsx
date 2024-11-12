@@ -44,7 +44,6 @@ function PreviewPresentation({ token }) {
   }, [currentSlideIndex, presentation?.slides?.length]);
 
 
-
   useEffect(() => {
     if (token) {
       axios
