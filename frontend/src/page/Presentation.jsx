@@ -1,5 +1,5 @@
 import { useNavigate, useParams, useLocation, Routes, Route } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
 import { Box, Typography, Button, IconButton } from '@mui/material';
@@ -284,7 +284,7 @@ function Presentation({ token }) {
                     onSubmit={updateThumbnail}
                     confirmMsg={"Update"}
                   />
-                   <Button
+                  <Button
                     onClick={() => setIsFontFamilyModalOpen(true)}
                     variant="contained"
                     color="success"

@@ -9,7 +9,7 @@ import Presentation from './page/Presentation';
 import PreviewPresentation from './page/PreviewPresentation';
 
 function Router() {
-
+  
   const [token, setToken] = useState(localStorage.getItem('token'));
   const navigate = useNavigate();
   const location = useLocation();

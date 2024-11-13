@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import '@fontsource/open-sans';
 import '@fontsource/poppins';
 import PresentationContext from '../PresentationContext';
