@@ -7,6 +7,7 @@ import Dashboard from './page/Dashboard';
 import NavBar from './component/NavBar';
 import Presentation from './page/Presentation';
 import PreviewPresentation from './page/PreviewPresentation';
+import SlidesRearrange from './page/SlidesRearrange';
 
 function Router() {
 
@@ -42,6 +43,7 @@ function Router() {
         <Route path="/presentation/:presentationId" element={<Presentation token={token} />} />
         <Route path="/login" element={<Login handleSuccess={handleNewToken} />} />
         <Route path="/preview/:presentationId" element={<PreviewPresentation token={token} />} />
+        <Route path="presentation/:presentationId/rearrange" element={<SlidesRearrange token={token}/>} />
       </Routes>
     </>
   )

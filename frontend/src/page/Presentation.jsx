@@ -188,7 +188,8 @@ function Presentation({ token }) {
 
   return (
     <Box
-      sx={{ p: 3,
+      sx={{ 
+        p: 3,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
@@ -266,6 +267,13 @@ function Presentation({ token }) {
             onClick={handlePreview}
           >
             Preview
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate(`/presentation/${presentationId}/rearrange`)}
+          >
+            Rearrange Slides
           </Button>
         </Box>
         <Button
