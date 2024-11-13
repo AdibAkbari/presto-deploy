@@ -99,6 +99,7 @@ const ElementModal = ({
         content: contentValue,
         fontSize: fontSizeValue,
         color: fontColorValue,
+        // Poppins is the default font.
         fontFamily: 'poppins'
       };
       break;

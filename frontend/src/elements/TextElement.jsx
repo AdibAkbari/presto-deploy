@@ -1,9 +1,11 @@
 import { Box } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import '@fontsource/open-sans';
 import '@fontsource/poppins';
+import PresentationContext from '../PresentationContext';
 
 function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
+  const currFontFamily = useContext(PresentationContext).fontFamily;
   const handleDoubleClick = () => {
     if (!isPreview) {
       doubleClickFunc(element);
@@ -32,7 +34,7 @@ function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpen
         textAlign: 'left',
         overflow: 'hidden',
         padding: 1,
-        fontFamily: `${element.fontFamily}`,
+        fontFamily: `${currFontFamily}`,
       }}
     >
       {element.content}

@@ -1,5 +1,5 @@
 import { useNavigate, useParams, useLocation, Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
 import { Box, Typography, Button, IconButton } from '@mui/material';
@@ -24,6 +24,7 @@ function Presentation({ token }) {
   const [isSlideInitialized, setIsSlideInitialized] = useState(false);
   const [isRearranging, setIsRearranging] = useState(false);
   const [isFontFamilyModalOpen, setIsFontFamilyModalOpen] = useState(false);
+  const [fontFamily, setFontFamily] = useState('poppins');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -141,18 +142,7 @@ function Presentation({ token }) {
   }
   // Function to change the font family of the entire presentation.
   const changeFont = (newFont) => {
-    const currentSlides = [...presentation.slides];
-
-    currentSlides.forEach(s => {
-      console.log(s.slideId);
-      const currentElments = [...s.elements];
-      currentElments.forEach(e => {
-        if (e.type === 'text') {
-          const updatedElement = {...e, fontFamily: `${newFont}`}
-          updateElement(updatedElement);
-        }
-      })
-    })
+    setFontFamily(newFont);
   }
 
   // Function to save presentations to the backend
@@ -217,9 +207,9 @@ function Presentation({ token }) {
     presentationId,
     token,
     navigate,
-    setIsRearranging
+    setIsRearranging,
+    fontFamily
   };
-
 
   return (
     <PresentationContext.Provider value={contextValue}>
