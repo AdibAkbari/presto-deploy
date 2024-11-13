@@ -1,5 +1,5 @@
 import { useNavigate, useParams, useLocation, Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
 import { Box, Typography, Button, IconButton } from '@mui/material';
@@ -10,6 +10,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import NewElement from '../component/NewElement';
 import SlidesRearrange from './SlidesRearrange';
 import PresentationContext from '../PresentationContext';
+import FontFamilyModal from '../component/FontFamilyModal';
+import FontIcon from '@mui/icons-material/TextFields';
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -21,6 +23,8 @@ function Presentation({ token }) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isSlideInitialized, setIsSlideInitialized] = useState(false);
   const [isRearranging, setIsRearranging] = useState(false);
+  const [isFontFamilyModalOpen, setIsFontFamilyModalOpen] = useState(false);
+  const [fontFamily, setFontFamily] = useState('poppins');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -136,6 +140,10 @@ function Presentation({ token }) {
       }
     }
   }
+  // Function to change the font family of the entire presentation.
+  const changeFont = (newFont) => {
+    setFontFamily(newFont);
+  }
 
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
@@ -199,9 +207,9 @@ function Presentation({ token }) {
     presentationId,
     token,
     navigate,
-    setIsRearranging
+    setIsRearranging,
+    fontFamily
   };
-
 
   return (
     <PresentationContext.Provider value={contextValue}>
@@ -274,6 +282,21 @@ function Presentation({ token }) {
                     instruction="Put the URL of the image"
                     nameOfInput="Thumbnail"
                     onSubmit={updateThumbnail}
+                    confirmMsg={"Update"}
+                  />
+                   <Button
+                    onClick={() => setIsFontFamilyModalOpen(true)}
+                    variant="contained"
+                    color="success"
+                    endIcon={<FontIcon/>}
+                  >
+                    Font Family
+                  </Button>
+                  <FontFamilyModal
+                    open={isFontFamilyModalOpen}
+                    onClose={() => setIsFontFamilyModalOpen(false)}
+                    instruction="Select the font family for all textboxes"
+                    onSubmit={changeFont}
                     confirmMsg={"Update"}
                   />
                   <NewElement

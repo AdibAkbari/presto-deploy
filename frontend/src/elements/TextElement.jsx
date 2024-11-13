@@ -1,6 +1,11 @@
 import { Box } from '@mui/material';
+import { useContext, useState } from 'react';
+import '@fontsource/open-sans';
+import '@fontsource/poppins';
+import PresentationContext from '../PresentationContext';
 
 function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
+  const currFontFamily = useContext(PresentationContext).fontFamily;
   const handleDoubleClick = () => {
     if (!isPreview) {
       doubleClickFunc(element);
@@ -17,8 +22,8 @@ function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpen
   return (
     <Box
       onDoubleClick={handleDoubleClick}
-      tabIndex={-1} 
-      onClick={handleClick} 
+      tabIndex={-1}
+      onClick={handleClick}
       onBlur={handleBlur}
       onContextMenu={handleDelete}
       sx={{
@@ -29,6 +34,7 @@ function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpen
         textAlign: 'left',
         overflow: 'hidden',
         padding: 1,
+        fontFamily: `${currFontFamily}`,
       }}
     >
       {element.content}
