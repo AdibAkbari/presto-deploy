@@ -1,4 +1,7 @@
 import { Box } from '@mui/material';
+import { useState } from 'react';
+import '@fontsource/open-sans';
+import '@fontsource/poppins';
 
 function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
   const handleDoubleClick = () => {
@@ -17,8 +20,8 @@ function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpen
   return (
     <Box
       onDoubleClick={handleDoubleClick}
-      tabIndex={-1} 
-      onClick={handleClick} 
+      tabIndex={-1}
+      onClick={handleClick}
       onBlur={handleBlur}
       onContextMenu={handleDelete}
       sx={{
@@ -29,6 +32,7 @@ function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpen
         textAlign: 'left',
         overflow: 'hidden',
         padding: 1,
+        fontFamily: `${element.fontFamily}`,
       }}
     >
       {element.content}

@@ -10,6 +10,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import NewElement from '../component/NewElement';
 import SlidesRearrange from './SlidesRearrange';
 import PresentationContext from '../PresentationContext';
+import FontFamilyModal from '../component/FontFamilyModal';
+import FontIcon from '@mui/icons-material/TextFields';
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -21,6 +23,7 @@ function Presentation({ token }) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isSlideInitialized, setIsSlideInitialized] = useState(false);
   const [isRearranging, setIsRearranging] = useState(false);
+  const [isFontFamilyModalOpen, setIsFontFamilyModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -135,6 +138,21 @@ function Presentation({ token }) {
         setCurrentSlideIndex(currentSlideIndex - 1);
       }
     }
+  }
+  // Function to change the font family of the entire presentation.
+  const changeFont = (newFont) => {
+    const currentSlides = [...presentation.slides];
+
+    currentSlides.forEach(s => {
+      console.log(s.slideId);
+      const currentElments = [...s.elements];
+      currentElments.forEach(e => {
+        if (e.type === 'text') {
+          const updatedElement = {...e, fontFamily: `${newFont}`}
+          updateElement(updatedElement);
+        }
+      })
+    })
   }
 
   // Function to save presentations to the backend
@@ -274,6 +292,21 @@ function Presentation({ token }) {
                     instruction="Put the URL of the image"
                     nameOfInput="Thumbnail"
                     onSubmit={updateThumbnail}
+                    confirmMsg={"Update"}
+                  />
+                   <Button
+                    onClick={() => setIsFontFamilyModalOpen(true)}
+                    variant="contained"
+                    color="success"
+                    endIcon={<FontIcon/>}
+                  >
+                    Font Family
+                  </Button>
+                  <FontFamilyModal
+                    open={isFontFamilyModalOpen}
+                    onClose={() => setIsFontFamilyModalOpen(false)}
+                    instruction="Select the font family for all textboxes"
+                    onSubmit={changeFont}
                     confirmMsg={"Update"}
                   />
                   <NewElement

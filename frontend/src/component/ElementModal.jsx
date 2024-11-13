@@ -99,6 +99,7 @@ const ElementModal = ({
         content: contentValue,
         fontSize: fontSizeValue,
         color: fontColorValue,
+        fontFamily: 'poppins'
       };
       break;
     case 'image':
@@ -176,7 +177,6 @@ const ElementModal = ({
               />
             </Box>
           )}
-          
 
           {/* Conditional fields based on element type */}
           {elementType === 'text' && (
