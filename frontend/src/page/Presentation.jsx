@@ -1,4 +1,4 @@
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
@@ -8,6 +8,7 @@ import PopupModal from '../component/PopupModal';
 import Slide from '../component/Slide';
 import EditIcon from '@mui/icons-material/Edit';
 import NewElement from '../component/NewElement';
+import SlidesRearrange from './SlidesRearrange';
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -18,6 +19,7 @@ function Presentation({ token }) {
   const [presentations, setPresentations] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isSlideInitialized, setIsSlideInitialized] = useState(false);
+  const [isRearranging, setIsRearranging] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -34,7 +36,7 @@ function Presentation({ token }) {
 
   // tries to get slide number from url
   useEffect(() => {
-    if (!isSlideInitialized) {
+    if (!isRearranging && !isSlideInitialized) {
       const searchParams = new URLSearchParams(location.search);
       const slideParam = searchParams.get('slide');
       if (slideParam) {
@@ -49,7 +51,7 @@ function Presentation({ token }) {
   
   // adds slide number to url when currentSlideIndex changes
   useEffect(() => {
-    if (isSlideInitialized) {
+    if (!isRearranging && isSlideInitialized) {
       const searchParams = new URLSearchParams(location.search);
       searchParams.set('slide', currentSlideIndex + 1);
       navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
@@ -187,179 +189,190 @@ function Presentation({ token }) {
   }
 
   return (
-    <Box
-      sx={{ 
-        p: 3,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}
-    >
-      {/* Bar with back button, presentation title and delete presentation button */}
-      <Box sx={{
-        display: 'flex',
-        width: '100%'
-      }}>
-        <Button
-          variant="contained"
-          onClick={() => navigate('/dashboard')}
-        >
-          Back
-        </Button>
-        <Box sx={{
-          display: 'flex',
-          width: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '24px'
-        }}
-        >
-          <Typography
-            variant="h4"
-            align="center"
-            sx={{
-              textAlign: 'center'
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Box
+            sx={{ 
+              p: 3,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center'
             }}
           >
-            {presentation ? presentation.title : 'Loading...'}
-          </Typography>
-          <Button
-            onClick={() => setIsEditModalOpen(true)}
-            variant="contained"
-            endIcon={<EditIcon/>}
-          >
-            Edit
-          </Button>
-          <PopupModal
-            open={isEditModalOpen}
-            onClose={() => setIsEditModalOpen(false)}
-            instruction="Enter a new title for your presentation"
-            nameOfInput="New Title"
-            onSubmit={editPresentationTitle}
-            confirmMsg={"Edit"}
-          />
-          <Button
-            onClick={() => setIsUpdateThumbnailOpen(true)}
-            variant="contained"
-            color="secondary"
-            endIcon={<EditIcon/>}
-          >
-            Update Thumbnail
-          </Button>
-          <PopupModal
-            open={isUpdateThumbnailOpen}
-            onClose={() => setIsUpdateThumbnailOpen(false)}
-            instruction="Put the URL of the image"
-            nameOfInput="Thumbnail"
-            onSubmit={updateThumbnail}
-            confirmMsg={"Update"}
-          />
-          <NewElement
-            presentation={presentation}
-            setPresentation={setPresentation}
-            currentSlideIndex={currentSlideIndex}
-            savePresentationsToStore={savePresentationsToStore}
-            presentations={presentations}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handlePreview}
-          >
-            Preview
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => navigate(`/presentation/${presentationId}/rearrange`)}
-          >
-            Rearrange Slides
-          </Button>
-        </Box>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={() => setIsDeleteModalOpen(true)}
-        >
-          Delete Presentation
-        </Button>
-      </Box>
+            {/* Bar with back button, presentation title and delete presentation button */}
+            <Box sx={{
+              display: 'flex',
+              width: '100%'
+            }}>
+              <Button
+                variant="contained"
+                onClick={() => navigate('/dashboard')}
+              >
+                Back
+              </Button>
+              <Box sx={{
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '24px'
+              }}
+              >
+                <Typography
+                  variant="h4"
+                  align="center"
+                  sx={{
+                    textAlign: 'center'
+                  }}
+                >
+                  {presentation ? presentation.title : 'Loading...'}
+                </Typography>
+                <Button
+                  onClick={() => setIsEditModalOpen(true)}
+                  variant="contained"
+                  endIcon={<EditIcon/>}
+                >
+                  Edit
+                </Button>
+                <PopupModal
+                  open={isEditModalOpen}
+                  onClose={() => setIsEditModalOpen(false)}
+                  instruction="Enter a new title for your presentation"
+                  nameOfInput="New Title"
+                  onSubmit={editPresentationTitle}
+                  confirmMsg={"Edit"}
+                />
+                <Button
+                  onClick={() => setIsUpdateThumbnailOpen(true)}
+                  variant="contained"
+                  color="secondary"
+                  endIcon={<EditIcon/>}
+                >
+                  Update Thumbnail
+                </Button>
+                <PopupModal
+                  open={isUpdateThumbnailOpen}
+                  onClose={() => setIsUpdateThumbnailOpen(false)}
+                  instruction="Put the URL of the image"
+                  nameOfInput="Thumbnail"
+                  onSubmit={updateThumbnail}
+                  confirmMsg={"Update"}
+                />
+                <NewElement
+                  presentation={presentation}
+                  setPresentation={setPresentation}
+                  currentSlideIndex={currentSlideIndex}
+                  savePresentationsToStore={savePresentationsToStore}
+                  presentations={presentations}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handlePreview}
+                >
+                  Preview
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    setIsRearranging(true)
+                    navigate('rearrange')
+                  }}
+                >
+                  Rearrange Slides
+                </Button>
+              </Box>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                Delete Presentation
+              </Button>
+            </Box>
 
-      {/* Delete confirmation modal */}
-      <PopupModal
-        open={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        instruction="Are you sure you want to delete this presentation?"
-        onSubmit={handleDelete}
-        confirmMsg="Yes"
-        cancelMsg="No"
+            {/* Delete confirmation modal */}
+            <PopupModal
+              open={isDeleteModalOpen}
+              onClose={() => setIsDeleteModalOpen(false)}
+              instruction="Are you sure you want to delete this presentation?"
+              onSubmit={handleDelete}
+              confirmMsg="Yes"
+              cancelMsg="No"
+            />
+            {/* Displaying first slide */}
+            {presentation && presentation.slides && presentation.slides.length > 0 && (
+              <Slide 
+                slide={presentation.slides[currentSlideIndex]} 
+                slideIndex={currentSlideIndex} 
+                onUpdateElement={updateElement}
+                deleteElement={deleteElement}
+                isPreview={false}
+              />
+            )}
+            {/* Footer controls */}
+            <Box
+              sx={{
+                p: 3,
+                display: 'flex',
+                width: '1000px',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                alignContent: 'center'
+              }}
+            >
+              <IconButton
+                disabled={currentSlideIndex === 0}
+                onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
+                sx={{fontSize: '2rem'}}
+              >
+                <ArrowBack fontSize="inherit" />
+              </IconButton>
+
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => createNewSlide()}
+              >
+                New Slide
+              </Button>
+              <IconButton
+                disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
+                onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
+                sx={{fontSize: '2rem'}}
+              >
+                <ArrowForward fontSize="inherit" />
+              </IconButton>
+            </Box>
+            {/* Sub-footer controls */}
+            <Box
+              sx={{
+                p: 3,
+                display: 'flex',
+                width: '1000px',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'right',
+                alignContent: 'center'
+              }}
+            >
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => deleteSlide()}
+              >
+                Delete Slide
+              </Button>
+            </Box>
+          </Box>
+        }
       />
-      {/* Displaying first slide */}
-      {presentation && presentation.slides && presentation.slides.length > 0 && (
-        <Slide 
-          slide={presentation.slides[currentSlideIndex]} 
-          slideIndex={currentSlideIndex} 
-          onUpdateElement={updateElement}
-          deleteElement={deleteElement}
-          isPreview={false}
-        />
-      )}
-      {/* Footer controls */}
-      <Box
-        sx={{
-          p: 3,
-          display: 'flex',
-          width: '1000px',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
-          alignContent: 'center'
-        }}
-      >
-        <IconButton
-          disabled={currentSlideIndex === 0}
-          onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
-          sx={{fontSize: '2rem'}}
-        >
-          <ArrowBack fontSize="inherit" />
-        </IconButton>
-
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => createNewSlide()}
-        >
-          New Slide
-        </Button>
-        <IconButton
-          disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
-          onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
-          sx={{fontSize: '2rem'}}
-        >
-          <ArrowForward fontSize="inherit" />
-        </IconButton>
-      </Box>
-      {/* Sub-footer controls */}
-      <Box
-        sx={{
-          p: 3,
-          display: 'flex',
-          width: '1000px',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'right',
-          alignContent: 'center'
-        }}
-      >
-        <Button
-          variant="contained"
-          color="error"
-          onClick={() => deleteSlide()}
-        >
-          Delete Slide
-        </Button>
-      </Box>
-    </Box>
+      <Route path="rearrange" element={<SlidesRearrange />} />
+    </Routes>
   );
 
 }

@@ -1,7 +1,6 @@
-
-function SlidesRearrange({token}) {
+function SlidesRearrange() {
   return <div>
-    SlidesRearrange {token}
+    SlidesRearrange
   </div>;
 }
 
