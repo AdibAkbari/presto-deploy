@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
@@ -17,7 +17,9 @@ function Presentation({ token }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Controls the Delete Thumbnail PopupModal
   const [presentations, setPresentations] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [isSlideInitialized, setIsSlideInitialized] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Function to handle editing the title of a presentation
   const editPresentationTitle = (newTitle) => {
@@ -30,6 +32,30 @@ function Presentation({ token }) {
     }
   };
 
+  // tries to get slide number from url
+  useEffect(() => {
+    if (!isSlideInitialized) {
+      const searchParams = new URLSearchParams(location.search);
+      const slideParam = searchParams.get('slide');
+      if (slideParam) {
+        const slideNumber = parseInt(slideParam, 10) - 1;
+        if (!isNaN(slideNumber)) {
+          setCurrentSlideIndex(slideNumber);
+        }
+      }
+      setIsSlideInitialized(true); // prevents flickering between slides after reload
+    }
+  }, [location.search, isSlideInitialized]);
+  
+  // adds slide number to url when currentSlideIndex changes
+  useEffect(() => {
+    if (isSlideInitialized) {
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.set('slide', currentSlideIndex + 1);
+      navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+    }
+  }, [currentSlideIndex, location.pathname, navigate, isSlideInitialized]);
+  
   // updates element of current slide in presentation
   const updateElement = (updatedElement) => {
     console.log('updating element', updatedElement);

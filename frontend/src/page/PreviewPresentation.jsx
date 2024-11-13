@@ -11,25 +11,31 @@ function PreviewPresentation({ token }) {
   const navigate = useNavigate();
   const [presentation, setPresentation] = useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [isSlideInitialized, setIsSlideInitialized] = useState(false);
 
   // tries to parse slide number from url
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const slideParam = searchParams.get('slide');
-    if (slideParam) {
-      const slideNumber = parseInt(slideParam, 10) - 1; // slide numbers start from 1
-      if (!isNaN(slideNumber)) {
-        setCurrentSlideIndex(slideNumber);
+    if (!isSlideInitialized) {
+      const searchParams = new URLSearchParams(location.search);
+      const slideParam = searchParams.get('slide');
+      if (slideParam) {
+        const slideNumber = parseInt(slideParam, 10) - 1; // slide numbers start from 1
+        if (!isNaN(slideNumber)) {
+          setCurrentSlideIndex(slideNumber);
+        }
       }
+      setIsSlideInitialized(true);
     }
-  }, [location.search]);
+  }, [location.search, isSlideInitialized]);
 
   // updates URL when currentSlideIndex changes
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set('slide', currentSlideIndex + 1);
-    navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
-  }, [currentSlideIndex, location.pathname, navigate]);
+    if (isSlideInitialized) {
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.set('slide', currentSlideIndex + 1);
+      navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+    }
+  }, [currentSlideIndex, location.pathname, navigate, isSlideInitialized]);
   
   useEffect(() => {
     const handleKeyDown = (event) => {
