@@ -104,7 +104,7 @@ function Presentation({ token }) {
   const createNewSlide = () => {
     if (presentation) {
       const newSlide = {
-        slideId: `slide_${presentation.slides.length + 1}`,
+        slideId: `slide_${Date.now()}`,
         elements: []
       }
       const updatedPresentation = { ...presentation, slides: [...presentation.slides, newSlide] };
