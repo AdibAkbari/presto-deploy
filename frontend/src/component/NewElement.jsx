@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {Menu, Button, MenuItem} from '@mui/material/';
 import ElementModal from './ElementModal';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function NewElement({ presentation, setPresentation, currentSlideIndex, savePresentationsToStore, presentations }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -35,13 +36,13 @@ export default function NewElement({ presentation, setPresentation, currentSlide
   return (
     <>
       <Button
-        id="basic-button"
-        variant="contained"
-        color=""
+        variant="text"
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        endIcon={<AddIcon/>}
+        sx={{my: 2, color: 'black'}}
       >
         New Element
       </Button>

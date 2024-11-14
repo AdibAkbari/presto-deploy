@@ -1,9 +1,9 @@
 import { useNavigate, useParams, useLocation, Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
-import { Box, Typography, Button, IconButton } from '@mui/material';
-import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import { Box, Typography, AppBar, Container, Toolbar, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, Divider } from '@mui/material';
+import { ArrowBack, ArrowForward, Delete } from '@mui/icons-material';
 import PopupModal from '../component/PopupModal';
 import Slide from '../component/Slide';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,6 +13,14 @@ import PresentationContext from '../PresentationContext';
 import FontFamilyModal from '../component/FontFamilyModal';
 import FontIcon from '@mui/icons-material/TextFields';
 import ThemeModal from '../component/ThemeModal';
+import AdbIcon from '@mui/icons-material/Adb';
+import MenuIcon from '@mui/icons-material/menu';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import SlideshowIcon from '@mui/icons-material/Slideshow';
+import LowPriorityIcon from '@mui/icons-material/LowPriority';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -28,7 +36,9 @@ function Presentation({ token }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
   // Function to handle editing the title of a presentation
   const editPresentationTitle = (newTitle) => {
     if (presentation) {
@@ -110,14 +120,16 @@ function Presentation({ token }) {
       const newSlide = {
         slideId: `slide_${Date.now()}`,
         elements: [],
-        backgroundImage: '',
-        backgroundColor: 'none'
+        backgroundImage: 'none',
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
       }
       const updatedPresentation = { ...presentation, slides: [...presentation.slides, newSlide] };
       setPresentation(updatedPresentation);
       savePresentationsToStore(
         presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
       );
+      setCurrentSlideIndex(updatedPresentation.slides.length - 1);
     }
   }
 
@@ -264,6 +276,22 @@ function Presentation({ token }) {
     }
   };
 
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   return (
     <PresentationContext.Provider value={contextValue}>
       <Routes>
@@ -272,137 +300,82 @@ function Presentation({ token }) {
           element={
             <Box
               sx={{ 
-                p: 3,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center'
               }}
             >
-              {/* Bar with back button, presentation title and delete presentation button */}
-              <Box sx={{
-                display: 'flex',
-                width: '100%'
-              }}>
-                <Button
-                  variant="contained"
-                  onClick={() => navigate('/dashboard')}
-                >
-                  Back
-                </Button>
-                <Box sx={{
-                  display: 'flex',
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: '24px'
-                }}
-                >
+              <AppBar position="static" sx={{display: 'flex', alignItems: 'center', gap: '8px'}} color="#ffffff">
+                <Container maxWidth="xl">
+                  <Toolbar disableGutters>
+                 <Box sx={{maxWidth: '15%', overflow: 'scroll'}}>
                   <Typography
-                    variant="h4"
-                    align="center"
-                    sx={{
-                      textAlign: 'center'
-                    }}
-                  >
-                    {presentation ? presentation.title : 'Loading...'}
+                      variant="h5"
+                      align="center"
+                      sx={{
+                        textAlign: 'center'
+                      }}
+                    >
+                      {presentation ? presentation.title : 'Loading...'}
                   </Typography>
-                  <Button
-                    onClick={() => setIsEditModalOpen(true)}
-                    variant="contained"
-                    endIcon={<EditIcon/>}
-                  >
-                    Edit
-                  </Button>
-                  <PopupModal
-                    open={isEditModalOpen}
-                    onClose={() => setIsEditModalOpen(false)}
-                    instruction="Enter a new title for your presentation"
-                    nameOfInput="New Title"
-                    onSubmit={editPresentationTitle}
-                    confirmMsg={"Edit"}
-                  />
-                  <Button
-                    onClick={() => setIsUpdateThumbnailOpen(true)}
-                    variant="contained"
-                    color="secondary"
-                    endIcon={<EditIcon/>}
-                  >
-                    Update Thumbnail
-                  </Button>
-                  <PopupModal
-                    open={isUpdateThumbnailOpen}
-                    onClose={() => setIsUpdateThumbnailOpen(false)}
-                    instruction="Put the URL of the image"
-                    nameOfInput="Thumbnail"
-                    onSubmit={updateThumbnail}
-                    confirmMsg={"Update"}
-                  />
-                  <Button
-                    onClick={() => setIsFontFamilyModalOpen(true)}
-                    variant="contained"
-                    color="success"
-                    endIcon={<FontIcon/>}
-                  >
-                    Font Family
-                  </Button>
-                  <FontFamilyModal
-                    open={isFontFamilyModalOpen}
-                    onClose={() => setIsFontFamilyModalOpen(false)}
-                    instruction="Select the font family for all textboxes"
-                    onSubmit={updateFont}
-                    confirmMsg={"Update"}
-                  />
-                  <NewElement
-                    presentation={presentation}
-                    setPresentation={setPresentation}
-                    currentSlideIndex={currentSlideIndex}
-                    savePresentationsToStore={savePresentationsToStore}
-                    presentations={presentations}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handlePreview}
-                  >
-                    Preview
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => {
-                      setIsRearranging(true)
-                      navigate('rearrange')
+                 </Box>
+                  <Divider 
+                    variant='midddle' 
+                    orientation='vertical'
+                    aria-hidden='true'
+                    sx={{
+                      borderRightWidth: '3px',
+                      paddingLeft: '16px'
                     }}
-                  >
-                    Rearrange Slides
-                  </Button>
-                </Box>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => setIsDeleteModalOpen(true)}
-                >
-                  Delete Presentation
-                </Button>
-              </Box>
-
-              {/* Delete confirmation modal */}
-              <PopupModal
-                open={isDeleteModalOpen}
-                onClose={() => setIsDeleteModalOpen(false)}
-                instruction="Are you sure you want to delete this presentation?"
-                onSubmit={handleDelete}
-                confirmMsg="Yes"
-                cancelMsg="No"
-              />
+                    flexItem
+                  ></Divider>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                      {/* Puts all the buttons in a menu when the screen size gets small. */}
+                      <IconButton
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={handleOpenNavMenu}
+                        color="inherit"
+                      >
+                        <MenuIcon />
+                      </IconButton>
+                      <Menu
+                        id="menu-appbar"
+                        anchorEl={anchorElNav}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'left',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'left',
+                        }}
+                        open={Boolean(anchorElNav)}
+                        onClose={handleCloseNavMenu}
+                        sx={{ display: { xs: 'block', md: 'none' } }}
+                      >
+                        {/* {pages.map((page) => (
+                          <MenuItem key={page} onClick={handleCloseNavMenu}>
+                            <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                          </MenuItem>
+                        ))} */}
+                      </Menu>
+                    </Box>
+                  </Toolbar>
+                </Container>
+              </AppBar>
               {/* Displaying first slide */}
               {presentation && presentation.slides && presentation.slides.length > 0 && (
-                <Slide
-                  presentation={presentation}
+                <Slide 
+                  slide={presentation.slides[currentSlideIndex]} 
                   slideIndex={currentSlideIndex} 
                   onUpdateElement={updateElement}
                   deleteElement={deleteElement}
                   isPreview={false}
+                  presentation={presentation}
                 />
               )}
               {/* Footer controls */}
@@ -424,27 +397,14 @@ function Presentation({ token }) {
                 >
                   <ArrowBack fontSize="inherit" />
                 </IconButton>
-
                 <Button
-                  variant="contained"
-                  color="success"
                   onClick={() => createNewSlide()}
+                  variant="text"
+                  endIcon={<AddBoxIcon/>}
+                  sx={{ my: 2, color: 'black' }}
                 >
                   New Slide
                 </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => setIsThemeModalOpen(true)}
-                >
-                  Theme
-                </Button>
-                <ThemeModal
-                  open={isThemeModalOpen}
-                  onClose={() => setIsThemeModalOpen(false)}
-                  onSubmit={updateSlideTheme}
-                  presentation={presentation}
-                >
-                </ThemeModal>
                 <IconButton
                   disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
                   onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
@@ -461,16 +421,15 @@ function Presentation({ token }) {
                   width: '1000px',
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'right',
+                  justifyContent: 'space-between',
                   alignContent: 'center'
                 }}
               >
                 <Button
                   variant="contained"
-                  color="error"
-                  onClick={() => deleteSlide()}
+                  onClick={() => navigate('/dashboard')}
                 >
-                  Delete Slide
+                  Back
                 </Button>
               </Box>
             </Box>
@@ -484,3 +443,6 @@ function Presentation({ token }) {
 }
 
 export default Presentation;
+
+
+

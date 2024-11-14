@@ -6,7 +6,6 @@ import PopupModal from './PopupModal';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPreview }) {
-  console.log('presentation:', presentation);
   const slide = presentation.slides[slideIndex];
   const [selectedElement, setSelectedElement] = useState(null); // Track the element to edit
   const [isEditing, setIsEditing] = useState(false);
