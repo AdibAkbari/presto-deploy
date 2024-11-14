@@ -212,7 +212,6 @@ const ElementModal = ({
               </Box>
             </>
           )}
-          
           {elementType === 'image' && (
             <>
               <TextField

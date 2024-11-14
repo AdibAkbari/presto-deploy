@@ -221,7 +221,12 @@ function Presentation({ token }) {
 
   const updateSlideTheme = (newTheme) => {
     const updatedSlides = [...presentation.slides];
-    const currentSlide = { ...updatedSlides[currentSlideIndex], backgroundImage: `${newTheme}` };
+    let currentSlide = '';
+    if (newTheme.backgroundImage === undefined) {
+      currentSlide = { ...updatedSlides[currentSlideIndex], backgroundColor: `${newTheme.backgroundColor}` };
+    } else if (newTheme.backgroundColor === undefined) {
+      currentSlide = { ...updatedSlides[currentSlideIndex], backgroundImage: `${newTheme.backgroundImage}` };
+    }
     updatedSlides[currentSlideIndex] = currentSlide;
     const updatedPresentation = { ...presentation, slides: updatedSlides };
     setPresentation(updatedPresentation);

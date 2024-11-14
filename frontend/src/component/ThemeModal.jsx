@@ -6,6 +6,7 @@ import { Box,
   Radio,
   RadioGroup,
   FormControl,
+  FormLabel,
   FormControlLabel,
   TextField
 } from '@mui/material';
@@ -23,9 +24,14 @@ const style = {
 };
 
 const ThemeModal = ({onSubmit, open, onClose, currentSlideIndex}) => {
+  // 'default' refers to the presentaiotin
   const [inputValue, setInputValue] = useState(null);
   const [defaultImgUrl, setDefaultImgUrl] = useState('');
   const [slideImgUrl, setSlideImgUrl] = useState('');
+  const [slideSolidColour, setSlideSolidColour] = useState('');
+  const [defaultSolidColour, setDefaultSolidColour] = useState('');
+  const [returnObject, setReturnObject] = useState({});
+
   useEffect(() => {
     if (!open) {
       setInputValue(null); // Clear input when the modal is closed
@@ -33,26 +39,49 @@ const ThemeModal = ({onSubmit, open, onClose, currentSlideIndex}) => {
       setSlideImgUrl('');
     }
   }, [open]);
+
   const handleAction = () => {
-    onSubmit(slideImgUrl); // Pass the input value (or null) to parents submit function
+    onSubmit(returnObject); // Pass the input value (or null) to parents submit function
     onClose(); // Close the modal
   };
+
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChangeSlide = (event) => {
     const file = event.target.files[0];
     setImageFile(file);
 
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setMediaUrl(reader.result); // set mediaUrl to base64 string
+        setSlideImgUrl(reader.result); // set slideImgUrl to base64 string
+        setReturnObject({backgroundImage: `${reader.result}`});
       };
       reader.readAsDataURL(file);
     }
   };
+
+  const handleSlideImgUrl = (newValue) => {
+    setSlideImgUrl(newValue);
+    setReturnObject({backgroundImage: `${newValue}`});
+  };
+
+  const handlePresentationImgUrl = (newValue) => {
+    setDefaultImgUrl(newValue);
+    setReturnObject({backgroundImage: `${newValue}`});
+  }
+
+  const handleSlideSolidColour = (newValue) => {
+    setSlideSolidColour(newValue);
+    setReturnObject({backgroundColor: `${newValue}`});
+  }
+
+  const handleDefaultSolidColour = (newValue) => {
+    setDefaultSolidColour(newValue);
+    setReturnObject({backgroundColor: `${newValue}`});
+  }
 
   return (
     <Modal
@@ -98,7 +127,7 @@ const ThemeModal = ({onSubmit, open, onClose, currentSlideIndex}) => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleFileChange}
+                onChange={(e) => handleFileChangeSlide(e.target.value)}
                 style={{ marginTop: '8px', marginBottom: '8px' }}
               />
             </>
@@ -117,7 +146,28 @@ const ThemeModal = ({onSubmit, open, onClose, currentSlideIndex}) => {
                 type="text"
                 variant="outlined"
                 value={slideImgUrl}
-                onChange={(e) => setSlideImgUrl(e.target.value)}
+                onChange={(e) => handleSlideImgUrl(e.target.value)}
+                fullWidth
+                sx={{ mt: 2 }}
+              />
+              <Typography variant="body2" sx={{ mt: 2 }}>Or upload a file:</Typography>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                style={{ marginTop: '8px', marginBottom: '8px' }}
+              />
+            </>
+          }
+          {
+            inputValue === 'solid-colour' &&
+            <>
+              <TextField
+                label="Image URL"
+                type="text"
+                variant="outlined"
+                value={slideImgUrl}
+                onChange={(e) => handleSlideImgUrl(e.target.value)}
                 fullWidth
                 sx={{ mt: 2 }}
               />
