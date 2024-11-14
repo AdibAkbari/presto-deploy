@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, IconButton } from '@mui/material';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import Slide from '../component/Slide';
 
 function PreviewPresentation({ token }) {
@@ -73,21 +74,46 @@ function PreviewPresentation({ token }) {
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-    >
-      {presentation.slides && presentation.slides.length > 0 && (
-        <Slide
-          slide={presentation.slides[currentSlideIndex]}
-          slideIndex={currentSlideIndex}
-          isPreview={true}
-          presentation={presentation}
-        />
-      )}
-    </Box>
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        {presentation.slides && presentation.slides.length > 0 && (
+          <Slide
+            slide={presentation.slides[currentSlideIndex]}
+            slideIndex={currentSlideIndex}
+            isPreview={true}
+            presentation={presentation}
+          />
+        )}
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          mt: 2,
+          gap: '5%'
+        }}
+      >
+        <IconButton
+          disabled={currentSlideIndex === 0}
+          onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
+          sx={{fontSize: '2rem'}}
+        >
+          <ArrowBack fontSize="inherit" />
+        </IconButton>
+        <IconButton
+          disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
+          onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
+          sx={{fontSize: '2rem'}}
+        >
+          <ArrowForward fontSize="inherit" />
+        </IconButton>
+      </Box>
+    </>
   );
 
 }
