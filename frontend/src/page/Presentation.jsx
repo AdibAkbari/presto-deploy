@@ -20,6 +20,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import LowPriorityIcon from '@mui/icons-material/LowPriority';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -35,8 +36,8 @@ function Presentation({ token }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
   // Function to handle editing the title of a presentation
   const editPresentationTitle = (newTitle) => {
@@ -304,28 +305,7 @@ function Presentation({ token }) {
                 alignItems: 'center'
               }}
             >
-              {/* Bar with back button, presentation title and delete presentation button
-              <Box sx={{
-                display: 'flex',
-                width: '100%'
-              }}>
-                <Box sx={{
-                  display: 'flex',
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: '24px'
-                }}
-                >
-                </Box>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => setIsDeleteModalOpen(true)}
-                >
-                  Delete Presentation
-                </Button>
-              </Box> */}
+              {/* Bar with back button, presentation title and delete presentation button*/}
               <AppBar position="static" sx={{display: 'flex', alignItems: 'center', gap: '8px'}} color="#ffffff">
                 <Container maxWidth="xl">
                   <Toolbar disableGutters>
@@ -445,6 +425,14 @@ function Presentation({ token }) {
                     >
                       Delete Slide
                     </Button>
+                    <Button
+                      variant="text"
+                      onClick={() => setIsDeleteModalOpen(true)}
+                      endIcon={<DeleteForeverIcon/>}
+                      sx={{ my: 2, color: 'black' }}
+                    >
+                      Delete Presentation
+                    </Button>
                     </Box>
                   </Toolbar>
                 </Container>
@@ -476,7 +464,7 @@ function Presentation({ token }) {
                 onSubmit={updateFont}
                 confirmMsg={"Update"}
               />
-		<ThemeModal
+		          <ThemeModal
                   open={isThemeModalOpen}
                   onClose={() => setIsThemeModalOpen(false)}
                   onSubmit={updateSlideTheme}
@@ -492,17 +480,38 @@ function Presentation({ token }) {
                 confirmMsg="Yes"
                 cancelMsg="No"
               />
-              {/* Displaying first slide */}
-              {presentation && presentation.slides && presentation.slides.length > 0 && (
-                <Slide 
-                  slide={presentation.slides[currentSlideIndex]} 
-                  slideIndex={currentSlideIndex} 
-                  onUpdateElement={updateElement}
-                  deleteElement={deleteElement}
-                  isPreview={false}
-                  presentation={presentation}
-                />
-              )}
+              <Box sx={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center'
+              }}>
+                <IconButton
+                    disabled={presentation && currentSlideIndex === 1}
+                    onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
+                    sx={{fontSize: '2rem'}}
+                  >
+                    <ArrowBack fontSize="inherit" />
+                </IconButton> 
+                {/* Displaying first slide */}
+                {presentation && presentation.slides && presentation.slides.length > 0 && (
+                    <Slide
+                      slide={presentation.slides[currentSlideIndex]} 
+                      slideIndex={currentSlideIndex} 
+                      onUpdateElement={updateElement}
+                      deleteElement={deleteElement}
+                      isPreview={false}
+                      presentation={presentation}
+                    />
+                )}
+                <IconButton
+                    disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
+                    onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
+                    sx={{fontSize: '2rem'}}
+                  >
+                    <ArrowForward fontSize="inherit" />
+                </IconButton> 
+              </Box>
               {/* Footer controls */}
               <Box
                 sx={{
@@ -515,26 +524,12 @@ function Presentation({ token }) {
                   alignContent: 'center'
                 }}
               >
-                <IconButton
-                  disabled={currentSlideIndex === 0}
-                  onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
-                  sx={{fontSize: '2rem'}}
-                >
-                  <ArrowBack fontSize="inherit" />
-                </IconButton>
                 <Button
                   variant="contained"
                   onClick={() => setIsThemeModalOpen(true)}
                 >
                   Theme
                 </Button>
-                <IconButton
-                  disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
-                  onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
-                  sx={{fontSize: '2rem'}}
-                >
-                  <ArrowForward fontSize="inherit" />
-                </IconButton>
               </Box>
               {/* Sub-footer controls */}
               <Box
