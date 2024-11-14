@@ -41,7 +41,8 @@ function Dashboard({ token }) {
       title: title,
       description: '',
       thumbnail: '', // Grey square by default
-      slides: [{ slideId: `slide_1`, elements: [] }] // Default with one empty slide
+      slides: [{ slideId: `slide_${Date.now()}`, elements: [] }], // Default with one empty slide
+      fontFamily: 'poppins'
     };
 
     const updatedPresentations = [...presentations, newPresentation];

@@ -4,7 +4,7 @@ import ElementModal from './ElementModal';
 import DisplayElement from '../elements/DisplayElement';
 import PopupModal from './PopupModal';
 
-function Slide({ slide, slideIndex, onUpdateElement, deleteElement, isPreview }) {
+function Slide({ slide, slideIndex, onUpdateElement, deleteElement, isPreview, presentation }) {
   const [selectedElement, setSelectedElement] = useState(null); // Track the element to edit
   const [isEditing, setIsEditing] = useState(false);
   const slideRef = useRef(null);
@@ -66,6 +66,7 @@ function Slide({ slide, slideIndex, onUpdateElement, deleteElement, isPreview })
             parentHeight={slideHeight}
             onOpenDeleteModal={handleOpenDeleteModal}
             isPreview={isPreview}
+            presentation={presentation}
           />
         )}
 

@@ -6,7 +6,7 @@ import ImageElement from './ImageElement';
 import VideoElement from './VideoElement';
 import CodeElement from './CodeElement';
 
-function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth, parentHeight, onOpenDeleteModal, isPreview }) {
+function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth, parentHeight, onOpenDeleteModal, isPreview, presentation }) {
   const [position, setPosition] = useState(element.position);
   const [size, setSize] = useState({ width: element.width, height: element.height });
   const [isClicked, setIsClicked] = useState(false);
@@ -142,6 +142,7 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
           handleBlur={handleBlur}
           onOpenDeleteModal={() => onOpenDeleteModal(element)}
           isPreview={isPreview}
+          presentation={presentation}
         />
       )}
 
