@@ -24,7 +24,6 @@ function Presentation({ token }) {
   const [isSlideInitialized, setIsSlideInitialized] = useState(false);
   const [isRearranging, setIsRearranging] = useState(false);
   const [isFontFamilyModalOpen, setIsFontFamilyModalOpen] = useState(false);
-  const [fontFamily, setFontFamily] = useState('poppins');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -146,8 +145,9 @@ function Presentation({ token }) {
     setPresentation(updatedPresentation);
     savePresentationsToStore(
       presentations.map((p) =>
-      p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
-    ));
+        p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
+      )
+    );
   };
 
   // Function to save presentations to the backend
@@ -207,12 +207,8 @@ function Presentation({ token }) {
     setPresentation,
     presentations,
     savePresentationsToStore,
-    currentSlideIndex,
-    setCurrentSlideIndex,
-    presentationId,
-    token,
-    navigate,
-    setIsRearranging
+    setIsRearranging,
+    presentationId
   };
 
   return (
