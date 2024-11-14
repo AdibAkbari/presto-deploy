@@ -41,7 +41,11 @@ function Dashboard({ token }) {
       title: title,
       description: '',
       thumbnail: '', // Grey square by default
-      slides: [{ slideId: `slide_${Date.now()}`, elements: [] }], // Default with one empty slide
+      slides: [{ slideId: `slide_${Date.now()}`,
+        elements: [],
+        backgroundImage: '',
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",}], // Default with one empty slide
       fontFamily: 'poppins'
     };
 

@@ -12,6 +12,7 @@ import SlidesRearrange from './SlidesRearrange';
 import PresentationContext from '../PresentationContext';
 import FontFamilyModal from '../component/FontFamilyModal';
 import FontIcon from '@mui/icons-material/TextFields';
+import ThemeModal from '../component/ThemeModal';
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -24,6 +25,7 @@ function Presentation({ token }) {
   const [isSlideInitialized, setIsSlideInitialized] = useState(false);
   const [isRearranging, setIsRearranging] = useState(false);
   const [isFontFamilyModalOpen, setIsFontFamilyModalOpen] = useState(false);
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -52,7 +54,6 @@ function Presentation({ token }) {
       setIsSlideInitialized(true); // prevents flickering between slides after reload
     }
   }, [location.search, isSlideInitialized]);
-  
   // adds slide number to url when currentSlideIndex changes
   useEffect(() => {
     if (!isRearranging && isSlideInitialized) {
@@ -108,7 +109,10 @@ function Presentation({ token }) {
     if (presentation) {
       const newSlide = {
         slideId: `slide_${Date.now()}`,
-        elements: []
+        elements: [],
+        backgroundImage: 'none',
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
       }
       const updatedPresentation = { ...presentation, slides: [...presentation.slides, newSlide] };
       setPresentation(updatedPresentation);
@@ -140,7 +144,7 @@ function Presentation({ token }) {
     }
   }
   // Function to change the font family of the entire presentation.
-  const changeFont = (newFont) => {
+  const updateFont = (newFont) => {
     const updatedPresentation = {...presentation, fontFamily: `${newFont}`};
     setPresentation(updatedPresentation);
     savePresentationsToStore(
@@ -207,8 +211,25 @@ function Presentation({ token }) {
     setPresentation,
     presentations,
     savePresentationsToStore,
-    setIsRearranging,
-    presentationId
+    currentSlideIndex,
+    setCurrentSlideIndex,
+    presentationId,
+    token,
+    navigate,
+    setIsRearranging
+  };
+
+  const updateSlideTheme = (newTheme) => {
+    const updatedSlides = [...presentation.slides];
+    const currentSlide = { ...updatedSlides[currentSlideIndex], backgroundImage: `${newTheme}` };
+    updatedSlides[currentSlideIndex] = currentSlide;
+    const updatedPresentation = { ...presentation, slides: updatedSlides };
+    setPresentation(updatedPresentation);
+    savePresentationsToStore(
+      presentations.map((p) =>
+        p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
+      )
+    );
   };
 
   return (
@@ -296,7 +317,7 @@ function Presentation({ token }) {
                     open={isFontFamilyModalOpen}
                     onClose={() => setIsFontFamilyModalOpen(false)}
                     instruction="Select the font family for all textboxes"
-                    onSubmit={changeFont}
+                    onSubmit={updateFont}
                     confirmMsg={"Update"}
                   />
                   <NewElement
@@ -380,6 +401,19 @@ function Presentation({ token }) {
                 >
                   New Slide
                 </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => setIsThemeModalOpen(true)}
+                >
+                  Theme
+                </Button>
+                <ThemeModal
+                  open={isThemeModalOpen}
+                  onClose={() => setIsThemeModalOpen(false)}
+                  onSubmit={updateSlideTheme}
+                  presentation={presentation}
+                >
+                </ThemeModal>
                 <IconButton
                   disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
                   onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
