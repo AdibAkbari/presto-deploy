@@ -141,13 +141,14 @@ function Presentation({ token }) {
     }
   }
   // Function to change the font family of the entire presentation.
-  const updatedPresentation = {...presentation, fontFamily: `${newFont}`};
+  const changeFont = (newFont) => {
+    const updatedPresentation = {...presentation, fontFamily: `${newFont}`};
     setPresentation(updatedPresentation);
     savePresentationsToStore(
       presentations.map((p) =>
       p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
-    )
-  );
+    ));
+  };
 
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
