@@ -141,9 +141,13 @@ function Presentation({ token }) {
     }
   }
   // Function to change the font family of the entire presentation.
-  const changeFont = (newFont) => {
-    setFontFamily(newFont);
-  }
+  const updatedPresentation = {...presentation, fontFamily: `${newFont}`};
+    setPresentation(updatedPresentation);
+    savePresentationsToStore(
+      presentations.map((p) =>
+      p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
+    )
+  );
 
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
@@ -207,8 +211,7 @@ function Presentation({ token }) {
     presentationId,
     token,
     navigate,
-    setIsRearranging,
-    fontFamily
+    setIsRearranging
   };
 
   return (
@@ -350,6 +353,7 @@ function Presentation({ token }) {
                   onUpdateElement={updateElement}
                   deleteElement={deleteElement}
                   isPreview={false}
+                  presentation={presentation}
                 />
               )}
               {/* Footer controls */}
