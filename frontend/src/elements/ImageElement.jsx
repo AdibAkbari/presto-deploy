@@ -31,7 +31,7 @@ function ImageElement({ element, doubleClickFunc, handleClick, handleBlur, onOpe
           component="img"
           sx={{
             width: '100%',
-            height: '100%',
+            height: '100%'
           }}
           alt={element.altText}
           src={element.url}

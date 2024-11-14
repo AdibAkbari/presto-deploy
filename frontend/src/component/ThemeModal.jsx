@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Box,
   Button,
-  Typography,
   Modal,
   Radio,
   RadioGroup,
   FormControl,
   FormLabel,
   FormControlLabel,
-  TextField
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup
 } from '@mui/material';
 
 const style = {
@@ -16,72 +17,52 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: '30%',
   bgcolor: 'background.paper',
-  border: '2px solid blue',
+  border: '1px solid black',
+  borderRadius: '5px',
   boxShadow: 24,
-  p: 4,
+  pb: 1
 };
 
 const ThemeModal = ({onSubmit, open, onClose, currentSlideIndex}) => {
-  // 'default' refers to the presentaiotin
-  const [inputValue, setInputValue] = useState(null);
-  const [defaultImgUrl, setDefaultImgUrl] = useState('');
-  const [slideImgUrl, setSlideImgUrl] = useState('');
-  const [slideSolidColour, setSlideSolidColour] = useState('');
-  const [defaultSolidColour, setDefaultSolidColour] = useState('');
-  const [returnObject, setReturnObject] = useState({});
+  // 'default' refers to the presentation
+  const [themeScope, setThemeScope] = useState('presentation');
 
-  useEffect(() => {
-    if (!open) {
-      setInputValue(null); // Clear input when the modal is closed
-      setDefaultImgUrl('');
-      setSlideImgUrl('');
-    }
-  }, [open]);
+  const [backgroundType, setBackgroundType] = useState('solid'); // default to 'solid'
+  const [solidColor, setSolidColor] = useState('#ffffff');
+  const [gradient, setGradient] = useState('linear-gradient(to right, #000, #fff)');
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState(null);
 
   const handleAction = () => {
-    onSubmit(returnObject); // Pass the input value (or null) to parents submit function
-    onClose(); // Close the modal
+    const returnObject = {
+      themeScope,
+      backgroundType,
+      solidColor: backgroundType === 'solid' ? solidColor : null,
+      gradient: backgroundType === 'gradient' ? gradient : null,
+      imageUrl: backgroundType === 'image' ? imageUrl : null,
+    };
+    onSubmit(returnObject);
+    onClose();
   };
 
-  const handleChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
-  const handleFileChangeSlide = (event) => {
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
     setImageFile(file);
 
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSlideImgUrl(reader.result); // set slideImgUrl to base64 string
-        setReturnObject({backgroundImage: `${reader.result}`});
+        setImageUrl(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSlideImgUrl = (newValue) => {
-    setSlideImgUrl(newValue);
-    setReturnObject({backgroundImage: `${newValue}`});
+  const handleToggle = (event, newAlignment) => {
+    setThemeScope(newAlignment);
   };
-
-  const handlePresentationImgUrl = (newValue) => {
-    setDefaultImgUrl(newValue);
-    setReturnObject({backgroundImage: `${newValue}`});
-  }
-
-  const handleSlideSolidColour = (newValue) => {
-    setSlideSolidColour(newValue);
-    setReturnObject({backgroundColor: `${newValue}`});
-  }
-
-  const handleDefaultSolidColour = (newValue) => {
-    setDefaultSolidColour(newValue);
-    setReturnObject({backgroundColor: `${newValue}`});
-  }
 
   return (
     <Modal
@@ -91,98 +72,72 @@ const ThemeModal = ({onSubmit, open, onClose, currentSlideIndex}) => {
       aria-describedby="modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-title" variant="subtitle1">
-          Set Presentations's Theme Type.
-        </Typography>
-        <FormControl>
-          <RadioGroup
-            aria-labelledby="font-family-radio-buttons-group"
-            defaultValue="poppins"
-            value={inputValue}
-            onChange={handleChange}
-            name="font-family-radio-buttons-group"
+        <ToggleButtonGroup
+          color="primary"
+          value={themeScope}
+          exclusive
+          onChange={handleToggle}
+          aria-label="Scope"
+          sx={{ display: 'flex', justifyContent: 'center'}}
+        >
+          <ToggleButton 
+            value="presentation" 
+            sx={{ width: '50%'}}
           >
-            <FormControlLabel value="solid-colour" control={<Radio />} label="Solid Colour" />
+            Presentation
+          </ToggleButton>
+          <ToggleButton 
+            value="current slide" 
+            sx={{ width: '50%'}}
+          >
+            Current Slide
+          </ToggleButton>
+        </ToggleButtonGroup>
+
+        <FormControl component="fieldset" sx={{ mt: 2, ml: 3 }}>
+          <FormLabel component="legend">Background Theme Type</FormLabel>
+          <RadioGroup
+            value={backgroundType}
+            onChange={(e) => setBackgroundType(e.target.value)}
+          >
+            <FormControlLabel value="solid" control={<Radio />} label="Solid Color" />
+            {backgroundType === 'solid' && (
+              <TextField
+                label="Solid Color Hex"
+                type="text"
+                value={solidColor}
+                onChange={(e) => setSolidColor(e.target.value)}
+                sx={{ mt: 1 }}
+              />
+            )}
             <FormControlLabel value="gradient" control={<Radio />} label="Gradient" />
+            {backgroundType === 'gradient' && (
+              <TextField
+                label="Gradient (CSS)"
+                type="text"
+                value={gradient}
+                onChange={(e) => setGradient(e.target.value)}
+                sx={{ mt: 1 }}
+              />
+            )}
             <FormControlLabel value="image" control={<Radio />} label="Image" />
+            {backgroundType === 'image' && (
+              <>
+                <TextField
+                  label="Image URL"
+                  type="text"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  sx={{ mt: 1 }}
+                />
+                <input type="file" onChange={handleFileChange}/>
+              </>
+            )}
           </RadioGroup>
         </FormControl>
-        <Box>
-          <Typography id="modal-title" variant="subtitle1">
-            Set Presentations's Default Theme.
-          </Typography>
-          {
-            inputValue === "image" &&
-            <>
-              <TextField
-                label="Image URL"
-                type="text"
-                variant="outlined"
-                value={defaultImgUrl}
-                onChange={(e) => setDefaultImgUrl(e.target.value)}
-                fullWidth
-                sx={{ mt: 2 }}
-              />
-              <Typography variant="body2" sx={{ mt: 2 }}>Or upload a file:</Typography>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleFileChangeSlide(e.target.value)}
-                style={{ marginTop: '8px', marginBottom: '8px' }}
-              />
-            </>
-          }
-        </Box>
 
-        <Box>
-          <Typography id="modal-title" variant="subtitle1">
-            Set Slide's Default Theme.
-          </Typography>
-          {
-            inputValue === "image" &&
-            <>
-              <TextField
-                label="Image URL"
-                type="text"
-                variant="outlined"
-                value={slideImgUrl}
-                onChange={(e) => handleSlideImgUrl(e.target.value)}
-                fullWidth
-                sx={{ mt: 2 }}
-              />
-              <Typography variant="body2" sx={{ mt: 2 }}>Or upload a file:</Typography>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                style={{ marginTop: '8px', marginBottom: '8px' }}
-              />
-            </>
-          }
-          {
-            inputValue === 'solid-colour' &&
-            <>
-              <TextField
-                label="Image URL"
-                type="text"
-                variant="outlined"
-                value={slideImgUrl}
-                onChange={(e) => handleSlideImgUrl(e.target.value)}
-                fullWidth
-                sx={{ mt: 2 }}
-              />
-              <Typography variant="body2" sx={{ mt: 2 }}>Or upload a file:</Typography>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                style={{ marginTop: '8px', marginBottom: '8px' }}
-              />
-            </>
-          }
-        </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
           <Button variant="contained" onClick={handleAction}>
             Save
           </Button>
@@ -190,7 +145,7 @@ const ThemeModal = ({onSubmit, open, onClose, currentSlideIndex}) => {
             Cancel
           </Button>
         </Box>
-      </Box>
+      </Box> 
     </Modal>
   );
 };
