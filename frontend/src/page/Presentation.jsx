@@ -110,16 +110,14 @@ function Presentation({ token }) {
       const newSlide = {
         slideId: `slide_${Date.now()}`,
         elements: [],
-        backgroundImage: 'none',
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
+        backgroundImage: '',
+        backgroundColor: 'none'
       }
       const updatedPresentation = { ...presentation, slides: [...presentation.slides, newSlide] };
       setPresentation(updatedPresentation);
       savePresentationsToStore(
         presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
       );
-      setCurrentSlideIndex(updatedPresentation.slides.length - 1);
     }
   }
 
@@ -219,22 +217,51 @@ function Presentation({ token }) {
     setIsRearranging
   };
 
-  const updateSlideTheme = (newTheme) => {
-    const updatedSlides = [...presentation.slides];
-    let currentSlide = '';
-    if (newTheme.backgroundImage === undefined) {
-      currentSlide = { ...updatedSlides[currentSlideIndex], backgroundColor: `${newTheme.backgroundColor}` };
-    } else if (newTheme.backgroundColor === undefined) {
-      currentSlide = { ...updatedSlides[currentSlideIndex], backgroundImage: `${newTheme.backgroundImage}` };
+  const updateSlideTheme = (themeObject) => {
+    console.log('updating theme', themeObject);
+    const { themeScope, backgroundType, solidColor, gradient, imageUrl } = themeObject;
+
+    if (themeScope === 'presentation') {
+      const updatedPresentation = { ...presentation };
+      if (backgroundType === 'solid') {
+        updatedPresentation.backgroundColor = solidColor;
+        updatedPresentation.backgroundImage = '';
+      } else if (backgroundType === 'gradient') {
+        updatedPresentation.backgroundColor = gradient;
+        updatedPresentation.backgroundImage = 'none';
+      } else { // image
+        updatedPresentation.backgroundImage = imageUrl;
+        updatedPresentation.backgroundColor = 'none';
+      }
+      setPresentation(updatedPresentation);
+      savePresentationsToStore(
+        presentations.map((p) =>
+          p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
+        )
+      );
     }
-    updatedSlides[currentSlideIndex] = currentSlide;
-    const updatedPresentation = { ...presentation, slides: updatedSlides };
-    setPresentation(updatedPresentation);
-    savePresentationsToStore(
-      presentations.map((p) =>
-        p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
-      )
-    );
+    else { // current slide
+      const updatedSlides = [...presentation.slides];
+      const currentSlide = { ...updatedSlides[currentSlideIndex] };
+      if (backgroundType === 'solid') {
+        currentSlide.backgroundColor = solidColor;
+        currentSlide.backgroundImage = 'none';
+      } else if (backgroundType === 'gradient') {
+        currentSlide.backgroundColor = gradient;
+        currentSlide.backgroundImage = 'none';
+      } else { // image
+        currentSlide.backgroundImage = imageUrl;
+        currentSlide.backgroundColor = 'none';
+      }
+      updatedSlides[currentSlideIndex] = currentSlide;
+      const updatedPresentation = { ...presentation, slides: updatedSlides };
+      setPresentation(updatedPresentation);
+      savePresentationsToStore(
+        presentations.map((p) =>
+          p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
+        )
+      );
+    }
   };
 
   return (
@@ -370,13 +397,12 @@ function Presentation({ token }) {
               />
               {/* Displaying first slide */}
               {presentation && presentation.slides && presentation.slides.length > 0 && (
-                <Slide 
-                  slide={presentation.slides[currentSlideIndex]} 
+                <Slide
+                  presentation={presentation}
                   slideIndex={currentSlideIndex} 
                   onUpdateElement={updateElement}
                   deleteElement={deleteElement}
                   isPreview={false}
-                  presentation={presentation}
                 />
               )}
               {/* Footer controls */}

@@ -83,10 +83,9 @@ function PreviewPresentation({ token }) {
       >
         {presentation.slides && presentation.slides.length > 0 && (
           <Slide
-            slide={presentation.slides[currentSlideIndex]}
+            presentation={presentation}
             slideIndex={currentSlideIndex}
             isPreview={true}
-            presentation={presentation}
           />
         )}
       </Box>

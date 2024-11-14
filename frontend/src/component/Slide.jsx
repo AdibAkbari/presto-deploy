@@ -5,7 +5,9 @@ import DisplayElement from '../elements/DisplayElement';
 import PopupModal from './PopupModal';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function Slide({ slide, slideIndex, onUpdateElement, deleteElement, isPreview, presentation }) {
+function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPreview }) {
+  console.log('presentation:', presentation);
+  const slide = presentation.slides[slideIndex];
   const [selectedElement, setSelectedElement] = useState(null); // Track the element to edit
   const [isEditing, setIsEditing] = useState(false);
   const slideRef = useRef(null);
@@ -67,9 +69,6 @@ function Slide({ slide, slideIndex, onUpdateElement, deleteElement, isPreview, p
         outline: '2px solid grey',
         aspectRatio: '2/1',
         mt: isPreview? '1%': '2%',
-        backgroundImage: slide.backgroundImage === '' ? 'none' : `url(${slide.backgroundImage})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
       }}
     >
       <AnimatePresence mode="wait">
@@ -77,6 +76,10 @@ function Slide({ slide, slideIndex, onUpdateElement, deleteElement, isPreview, p
           style={{
             width: '100%',
             height: '100%',
+            background: slide.backgroundColor !== 'none'? slide.backgroundColor : presentation.backgroundColor,
+            backgroundImage: slide.backgroundImage === '' ? 'none' : `url(${slide.backgroundImage})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover'
           }}
           key={slide.slideId}
           initial={{ opacity: 0 }}
