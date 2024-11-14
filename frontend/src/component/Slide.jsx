@@ -52,6 +52,9 @@ function Slide({ slide, slideIndex, onUpdateElement, deleteElement, isPreview, p
         outline: '2px solid grey',
         aspectRatio: '2/1',
         mt: 2,
+        backgroundImage: slide.backgroundImage === '' ? 'none' : `url(${slide.backgroundImage})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover'
       }}
     >
       {/* Render text elements on the slide */}
