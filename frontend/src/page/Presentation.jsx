@@ -149,8 +149,9 @@ function Presentation({ token }) {
     setPresentation(updatedPresentation);
     savePresentationsToStore(
       presentations.map((p) =>
-      p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
-    ));
+        p.presentationId === updatedPresentation.presentationId ? updatedPresentation : p
+      )
+    );
   };
 
   // Function to save presentations to the backend
