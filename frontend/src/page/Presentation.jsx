@@ -36,7 +36,8 @@ import {
   ColorLens as ColorLensIcon 
 } from "@mui/icons-material";
 
-import { getStore, updateStore } from "../helpers/ApiDatastore";
+import { updateStore } from "../helpers/ApiDatastore";
+import usePresentation from '../helpers/UsePresentation';
 import PopupModal from "../component/PopupModal";
 import Slide from "../component/Slide";
 import NewElement from "../component/NewElement";
@@ -46,12 +47,12 @@ import ThemeModal from "../component/ThemeModal";
 import PresentationContext from "../PresentationContext";
 
 function Presentation({ token }) {
+
   const { presentationId } = useParams();
-  const [presentation, setPresentation] = useState(null);
+  const { presentation, setPresentation, presentations, savePresentationsToStore } = usePresentation(token, presentationId);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Controls the Edit PopupModal
   const [isUpdateThumbnailOpen, setIsUpdateThumbnailOpen] = useState(false); // Controls the Update Thumbnail PopupModal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Controls the Delete Thumbnail PopupModal
-  const [presentations, setPresentations] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isSlideInitialized, setIsSlideInitialized] = useState(false);
   const [isRearranging, setIsRearranging] = useState(false);
@@ -195,13 +196,6 @@ function Presentation({ token }) {
     );
   };
 
-  // Function to save presentations to the backend
-  const savePresentationsToStore = (updatedData) => {
-    updateStore(token, updatedData)
-      .then(() => console.log("Presentation edited successfully", updatedData))
-      .catch(error => console.error("Error editing presentations:", error));
-  };
-
   useEffect(() => {
     const handleKeyDown = (event) => {
       // only allows slide change when not typing in an input field
@@ -227,18 +221,6 @@ function Presentation({ token }) {
   const handlePreview = () => {
     window.open(`/preview/${presentationId}`, "_blank");
   };
-
-  useEffect(() => {
-    if (token) {
-      getStore(token)
-        .then(response => {
-          setPresentations(response.data.store || []);
-          const currentPresentation = presentations.find(p => p.presentationId === presentationId);
-          setPresentation(currentPresentation || null);
-        })
-        .catch(error => console.error("Error loading presentation:", error));
-    }
-  }, [token, presentationId, presentations]);
 
   const handleDelete = () => {
     updateStore(token, presentations.filter(p => p.presentationId !== presentationId))

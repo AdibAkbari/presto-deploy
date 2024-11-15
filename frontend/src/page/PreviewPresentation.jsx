@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Box, Typography, IconButton } from '@mui/material';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
+
 import Slide from '../component/Slide';
-import { getStore } from '../helpers/ApiDatastore';
+import usePresentation from '../helpers/UsePresentation';
 
 const PreviewPresentation = ({ token }) => {
   const { presentationId } = useParams();
+  const { presentation } = usePresentation(token, presentationId);
   const location = useLocation();
   const navigate = useNavigate();
-  const [presentation, setPresentation] = useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isSlideInitialized, setIsSlideInitialized] = useState(false);
 
@@ -49,21 +50,6 @@ const PreviewPresentation = ({ token }) => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentSlideIndex, presentation?.slides?.length]);
-
-  // gets presentation information from backend
-  useEffect(() => {
-    if (token) {
-      getStore(token)
-        .then((response) => {
-          const presentations = response.data.store || [];
-          const currentPresentation = presentations.find(
-            (p) => p.presentationId === presentationId
-          );
-          setPresentation(currentPresentation || null);
-        })
-        .catch((error) => console.error('Error loading presentation:', error));
-    }
-  }, [token, presentationId]);
 
   if (!presentation) {
     return <Typography>Loading...</Typography>;
