@@ -39,7 +39,6 @@ function Presentation({ token }) {
   const location = useLocation();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
   // Function to handle editing the title of a presentation
   const editPresentationTitle = (newTitle) => {
     if (presentation) {

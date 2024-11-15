@@ -101,39 +101,56 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
         mt: isPreview? '1%': '0%',
       }}
     >
-      <AnimatePresence mode="wait">
-        <motion.div
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
-          key={slide.slideId}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Box
-            sx={{...backgroundObject, width: '100%', height: '100%'}}
+      {isPreview ? (
+        <AnimatePresence mode="wait">
+          <motion.div
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+            key={slide.slideId}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            {/* Render text elements on the slide */}
-            {slide.elements &&
-              slide.elements.map((element, index) =>
-                <DisplayElement
-                  key={`${element.elementId}-${index}`}
-                  element={element}
-                  doubleClickFunc={handleDoubleClick}
-                  onUpdateElement={onUpdateElement}
-                  parentWidth={slideWidth}
-                  parentHeight={slideHeight}
-                  onOpenDeleteModal={handleOpenDeleteModal}
-                  isPreview={isPreview}
-                  presentation={presentation}
-                />
-              )}
-          </Box>
-        </motion.div>
-      </AnimatePresence>
+            <Box sx={{ ...backgroundObject, width: '100%', height: '100%' }}>
+              {slide.elements &&
+                slide.elements.map((element, index) => (
+                  <DisplayElement
+                    key={`${element.elementId}-${index}`}
+                    element={element}
+                    doubleClickFunc={handleDoubleClick}
+                    onUpdateElement={onUpdateElement}
+                    parentWidth={slideWidth}
+                    parentHeight={slideHeight}
+                    onOpenDeleteModal={handleOpenDeleteModal}
+                    isPreview={isPreview}
+                    presentation={presentation}
+                  />
+                ))}
+            </Box>
+          </motion.div>
+        </AnimatePresence>
+      ) : (
+        <Box sx={{ ...backgroundObject, width: '100%', height: '100%' }}>
+          {slide.elements &&
+            slide.elements.map((element, index) => (
+              <DisplayElement
+                key={`${element.elementId}-${index}`}
+                element={element}
+                doubleClickFunc={handleDoubleClick}
+                onUpdateElement={onUpdateElement}
+                parentWidth={slideWidth}
+                parentHeight={slideHeight}
+                onOpenDeleteModal={handleOpenDeleteModal}
+                isPreview={isPreview}
+                presentation={presentation}
+              />
+            ))}
+        </Box>
+      )}
+
 
       {/* Modal to edit text box properties */}
       {!isPreview && (
