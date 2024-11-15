@@ -131,6 +131,7 @@ function Presentation({ token }) {
       savePresentationsToStore(
         presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
       );
+      setCurrentSlideIndex(updatedPresentation.slides.length - 1);
     }
   }
 
@@ -230,7 +231,7 @@ function Presentation({ token }) {
     setIsRearranging
   };
 
-    const updateTheme = (themeObject) => {
+  const updateSlideTheme = (themeObject) => {
     console.log('updating theme', themeObject);
     const { themeScope, backgroundType, solidColor, gradient, imageUrl } = themeObject;
 
@@ -276,7 +277,6 @@ function Presentation({ token }) {
       );
     }
   };
-
 
 
   const handleOpenNavMenu = (event) => {
@@ -453,7 +453,7 @@ function Presentation({ token }) {
                 onSubmit={updateFont}
                 confirmMsg={"Update"}
               />
-              <ThemeModal
+		          <ThemeModal
                   open={isThemeModalOpen}
                   onClose={() => setIsThemeModalOpen(false)}
                   onSubmit={updateSlideTheme}
@@ -598,7 +598,6 @@ function Presentation({ token }) {
 }
 
 export default Presentation;
-
 
 
 

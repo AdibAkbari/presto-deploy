@@ -1,5 +1,3 @@
-dashboard
-// Dashboard.jsx
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
