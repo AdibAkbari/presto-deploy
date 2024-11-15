@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { Box, Button, Typography, Modal, TextField, FormControlLabel, Checkbox } from '@mui/material';
-import PopupModal from './PopupModal';
+import { useState, useEffect } from "react";
+import { Box, Button, Typography, Modal, TextField, FormControlLabel, Checkbox } from "@mui/material";
+import PopupModal from "./PopupModal";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '60%',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "60%",
   minWidth: 360,
-  bgcolor: 'background.paper',
-  border: '2px solid black',
+  bgcolor: "background.paper",
+  border: "2px solid black",
   boxShadow: 24,
   p: 4,
 };
@@ -28,23 +28,23 @@ const ElementModal = ({
 }) => {
   const [blockWidth, setBlockWidth] = useState(initialData.width || defaultBlockSize);
   const [blockHeight, setBlockHeight] = useState(initialData.height || defaultBlockSize);
-  const [contentValue, setContentValue] = useState(initialData.content || '');
+  const [contentValue, setContentValue] = useState(initialData.content || "");
   const [fontSizeValue, setFontSizeValue] = useState(initialData.fontSize || 1);
-  const [fontColorValue, setFontColorValue] = useState(initialData.color || '#000000');
-  const [mediaUrl, setMediaUrl] = useState(initialData.url || '');
+  const [fontColorValue, setFontColorValue] = useState(initialData.color || "#000000");
+  const [mediaUrl, setMediaUrl] = useState(initialData.url || "");
   const [imageFile, setImageFile] = useState(null);
-  const [altText, setAltText] = useState(initialData.altText || '');
+  const [altText, setAltText] = useState(initialData.altText || "");
   const [autoPlay, setAutoPlay] = useState(initialData.autoPlay || false);
 
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   const modalTitle = () => {
     switch (elementType) {
-    case 'text': return mode === 'new'? 'New Text Box': 'Edit Text Box';
-    case 'image': return mode === 'new'? 'Add Image': 'Edit Image';
-    case 'video': return mode === 'new'? 'Add Video': 'Edit Video';
-    case 'code': return mode === 'new'? 'Add Code Box': 'Edit Code Box';
-    default: return 'New Element';
+    case "text": return mode === "new"? "New Text Box": "Edit Text Box";
+    case "image": return mode === "new"? "Add Image": "Edit Image";
+    case "video": return mode === "new"? "Add Video": "Edit Video";
+    case "code": return mode === "new"? "Add Code Box": "Edit Code Box";
+    default: return "New Element";
     }
   }
 
@@ -53,12 +53,12 @@ const ElementModal = ({
       // Clear inputs when modal closes
       setBlockWidth(defaultBlockSize);
       setBlockHeight(defaultBlockSize);
-      setContentValue('');
+      setContentValue("");
       setFontSizeValue(1);
-      setFontColorValue('#000000');
-      setMediaUrl('');
+      setFontColorValue("#000000");
+      setMediaUrl("");
       setImageFile(null);
-      setAltText('');
+      setAltText("");
       setAutoPlay(false);
     }
   }, [open]);
@@ -90,7 +90,7 @@ const ElementModal = ({
     };
 
     switch (elementType) {
-    case 'text':
+    case "text":
       if (!contentValue || !fontSizeValue || !fontColorValue) {
         setIsErrorModalOpen(true);
         return;
@@ -102,7 +102,7 @@ const ElementModal = ({
         color: fontColorValue,
       };
       break;
-    case 'image':
+    case "image":
       if ((!mediaUrl && !imageFile) || !altText) {
         setIsErrorModalOpen(true);
         return;
@@ -113,7 +113,7 @@ const ElementModal = ({
         altText: altText,
       };
       break;
-    case 'video':
+    case "video":
       if (!mediaUrl) {
         setIsErrorModalOpen(true);
         return;
@@ -124,7 +124,7 @@ const ElementModal = ({
         autoPlay: autoPlay
       };
       break;
-    case 'code':
+    case "code":
       if (!contentValue || !fontSizeValue) {
         setIsErrorModalOpen(true);
         return;
@@ -158,14 +158,14 @@ const ElementModal = ({
 
           {/* only show width and height inputs in new element mode */}
           {mode === "new" && (
-            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <Box sx={{display: "flex", justifyContent: "space-between"}}>
               <TextField
                 label="Block width (%)"
                 type="number"
                 variant="outlined"
                 value={blockWidth}
                 onChange={(e) => setBlockWidth(e.target.value)}
-                sx={{ mt: 2, width: '45%' }}
+                sx={{ mt: 2, width: "45%" }}
               />
               <TextField
                 label="Block height (%)"
@@ -173,14 +173,14 @@ const ElementModal = ({
                 variant="outlined"
                 value={blockHeight}
                 onChange={(e) => setBlockHeight(e.target.value)}
-                sx={{ mt: 2, width: '45%' }}
+                sx={{ mt: 2, width: "45%" }}
               />
             </Box>
           )}
           
 
           {/* Conditional fields based on element type */}
-          {elementType === 'text' && (
+          {elementType === "text" && (
             <>
               <TextField
                 label="Content"
@@ -193,14 +193,14 @@ const ElementModal = ({
                 fullWidth
                 sx={{ mt: 2 }}
               />
-              <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+              <Box sx={{display: "flex", justifyContent: "space-between"}}>
                 <TextField
                   label="Font size (em)"
                   type="number"
                   variant="outlined"
                   value={fontSizeValue}
                   onChange={(e) => setFontSizeValue(e.target.value)}
-                  sx={{ mt: 2, width: '45%' }}
+                  sx={{ mt: 2, width: "45%" }}
                 />
                 <TextField
                   label="Font color (hex)"
@@ -208,12 +208,12 @@ const ElementModal = ({
                   variant="outlined"
                   value={fontColorValue}
                   onChange={(e) => setFontColorValue(e.target.value)}
-                  sx={{ mt: 2, ml: 2, width: '45%' }}
+                  sx={{ mt: 2, ml: 2, width: "45%" }}
                 />
               </Box>
             </>
           )}
-          {elementType === 'image' && (
+          {elementType === "image" && (
             <>
               <TextField
                 label="Image URL"
@@ -229,7 +229,7 @@ const ElementModal = ({
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                style={{ marginTop: '8px', marginBottom: '8px' }}
+                style={{ marginTop: "8px", marginBottom: "8px" }}
               />
               <TextField
                 label="Image Description"
@@ -243,7 +243,7 @@ const ElementModal = ({
             </>
           )}
 
-          {elementType === 'video' && (
+          {elementType === "video" && (
             <>
               <TextField
                 label="Video URL"
@@ -268,7 +268,7 @@ const ElementModal = ({
             </>
           )}
 
-          {elementType === 'code' && (
+          {elementType === "code" && (
             <>
               <TextField
                 label="Code Content"
@@ -287,12 +287,12 @@ const ElementModal = ({
                 variant="outlined"
                 value={fontSizeValue}
                 onChange={(e) => setFontSizeValue(e.target.value)}
-                sx={{ mt: 2, width: '45%' }}
+                sx={{ mt: 2, width: "45%" }}
               />
             </>
           )}
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
             <Button variant="contained" onClick={handleSubmit}>
               {mode === "new" ? "Create" : "Save"}
             </Button>

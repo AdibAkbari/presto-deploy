@@ -1,6 +1,6 @@
 import { Box, Button, AppBar, Typography, Toolbar} from "@mui/material";
-import { Link } from 'react-router-dom';
-import Logout from './Logout';
+import { Link } from "react-router-dom";
+import Logout from "./Logout";
 
 const NavBar = ({ token, setToken }) => {
   return (

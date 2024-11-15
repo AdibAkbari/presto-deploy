@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Box, Button, Typography, Modal, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from '@mui/material';
+import { useState, useEffect } from "react";
+import { Box, Button, Typography, Modal, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from "@mui/material";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid blue',
+  bgcolor: "background.paper",
+  border: "2px solid blue",
   boxShadow: 24,
   p: 4,
 };

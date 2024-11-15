@@ -497,17 +497,18 @@ function Presentation({ token }) {
                         presentations={presentations}
                         inMenu={false}
                       />
-                      <Tooltip title="" placement="bottom"></Tooltip>
-                      <Button
-                        key={"update-font-family"}
-                        onClick={() => setIsFontFamilyModalOpen(true)}
-                        variant="text"
-                        endIcon={<FontIcon/>}
-                        color="secondary"
-                        sx={{ my: 2 }}
-                      >
-                      Font Family
-                      </Button>
+                      <Tooltip title="Change the font family of the entire presentaiton" placement="bottom">
+                        <Button
+                          key={"update-font-family"}
+                          onClick={() => setIsFontFamilyModalOpen(true)}
+                          variant="text"
+                          endIcon={<FontIcon/>}
+                          color="secondary"
+                          sx={{ my: 2 }}
+                        >
+                          Font Family
+                        </Button>
+                      </Tooltip>
                       <Button
                         onClick={() => createNewSlide()}
                         variant="text"
