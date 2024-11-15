@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import BACKEND_PORT from '../../backend.config.json';
 import { Typography, Card, CardContent, Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid2';
@@ -16,7 +15,7 @@ const Dashboard = ({ token }) => {
     if (token) {
       axios
         .get(
-          `http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, 
+          `https://cgi.cse.unsw.edu.au/~cs6080/presto/`, 
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then(response => {
@@ -61,7 +60,7 @@ const Dashboard = ({ token }) => {
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
     axios
-      .put(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
+      .put(`https://cgi.cse.unsw.edu.au/~cs6080/presto/`, { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
       .then(() => console.log("Presentations saved successfully"))
       .catch(error => console.error("Error saving presentations:", error));
   };

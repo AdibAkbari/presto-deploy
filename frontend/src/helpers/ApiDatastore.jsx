@@ -1,7 +1,6 @@
 import axios from 'axios';
-import BACKEND_PORT from '../../backend.config.json';
 
-const API_URL = `http://localhost:${BACKEND_PORT.BACKEND_PORT}`;
+const API_URL = `https://cgi.cse.unsw.edu.au/~cs6080/presto/`;
 
 export const getStore = (token) => {
   return axios.get(`${API_URL}/store`, {

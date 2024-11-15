@@ -1,5 +1,4 @@
 import axios from "axios";
-import BACKEND_PORT from "../../backend.config.json";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -9,7 +8,7 @@ const Logout = ({token, setToken}) => {
 
   const logout = () => {
     console.log("logout");
-    axios.post(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/admin/auth/logout`, {},
+    axios.post(`https://cgi.cse.unsw.edu.au/~cs6080/presto/`, {},
       {
         headers: { Authorization: `Bearer ${token}` }
       })

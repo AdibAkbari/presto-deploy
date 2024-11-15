@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import axios from 'axios';
-import BACKEND_PORT from '../../backend.config.json';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import PopupModal from '../component/PopupModal';
 
@@ -19,7 +18,7 @@ const Register = ({handleSuccess}) => {
       setIsErrorModalOpen(true);
       return;
     }
-    axios.post(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/admin/auth/register`, {
+    axios.post(`https://cgi.cse.unsw.edu.au/~cs6080/presto/`, {
       email: email,
       password: password,
       name: name,
