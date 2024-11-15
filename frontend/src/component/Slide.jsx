@@ -93,7 +93,7 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
         width: isPreview? '94%' : '70%',
         outline: '2px solid grey',
         aspectRatio: '2/1',
-        mt: isPreview? '1%': '2%',
+        mt: isPreview? '1%': '0%',
       }}
     >
       <AnimatePresence mode="wait">

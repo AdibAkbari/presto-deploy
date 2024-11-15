@@ -1,3 +1,4 @@
+dashboard
 // Dashboard.jsx
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -46,7 +47,7 @@ function Dashboard({ token }) {
       slides: [{ slideId: `slide_${Date.now()}`,
         elements: [],
         backgroundImage: '',
-        backgroundColor: 'none',
+        backgroundColor: 'none'
       }], // Default with one empty slide
       fontFamily: 'poppins'
     };
@@ -70,6 +71,15 @@ function Dashboard({ token }) {
       {/* List of presentations  */}
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={4} sx={{ mt: 3 }}>
+          {
+            presentations.length === 0 &&
+            (
+              <Box
+                sx={{display: 'flex'}}>
+                <Typography variant="h2" overflow="hidden">Create your first presentation to see it here.</Typography>
+              </Box>
+            )
+          }
           {presentations.map(presentation => (
             <Grid
               item = "true"
@@ -91,7 +101,7 @@ function Dashboard({ token }) {
                 }}
               >
                 <CardContent>
-                  <Typography variant="h6">{presentation.title}</Typography>
+                  <Typography variant="h6" overflow="hidden">{presentation.title}</Typography>
                   <Typography variant="body2">{presentation.description}</Typography>
                   <Typography variant="caption">Slides: {presentation.slides?.length}</Typography>
                 </CardContent>

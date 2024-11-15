@@ -2,8 +2,9 @@ import { useNavigate, useParams, useLocation, Routes, Route } from 'react-router
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
-import { Box, Typography, AppBar, Container, Toolbar, IconButton, Menu, MenuItem, Button, Tooltip, Avatar } from '@mui/material';
+import { Box, Typography, AppBar, Container, Toolbar, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, Divider } from '@mui/material';
 import { ArrowBack, ArrowForward, Delete } from '@mui/icons-material';
+import theme from '../theme';
 import PopupModal from '../component/PopupModal';
 import Slide from '../component/Slide';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,13 +15,14 @@ import FontFamilyModal from '../component/FontFamilyModal';
 import FontIcon from '@mui/icons-material/TextFields';
 import ThemeModal from '../component/ThemeModal';
 import AdbIcon from '@mui/icons-material/Adb';
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from '@mui/icons-material/menu';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import LowPriorityIcon from '@mui/icons-material/LowPriority';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -129,7 +131,6 @@ function Presentation({ token }) {
       savePresentationsToStore(
         presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
       );
-      setCurrentSlideIndex(updatedPresentation.slides.length - 1);
     }
   }
 
@@ -229,7 +230,7 @@ function Presentation({ token }) {
     setIsRearranging
   };
 
-  const updateTheme = (themeObject) => {
+    const updateTheme = (themeObject) => {
     console.log('updating theme', themeObject);
     const { themeScope, backgroundType, solidColor, gradient, imageUrl } = themeObject;
 
@@ -277,6 +278,7 @@ function Presentation({ token }) {
   };
 
 
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -305,30 +307,11 @@ function Presentation({ token }) {
                 alignItems: 'center'
               }}
             >
-              {/* Bar with back button, presentation title and delete presentation button*/}
-              <AppBar position="static" sx={{display: 'flex', alignItems: 'center', gap: '8px'}} color="#ffffff">
+              <AppBar position="static" color="#ffffff">
                 <Container maxWidth="xl">
                   <Toolbar disableGutters>
-                 <Box sx={{maxWidth: '15%', overflow: 'scroll'}}>
-                  <Typography
-                      variant="h4"
-                      align="center"
-                      sx={{
-                        textAlign: 'center'
-                      }}
-                    >
-                      {presentation ? presentation.title : 'Loading...'}
-                  </Typography>
-                  <IconButton
-                      key={"edit-title"}
-                      onClick={() => setIsEditModalOpen(true)}
-                      variant="text"
-                      sx={{ my: 2, color: 'black' }}
-                    >
-                      {<EditIcon/>}
-                  </IconButton>
-                 </Box>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                    {/* Hamb */}
+                    <Box sx={{ flexGrow: 1, display: {xs: 'flex', md: 'none'} }}>
                       {/* Puts all the buttons in a menu when the screen size gets small. */}
                       <IconButton
                         size="large"
@@ -364,12 +347,13 @@ function Presentation({ token }) {
                       </Menu>
                     </Box>
                     {/* The buttons of the app bar. */}
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'space-evenly' }}>
                     <Button
                       onClick={() => setIsEditModalOpen(true)}
                       variant="text"
                       endIcon={<InsertPhotoIcon/>}
-                      sx={{ my: 2, color: 'black' }}
+                      color="secondary"
+                      sx={{ my: 2 }}
                     >
                       Update Thumbnail
                     </Button>
@@ -378,7 +362,8 @@ function Presentation({ token }) {
                       onClick={() => setIsFontFamilyModalOpen(true)}
                       variant="text"
                       endIcon={<FontIcon/>}
-                      sx={{ my: 2, color: 'black' }}
+                      color="secondary"
+                      sx={{ my: 2 }}
                     >
                       Font Family
                     </Button>
@@ -386,7 +371,8 @@ function Presentation({ token }) {
                       onClick={() => createNewSlide()}
                       variant="text"
                       endIcon={<AddBoxIcon/>}
-                      sx={{ my: 2, color: 'black' }}
+                      color="secondary"
+                      sx={{ my: 2 }}
                     >
                       New Slide
                     </Button>
@@ -394,7 +380,8 @@ function Presentation({ token }) {
                       onClick={handlePreview}
                       variant="text"
                       endIcon={<SlideshowIcon/>}
-                      sx={{ my: 2, color: 'black' }}
+                      color="secondary"
+                      sx={{ my: 2 }}
                     >
                       Preview
                     </Button>
@@ -412,32 +399,28 @@ function Presentation({ token }) {
                       }}
                       variant="text"
                       endIcon={<LowPriorityIcon/>}
-                      sx={{ my: 2, color: 'black' }}
+                      color="secondary"
+                      sx={{ my: 2 }}
                     >
                       Rearrange Slides
                     </Button>
                     <Button
                       variant="text"
-                      onClick={() => deleteSlide()}
-                      endIcon={<DeleteIcon/>}
-                      sx={{ my: 2, color: 'black' }}
-                    >
-                      Delete Slide
-                    </Button>
-                    <Button
-                      variant="text"
-                      onClick={() => setIsDeleteModalOpen(true)}
-                      endIcon={<DeleteForeverIcon/>}
-                      sx={{ my: 2, color: 'black' }}
-                    >
-                      Delete Presentation
-                    </Button>
-                    <Button
-                      variant="text"
                       onClick={() => setIsThemeModalOpen(true)}
-                      sx={{my: 2, color: 'black'}}
+                      endIcon={<ColorLensIcon/>}
+                      color="secondary"
+                      sx={{my: 2}}
                     >
                       Theme
+                    </Button>
+                    <Button
+                      variant="text"
+                      onClick={() => deleteSlide()}
+                      endIcon={<DeleteIcon/>}
+                      sx={{ my: 2 }}
+                      color='error'
+                    >
+                      Delete Slide
                     </Button>
                     </Box>
                   </Toolbar>
@@ -470,12 +453,13 @@ function Presentation({ token }) {
                 onSubmit={updateFont}
                 confirmMsg={"Update"}
               />
-		          <ThemeModal
-                open={isThemeModalOpen}
-                onClose={() => setIsThemeModalOpen(false)}
-                updateTheme={updateTheme}
-                presentation={presentation}
-              />
+              <ThemeModal
+                  open={isThemeModalOpen}
+                  onClose={() => setIsThemeModalOpen(false)}
+                  onSubmit={updateSlideTheme}
+                  presentation={presentation}
+                >
+                </ThemeModal>
               {/* Delete confirmation modal */}
               <PopupModal
                 open={isDeleteModalOpen}
@@ -486,15 +470,71 @@ function Presentation({ token }) {
                 cancelMsg="No"
               />
               {/* Box for title, edit title button, back button and delete presentation button */}
+              <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+                px: '12px'
+              }}>
+                <Button
+                    variant="text"
+                    color="primary"
+                    onClick={() => navigate('/dashboard')}
+                    startIcon={<ArrowBack/>}
+                    sx={{ my: 2 }}
+                  >
+                    Back
+                  </Button>
+                  <Box
+                    sx={{
+                      width: '30%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Typography
+                        variant="h5"
+                        align="center"
+                        sx={{
+                          textAlign: 'center',
+                        }}
+                        overflow="scroll"
+                        whiteSpace="nowrap"
+                      >
+                        {presentation ? presentation.title : 'Loading...'}
+                    </Typography>
+                    <IconButton
+                        key={"edit-title"}
+                        onClick={() => setIsEditModalOpen(true)}
+                        variant="text"
+                        color="secondary"
+                        sx={{ my: 2 }}
+                      >
+                        {<EditIcon/>}
+                    </IconButton>
+                  </Box>
+                 <Button
+                    variant="text"
+                    onClick={() => setIsDeleteModalOpen(true)}
+                    endIcon={<DeleteForeverIcon/>}
+                    color='error'
+                    sx={{ my: 2}}
+                  >
+                    Delete Presentation
+                  </Button>
+              </Box>
               {/* Box for slide and slide navigation buttons */}
               <Box sx={{
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'space-evenly',
-                alignContent: 'center'
+                alignContent: 'center',
+                alignItems: 'center'
               }}>
                 <IconButton
-                  disabled={presentation && currentSlideIndex === 1}
+                  disabled={presentation && currentSlideIndex === 0}
                   onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
                   sx={{
                     fontSize: '2rem',
@@ -519,7 +559,7 @@ function Presentation({ token }) {
                     sx={{fontSize: '2rem'}}
                   >
                     <ArrowForward fontSize="inherit" />
-                </IconButton> 
+                </IconButton>
               </Box>
               {/* Footer controls */}
               <Box
@@ -558,6 +598,7 @@ function Presentation({ token }) {
 }
 
 export default Presentation;
+
 
 
 
