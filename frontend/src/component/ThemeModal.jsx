@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box,
   Button,
   Modal,
@@ -11,6 +11,7 @@ import { Box,
   ToggleButton,
   ToggleButtonGroup
 } from '@mui/material';
+import PopupModal from './PopupModal';
 
 const style = {
   position: 'absolute',
@@ -25,9 +26,11 @@ const style = {
   pb: 1
 };
 
-const ThemeModal = ({ onSubmit, open, onClose }) => {
+const errorMessage = "All fields are required.";
+
+const ThemeModal = ({ updateTheme, open, onClose }) => {
   // 'presentation' is the default theme. Other scope is 'current slide'
-  const [themeScope, setThemeScope] = useState('presentation');
+  const [themeScope, setThemeScope] = useState('');
 
   const [backgroundType, setBackgroundType] = useState('solid');
   const [solidColor, setSolidColor] = useState('#ffffff');
@@ -35,7 +38,30 @@ const ThemeModal = ({ onSubmit, open, onClose }) => {
   const [secondColor, setSecondColor] = useState('#ffffff');
   const [imageUrl, setImageUrl] = useState('');
 
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
+  useEffect(() => {
+    console.log('theme scope', themeScope);
+  }, [themeScope]);
+
   const handleAction = () => {
+    if (themeScope === '' || themeScope === null) {
+      setIsErrorModalOpen(true);
+      return;
+    }
+    if (backgroundType === 'solid' && solidColor === '') {
+      setIsErrorModalOpen(true);
+      return;
+    }
+    if (backgroundType === 'gradient' && (firstColor === '' || secondColor === '')) {
+      setIsErrorModalOpen(true);
+      return;
+    }
+    if (backgroundType === 'image' && imageUrl === '') {
+      setIsErrorModalOpen(true);
+      return;
+    }
+    
     const returnObject = {
       themeScope,
       backgroundType,
@@ -43,7 +69,11 @@ const ThemeModal = ({ onSubmit, open, onClose }) => {
       gradient: backgroundType === 'gradient' ? `linear-gradient(${firstColor}, ${secondColor})` : null,
       imageUrl: backgroundType === 'image' ? imageUrl : null,
     };
-    onSubmit(returnObject);
+    setSolidColor('#ffffff');
+    setFirstColor('#000000');
+    setSecondColor('#ffffff');
+    setImageUrl('');
+    updateTheme(returnObject);
     onClose();
   };
 
@@ -64,97 +94,105 @@ const ThemeModal = ({ onSubmit, open, onClose }) => {
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
-    >
-      <Box sx={style}>
-        <ToggleButtonGroup
-          color="primary"
-          value={themeScope}
-          exclusive
-          onChange={handleToggle}
-          aria-label="Scope"
-          sx={{ display: 'flex', justifyContent: 'center'}}
-        >
-          <ToggleButton 
-            value="presentation" 
-            sx={{ width: '50%'}}
+    <>
+      <Modal
+        open={open}
+        onClose={onClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={style}>
+          <ToggleButtonGroup
+            color="primary"
+            value={themeScope}
+            exclusive
+            onChange={handleToggle}
+            aria-label="Scope"
+            sx={{ display: 'flex', justifyContent: 'center'}}
           >
-            Presentation
-          </ToggleButton>
-          <ToggleButton 
-            value="current slide" 
-            sx={{ width: '50%'}}
-          >
-            Current Slide
-          </ToggleButton>
-        </ToggleButtonGroup>
+            <ToggleButton 
+              value="presentation" 
+              sx={{ width: '50%'}}
+            >
+              Presentation
+            </ToggleButton>
+            <ToggleButton 
+              value="current slide" 
+              sx={{ width: '50%'}}
+            >
+              Current Slide
+            </ToggleButton>
+          </ToggleButtonGroup>
 
-        <FormControl component="fieldset" sx={{ mt: 2, ml: 3 }}>
-          <FormLabel component="legend">Background Theme Type</FormLabel>
-          <RadioGroup
-            value={backgroundType}
-            onChange={(e) => setBackgroundType(e.target.value)}
-          >
-            <FormControlLabel value="solid" control={<Radio />} label="Solid Color" />
-            {backgroundType === 'solid' && (
-              <TextField
-                label="Solid Color Hex"
-                type="text"
-                value={solidColor}
-                onChange={(e) => setSolidColor(e.target.value)}
-                sx={{ mt: 1 }}
-              />
-            )}
-            <FormControlLabel value="gradient" control={<Radio />} label="Gradient" />
-            {backgroundType === 'gradient' && (
-              <Box sx={{display: 'flex', justifyContent: 'start'}}>
+          <FormControl component="fieldset" sx={{ mt: 2, ml: 3 }}>
+            <FormLabel component="legend">Background Theme Type</FormLabel>
+            <RadioGroup
+              value={backgroundType}
+              onChange={(e) => setBackgroundType(e.target.value)}
+            >
+              <FormControlLabel value="solid" control={<Radio />} label="Solid Color" />
+              {backgroundType === 'solid' && (
                 <TextField
-                  label="Colour 1"
+                  label="Solid Color Hex"
                   type="text"
-                  value={firstColor}
-                  onChange={(e) => setFirstColor(e.target.value)}
-                  sx={{ mt: 1, mr: 1, width: '45%' }}  
+                  value={solidColor}
+                  onChange={(e) => setSolidColor(e.target.value)}
+                  sx={{ mt: 1 }}
                 />
-                <TextField
-                  label="Colour 2"
-                  type="text"
-                  value={secondColor}
-                  onChange={(e) => setSecondColor(e.target.value)}
-                  sx={{ mt: 1, width: '45%' }}
-                />
-              </Box>
-            )}
-            <FormControlLabel value="image" control={<Radio />} label="Image" />
-            {backgroundType === 'image' && (
-              <>
-                <TextField
-                  label="Image URL"
-                  type="text"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  sx={{ mt: 1, mb: 1 }}
-                />
-                <input type="file" onChange={handleFileChange}/>
-              </>
-            )}
-          </RadioGroup>
-        </FormControl>
+              )}
+              <FormControlLabel value="gradient" control={<Radio />} label="Gradient" />
+              {backgroundType === 'gradient' && (
+                <Box sx={{display: 'flex', justifyContent: 'start'}}>
+                  <TextField
+                    label="Colour 1"
+                    type="text"
+                    value={firstColor}
+                    onChange={(e) => setFirstColor(e.target.value)}
+                    sx={{ mt: 1, mr: 1, width: '45%' }}  
+                  />
+                  <TextField
+                    label="Colour 2"
+                    type="text"
+                    value={secondColor}
+                    onChange={(e) => setSecondColor(e.target.value)}
+                    sx={{ mt: 1, width: '45%' }}
+                  />
+                </Box>
+              )}
+              <FormControlLabel value="image" control={<Radio />} label="Image" />
+              {backgroundType === 'image' && (
+                <>
+                  <TextField
+                    label="Image URL"
+                    type="text"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    sx={{ mt: 1, mb: 1 }}
+                  />
+                  <input type="file" onChange={handleFileChange}/>
+                </>
+              )}
+            </RadioGroup>
+          </FormControl>
 
-
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <Button variant="contained" onClick={handleAction}>
-            Save
-          </Button>
-          <Button variant="outlined" onClick={onClose} sx={{ ml: 2 }}>
-            Cancel
-          </Button>
-        </Box>
-      </Box> 
-    </Modal>
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+            <Button variant="contained" onClick={handleAction}>
+              Save
+            </Button>
+            <Button variant="outlined" onClick={onClose} sx={{ ml: 2 }}>
+              Cancel
+            </Button>
+          </Box>
+        </Box> 
+      </Modal>
+      <PopupModal
+        open={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+        instruction={errorMessage}
+        onSubmit={() => setIsErrorModalOpen(false)}
+        confirmMsg="OK"
+      />
+    </>
   );
 };
 

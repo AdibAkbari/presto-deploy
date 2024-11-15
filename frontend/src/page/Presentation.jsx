@@ -14,7 +14,7 @@ import FontFamilyModal from '../component/FontFamilyModal';
 import FontIcon from '@mui/icons-material/TextFields';
 import ThemeModal from '../component/ThemeModal';
 import AdbIcon from '@mui/icons-material/Adb';
-import MenuIcon from '@mui/icons-material/menu';
+import MenuIcon from '@mui/icons-material/Menu';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
@@ -229,7 +229,7 @@ function Presentation({ token }) {
     setIsRearranging
   };
 
-  const updateSlideTheme = (themeObject) => {
+  const updateTheme = (themeObject) => {
     console.log('updating theme', themeObject);
     const { themeScope, backgroundType, solidColor, gradient, imageUrl } = themeObject;
 
@@ -471,12 +471,11 @@ function Presentation({ token }) {
                 confirmMsg={"Update"}
               />
 		          <ThemeModal
-                  open={isThemeModalOpen}
-                  onClose={() => setIsThemeModalOpen(false)}
-                  onSubmit={updateSlideTheme}
-                  presentation={presentation}
-                >
-                </ThemeModal>
+                open={isThemeModalOpen}
+                onClose={() => setIsThemeModalOpen(false)}
+                updateTheme={updateTheme}
+                presentation={presentation}
+              />
               {/* Delete confirmation modal */}
               <PopupModal
                 open={isDeleteModalOpen}
