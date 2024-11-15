@@ -3,7 +3,14 @@ import {Menu, Button, MenuItem, Tooltip} from '@mui/material/';
 import ElementModal from './ElementModal';
 import AddIcon from '@mui/icons-material/Add';
 
-export default function NewElement({ presentation, setPresentation, currentSlideIndex, savePresentationsToStore, presentations, inMenu }) {
+// New element button and menu of element types to open relevant modal
+const NewElement = (
+  { presentation, 
+    setPresentation, 
+    currentSlideIndex, 
+    savePresentationsToStore, 
+    presentations, 
+    inMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [elementType, setElementType] = useState('');
@@ -15,6 +22,7 @@ export default function NewElement({ presentation, setPresentation, currentSlide
     setAnchorEl(event.currentTarget);
   };
 
+  // closes new element menu and opens modal for selected element type
   const handleClose = (event) => {
     if (elementTypes.includes(event.currentTarget.dataset.myValue)) {
       setElementType(event.currentTarget.dataset.myValue);
@@ -23,8 +31,8 @@ export default function NewElement({ presentation, setPresentation, currentSlide
     setAnchorEl(null);
   };
 
+  // adds new element to current slide
   const addElementToSlide = (element) =>{
-    console.log('addingElementToSlide', element);
     const updatedPresentation = { ...presentation};
     updatedPresentation.slides[currentSlideIndex].elements.push(element);
     setPresentation(updatedPresentation);
@@ -79,3 +87,4 @@ export default function NewElement({ presentation, setPresentation, currentSlide
   );
 }
 
+export default NewElement;

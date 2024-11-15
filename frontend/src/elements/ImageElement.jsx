@@ -1,18 +1,13 @@
 import { Box } from '@mui/material';
 
-function ImageElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
-  const handleDoubleClick = () => {
-    if (!isPreview) {
-      doubleClickFunc(element);
-    }
-  };
-
-  const handleDelete = (event) => {
-    if (!isPreview) {
-      event.preventDefault();
-      onOpenDeleteModal();
-    }
-  };
+const ImageElement = (
+  { 
+    element, 
+    handleDoubleClick, 
+    handleClick, 
+    handleBlur, 
+    handleDelete 
+  }) => {
   return (
     <>
       <Box

@@ -10,6 +10,7 @@ const NavBar = ({ token, setToken }) => {
           Presto
         </Typography>
         <Box sx={{ flexGrow: 39 }}>
+          {/* shows dashboard if there's a token, otherwise shows register and login */}
           {token ? (
             <>
               <Box sx={{

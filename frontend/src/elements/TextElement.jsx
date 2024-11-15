@@ -2,20 +2,15 @@ import { Box } from '@mui/material';
 import '@fontsource/open-sans';
 import '@fontsource/poppins';
 
-function TextElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview, presentation }) {
-  const handleDoubleClick = () => {
-    if (!isPreview) {
-      doubleClickFunc(element);
-    }
-  };
-
-  const handleDelete = (event) => {
-    if (!isPreview) {
-      event.preventDefault();
-      onOpenDeleteModal();
-    }
-  };
-
+const TextElement = (
+  { 
+    element, 
+    handleDoubleClick, 
+    handleClick, 
+    handleDelete,
+    handleBlur, 
+    presentation 
+  }) => {
   return (
     <Box
       onDoubleClick={handleDoubleClick}

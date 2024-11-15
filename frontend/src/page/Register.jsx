@@ -4,14 +4,15 @@ import BACKEND_PORT from '../../backend.config.json';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import PopupModal from '../component/PopupModal';
 
-function Register({handleSuccess}) {
+const Register = ({handleSuccess}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-
+  // registers with email, password, and name from input fields and 
+  // calls handleSuccess with token
   const register = () => {
     if (!email || !password || !name) {
       setErrorMessage('Please fill in all fields');

@@ -5,12 +5,13 @@ import { TextField, Button, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import PopupModal from '../component/PopupModal';
 
-function Login({handleSuccess}) {
+const Login = ({handleSuccess}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // logs in with email and password from inputs and adds token using handleSuccess
   const login = () => {
     if (!email || !password) {
       setErrorMessage('Please fill in all fields');
@@ -25,7 +26,6 @@ function Login({handleSuccess}) {
         handleSuccess(response.data.token);
       })
       .catch((error) => {
-        console.log(error);
         setErrorMessage(error.response.data.error);
         setIsErrorModalOpen(true);
       });
@@ -88,6 +88,7 @@ function Login({handleSuccess}) {
               height: "50%"
             }}
           >
+            {/* Sends user to register page if they don't have an account */}
             <Typography textTransform={'none'} sx={{fontSize: '0.9rem'}}>
               Don&apos;t have an account? Register here
             </Typography>

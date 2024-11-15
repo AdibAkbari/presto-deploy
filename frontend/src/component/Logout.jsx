@@ -14,6 +14,7 @@ const Logout = ({token, setToken}) => {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(() => {
+        // logs out by removing token and redirecting to login page
         localStorage.removeItem("token");
         setToken(undefined);
         navigate("/login");

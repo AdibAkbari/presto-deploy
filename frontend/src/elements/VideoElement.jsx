@@ -1,20 +1,14 @@
 import { Box } from '@mui/material';
 import ReactPlayer from 'react-player/lazy';
 
-function VideoElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
-  const handleDoubleClick = () => {
-    if (!isPreview) {
-      doubleClickFunc(element);
-    }
-  };
-
-  const handleDelete = (event) => {
-    if (!isPreview) {
-      event.preventDefault();
-      onOpenDeleteModal();
-    }
-  };
-
+const VideoElement = (
+  {
+    element, 
+    handleDoubleClick, 
+    handleClick, 
+    handleBlur, 
+    handleDelete 
+  }) => {
   return (
     <Box
       tabIndex={-1}
