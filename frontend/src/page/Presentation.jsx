@@ -1,26 +1,26 @@
-import { useNavigate, useParams, useLocation, Routes, Route } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import BACKEND_PORT from '../../backend.config.json';
-import { Box, Typography, AppBar, Container, Toolbar, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, Divider } from '@mui/material';
-import { ArrowBack, ArrowForward, Delete } from '@mui/icons-material';
-import PopupModal from '../component/PopupModal';
-import Slide from '../component/Slide';
-import EditIcon from '@mui/icons-material/Edit';
-import NewElement from '../component/NewElement';
-import SlidesRearrange from './SlidesRearrange';
-import PresentationContext from '../PresentationContext';
-import FontFamilyModal from '../component/FontFamilyModal';
-import FontIcon from '@mui/icons-material/TextFields';
-import ThemeModal from '../component/ThemeModal';
-import MenuIcon from '@mui/icons-material/Menu';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import SlideshowIcon from '@mui/icons-material/Slideshow';
-import LowPriorityIcon from '@mui/icons-material/LowPriority';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
+import { useNavigate, useParams, useLocation, Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import BACKEND_PORT from "../../backend.config.json";
+import { Box, Typography, AppBar, Container, Toolbar, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, Divider } from "@mui/material";
+import { ArrowBack, ArrowForward, Delete } from "@mui/icons-material";
+import PopupModal from "../component/PopupModal";
+import Slide from "../component/Slide";
+import EditIcon from "@mui/icons-material/Edit";
+import NewElement from "../component/NewElement";
+import SlidesRearrange from "./SlidesRearrange";
+import PresentationContext from "../PresentationContext";
+import FontFamilyModal from "../component/FontFamilyModal";
+import FontIcon from "@mui/icons-material/TextFields";
+import ThemeModal from "../component/ThemeModal";
+import MenuIcon from "@mui/icons-material/Menu";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import SlideshowIcon from "@mui/icons-material/Slideshow";
+import LowPriorityIcon from "@mui/icons-material/LowPriority";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ColorLensIcon from "@mui/icons-material/ColorLens";
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -53,7 +53,7 @@ function Presentation({ token }) {
   useEffect(() => {
     if (!isRearranging && !isSlideInitialized) {
       const searchParams = new URLSearchParams(location.search);
-      const slideParam = searchParams.get('slide');
+      const slideParam = searchParams.get("slide");
       if (slideParam) {
         const slideNumber = parseInt(slideParam, 10) - 1;
         if (!isNaN(slideNumber)) {
@@ -67,14 +67,14 @@ function Presentation({ token }) {
   useEffect(() => {
     if (!isRearranging && isSlideInitialized) {
       const searchParams = new URLSearchParams(location.search);
-      searchParams.set('slide', currentSlideIndex + 1);
+      searchParams.set("slide", currentSlideIndex + 1);
       navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
     }
   }, [currentSlideIndex, location.pathname, navigate, isSlideInitialized]);
   
   // updates element of current slide in presentation
   const updateElement = (updatedElement) => {
-    console.log('updating element', updatedElement);
+    console.log("updating element", updatedElement);
     const updatedSlides = [...presentation.slides];
     const currentSlide = { ...updatedSlides[currentSlideIndex] };
     currentSlide.elements = currentSlide.elements.map((el) =>
@@ -119,8 +119,8 @@ function Presentation({ token }) {
       const newSlide = {
         slideId: `slide_${Date.now()}`,
         elements: [],
-        backgroundColor: 'none',
-        backgroundImage: ''
+        backgroundColor: "none",
+        backgroundImage: ""
       }
       const updatedPresentation = { ...presentation, slides: [...presentation.slides, newSlide] };
       setPresentation(updatedPresentation);
@@ -203,7 +203,7 @@ function Presentation({ token }) {
   }, [currentSlideIndex, presentation?.slides?.length]);
 
   const handlePreview = () => {
-    window.open(`/preview/${presentationId}`, '_blank');
+    window.open(`/preview/${presentationId}`, "_blank");
   };
 
   useEffect(() => {
@@ -226,7 +226,7 @@ function Presentation({ token }) {
       { headers: { Authorization: `Bearer ${token}` } }
     )
       .then(() => {
-        navigate('/dashboard');
+        navigate("/dashboard");
       })
       .catch(error => {
         console.error("Error deleting presentation:", error);
@@ -247,20 +247,20 @@ function Presentation({ token }) {
   };
 
   const updateTheme = (themeObject) => {
-    console.log('updating theme', themeObject);
+    console.log("updating theme", themeObject);
     const { themeScope, backgroundType, solidColor, gradient, imageUrl } = themeObject;
 
-    if (themeScope === 'presentation') {
+    if (themeScope === "presentation") {
       const updatedPresentation = { ...presentation };
-      if (backgroundType === 'solid') {
+      if (backgroundType === "solid") {
         updatedPresentation.backgroundColor = solidColor;
-        updatedPresentation.backgroundImage = '';
-      } else if (backgroundType === 'gradient') {
+        updatedPresentation.backgroundImage = "";
+      } else if (backgroundType === "gradient") {
         updatedPresentation.backgroundColor = gradient;
-        updatedPresentation.backgroundImage = 'none';
+        updatedPresentation.backgroundImage = "none";
       } else { // image
         updatedPresentation.backgroundImage = imageUrl;
-        updatedPresentation.backgroundColor = 'none';
+        updatedPresentation.backgroundColor = "none";
       }
       setPresentation(updatedPresentation);
       savePresentationsToStore(
@@ -272,15 +272,15 @@ function Presentation({ token }) {
     else { // current slide
       const updatedSlides = [...presentation.slides];
       const currentSlide = { ...updatedSlides[currentSlideIndex] };
-      if (backgroundType === 'solid') {
+      if (backgroundType === "solid") {
         currentSlide.backgroundColor = solidColor;
-        currentSlide.backgroundImage = 'none';
-      } else if (backgroundType === 'gradient') {
+        currentSlide.backgroundImage = "none";
+      } else if (backgroundType === "gradient") {
         currentSlide.backgroundColor = gradient;
-        currentSlide.backgroundImage = 'none';
+        currentSlide.backgroundImage = "none";
       } else { // image
         currentSlide.backgroundImage = imageUrl;
-        currentSlide.backgroundColor = 'none';
+        currentSlide.backgroundColor = "none";
       }
       updatedSlides[currentSlideIndex] = currentSlide;
       const updatedPresentation = { ...presentation, slides: updatedSlides };
@@ -317,19 +317,19 @@ function Presentation({ token }) {
           element={
             <Box
               sx={{ 
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center"
               }}
             >
               <AppBar position="static" color="#ffffff">
                 <Container maxWidth="xl">
                   <Toolbar disableGutters>
                     <Box sx={{
-                    display: { xxs: 'flex', md: 'none' },
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    width: '100%'}}>
+                    display: { xxs: "flex", md: "none" },
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%"}}>
                       {/* Mobile menu icon */}  
                       <IconButton
                         size="large"
@@ -345,20 +345,20 @@ function Presentation({ token }) {
                         id="menu-appbar"
                         anchorEl={anchorElNav}
                         anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'left',
+                          vertical: "bottom",
+                          horizontal: "left",
                         }}
                         keepMounted
                         transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
+                          vertical: "top",
+                          horizontal: "left",
                         }}
                         open={Boolean(anchorElNav)}
                         onClose={handleCloseNavMenu}
                       >
                         <MenuItem
                           sx={{
-                            display: {xxs: 'flex', sm: 'none'}
+                            display: {xxs: "flex", sm: "none"}
                           }}
                         >
                           <NewElement
@@ -384,7 +384,7 @@ function Presentation({ token }) {
                           handleCloseNavMenu();
                         }}
                           sx={{
-                            display: {xxs: 'flex', sm: 'none'}
+                            display: {xxs: "flex", sm: "none"}
                           }}
                         >
                           <Button startIcon={<AddBoxIcon />} color="secondary">New Slide</Button>
@@ -392,11 +392,11 @@ function Presentation({ token }) {
                         <MenuItem 
                           onClick={() => {
                             setIsRearranging(true);
-                            navigate('rearrange');
+                            navigate("rearrange");
                             handleCloseNavMenu();
                           }}
                           sx={{
-                            display: {xxs: 'flex', sm: 'none'}
+                            display: {xxs: "flex", sm: "none"}
                           }}
                         >
                           <Button startIcon={<LowPriorityIcon />} color="secondary">Rearrange Slides</Button>
@@ -407,7 +407,7 @@ function Presentation({ token }) {
                             handleCloseNavMenu();
                           }}
                           sx={{
-                            display: {xxs: 'flex', sm: 'none'}
+                            display: {xxs: "flex", sm: "none"}
                           }}
                         >
                           <Button startIcon={<SlideshowIcon />} color="secondary">Preview</Button>
@@ -430,7 +430,7 @@ function Presentation({ token }) {
                             handleCloseNavMenu();
                           }}
                           sx={{
-                            display: {xxs: 'flex', sm: 'none'}
+                            display: {xxs: "flex", sm: "none"}
                           }}
                         >
                           <Button startIcon={<DeleteIcon />} color="error">Delete Slide</Button>
@@ -439,7 +439,7 @@ function Presentation({ token }) {
                       <Box
                       sx={{
                         my: 2,
-                        display: {xxs: 'none', sm: 'flex', md: 'none'}
+                        display: {xxs: "none", sm: "flex", md: "none"}
                       }}>
                         <NewElement
                           presentation={presentation}
@@ -455,7 +455,7 @@ function Presentation({ token }) {
                         variant="text"
                         endIcon={<AddBoxIcon/>}
                         color="secondary"
-                        sx={{ my: 2, display: {xxs: 'none', sm: 'flex', md: 'none'} }}
+                        sx={{ my: 2, display: {xxs: "none", sm: "flex", md: "none"} }}
                       >
                       New Slide
                       </Button>
@@ -464,7 +464,7 @@ function Presentation({ token }) {
                         variant="text"
                         endIcon={<SlideshowIcon/>}
                         color="secondary"
-                        sx={{ my: 2, display: {xxs: 'none', sm: 'flex', md: 'none'} }}
+                        sx={{ my: 2, display: {xxs: "none", sm: "flex", md: "none"} }}
                       >
                         Preview
                       </Button>
@@ -472,8 +472,8 @@ function Presentation({ token }) {
                         variant="text"
                         onClick={() => deleteSlide()}
                         endIcon={<DeleteIcon/>}
-                        sx={{ my: 2, display: {xxs: 'none', sm: 'flex', md: 'none'} }}
-                        color='error'
+                        sx={{ my: 2, display: {xxs: "none", sm: "flex", md: "none"} }}
+                        color="error"
                       >
                         Delete Slide
                       </Button>
@@ -481,14 +481,14 @@ function Presentation({ token }) {
                         variant="text"
                         onClick={() => setIsDeleteModalOpen(true)}
                         endIcon={<DeleteForeverIcon/>}
-                        color='error'
-                        sx={{ my: 2, display: {xs: 'flex', sm: 'none'}}}
+                        color="error"
+                        sx={{ my: 2, display: {xs: "flex", sm: "none"}}}
                       >
                         Delete Presentation
                       </Button>
                     </Box>
                     {/* The buttons of the app bar. */}
-                    <Box sx={{ flexGrow: 1, display: {xxs: 'none', md: 'flex' }, justifyContent: 'space-evenly' }}>
+                    <Box sx={{ flexGrow: 1, display: {xxs: "none", md: "flex" }, justifyContent: "space-evenly" }}>
                       <NewElement
                         presentation={presentation}
                         setPresentation={setPresentation}
@@ -497,6 +497,7 @@ function Presentation({ token }) {
                         presentations={presentations}
                         inMenu={false}
                       />
+                      <Tooltip title="" placement="bottom"></Tooltip>
                       <Button
                         key={"update-font-family"}
                         onClick={() => setIsFontFamilyModalOpen(true)}
@@ -519,7 +520,7 @@ function Presentation({ token }) {
                       <Button
                         onClick={() => {
                           setIsRearranging(true)
-                          navigate('rearrange')
+                          navigate("rearrange")
                         }}
                         variant="text"
                         endIcon={<LowPriorityIcon/>}
@@ -560,7 +561,7 @@ function Presentation({ token }) {
                         onClick={() => deleteSlide()}
                         endIcon={<DeleteIcon/>}
                         sx={{ my: 2 }}
-                        color='error'
+                        color="error"
                       >
                         Delete Slide
                       </Button>
@@ -614,15 +615,15 @@ function Presentation({ token }) {
               {/* Box for title, edit title button, back button and delete presentation button */}
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                  px: '12px'
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  px: "12px"
                 }}>
                 <Button
                   variant="text"
                   color="primary"
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => navigate("/dashboard")}
                   startIcon={<ArrowBack/>}
                   sx={{ my: 2 }}
                 >
@@ -630,22 +631,22 @@ function Presentation({ token }) {
                 </Button>
                 <Box
                   sx={{
-                    width: '30%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    width: "30%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   <Typography
                     variant="h5"
                     align="center"
                     sx={{
-                      textAlign: 'center',
+                      textAlign: "center",
                     }}
                     overflow="auto"
                     whiteSpace="nowrap"
                   >
-                    {presentation ? presentation.title : 'Loading...'}
+                    {presentation ? presentation.title : "Loading..."}
                   </Typography>
                   <IconButton
                     key={"edit-title"}
@@ -661,25 +662,25 @@ function Presentation({ token }) {
                   variant="text"
                   onClick={() => setIsDeleteModalOpen(true)}
                   endIcon={<DeleteForeverIcon/>}
-                  color='error'
-                  sx={{ my: 2, display: {xxs: 'none', sm: 'flex'}}}
+                  color="error"
+                  sx={{ my: 2, display: {xxs: "none", sm: "flex"}}}
                 >
                   Delete Presentation
                 </Button>
               </Box>
               {/* Box for slide and slide navigation buttons */}
               <Box sx={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'space-evenly',
-                alignContent: 'center',
-                alignItems: 'center'
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-evenly",
+                alignContent: "center",
+                alignItems: "center"
               }}>
                 <IconButton
                   disabled={presentation && currentSlideIndex === 0}
                   onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
                   sx={{
-                    fontSize: '2rem',
+                    fontSize: "2rem",
                   }}
                 >
                   <ArrowBack fontSize="inherit" />
@@ -698,7 +699,7 @@ function Presentation({ token }) {
                 <IconButton
                   disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
                   onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
-                  sx={{fontSize: '2rem'}}
+                  sx={{fontSize: "2rem"}}
                 >
                   <ArrowForward fontSize="inherit" />
                 </IconButton>
@@ -707,12 +708,12 @@ function Presentation({ token }) {
               <Box
                 sx={{
                   p: 3,
-                  display: 'flex',
-                  width: '1000px',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-evenly',
-                  alignContent: 'center'
+                  display: "flex",
+                  width: "1000px",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                  alignContent: "center"
                 }}
               >
               </Box>
@@ -720,12 +721,12 @@ function Presentation({ token }) {
               <Box
                 sx={{
                   p: 3,
-                  display: 'flex',
-                  width: '1000px',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  alignContent: 'center'
+                  display: "flex",
+                  width: "1000px",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  alignContent: "center"
                 }}
               >
               </Box>
