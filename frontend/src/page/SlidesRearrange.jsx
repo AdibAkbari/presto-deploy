@@ -94,22 +94,20 @@ function SlidesRearrange() {
         <Box
           sx={{
             p: 3,
-            ml: '8%',
-            mr: '8%',
+            mx: '8%'
           }}
         >
           <Typography variant="h5" gutterBottom>
             Rearrange Slides
           </Typography>
-          <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-            <Button variant="contained" onClick={handleCancel}>
-              Cancel
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleSave}>
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between'}}>
+            <Button variant="contained" onClick={handleSave}>
               Save Changes
             </Button>
+            <Button variant="contained" onClick={handleCancel} color='error'>
+              Cancel
+            </Button>
           </Box>
-
 
           <DndContext
             sensors={sensors}
