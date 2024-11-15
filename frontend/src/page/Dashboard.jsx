@@ -38,14 +38,16 @@ function Dashboard({ token }) {
   const addPresentation = (title) => {
     const newPresentation = {
       presentationId: `id_${Date.now()}`, // Temporary unique ID
+      backgroundColor: 'none',
+      backgroundImage: '',
       title: title,
       description: '',
       thumbnail: '', // Grey square by default
       slides: [{ slideId: `slide_${Date.now()}`,
         elements: [],
         backgroundImage: '',
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",}], // Default with one empty slide
+        backgroundColor: 'none',
+      }], // Default with one empty slide
       fontFamily: 'poppins'
     };
 

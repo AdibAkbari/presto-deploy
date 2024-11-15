@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import ElementModal from './ElementModal';
 import DisplayElement from '../elements/DisplayElement';
 import PopupModal from './PopupModal';
@@ -24,7 +24,24 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
     setIsDeleteModalOpen(false);
     setSelectedElement(null);
   };
+
+  const backgroundObject = useMemo(() => {
+    if (slide.backgroundColor !== 'none') {
+      return { background: slide.backgroundColor };
+    }
+    else if (slide.backgroundImage !== '') {
+      return {
+        backgroundImage: `url(${slide.backgroundImage})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+      };
+    }
+    else if (presentation.backgroundColor !== 'none') {
+      return {background: presentation.backgroundColor };
+    }
+  }, [slide.backgroundColor, slide.backgroundImage, presentation.backgroundColor, presentation.backgroundImage]);
   
+
   // Use ResizeObserver to watch for changes in slide dimensions
   useEffect(() => {
     const updateSize = () => {
@@ -42,7 +59,6 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
     // Initial size setting
     updateSize();
 
-    // Cleanup observer on component unmount
     return () => resizeObserver.disconnect();
   }, []);
 
@@ -75,10 +91,6 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
           style={{
             width: '100%',
             height: '100%',
-            background: slide.backgroundColor !== 'none'? slide.backgroundColor : presentation.backgroundColor,
-            backgroundImage: slide.backgroundImage === '' ? 'none' : `url(${slide.backgroundImage})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover'
           }}
           key={slide.slideId}
           initial={{ opacity: 0 }}
@@ -86,45 +98,49 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* Render text elements on the slide */}
-          {slide.elements &&
-            slide.elements.map((element, index) =>
-              <DisplayElement
-                key={`${element.elementId}-${index}`}
-                element={element}
-                doubleClickFunc={handleDoubleClick}
-                onUpdateElement={onUpdateElement}
-                parentWidth={slideWidth}
-                parentHeight={slideHeight}
-                onOpenDeleteModal={handleOpenDeleteModal}
-                isPreview={isPreview}
-                presentation={presentation}
-              />
-            )}
-
-          {/* Modal to edit text box properties */}
-          {!isPreview && (
-            <>
-              {isEditing && selectedElement && (
-                <ElementModal
-                  open={isEditing}
-                  onClose={() => setIsEditing(false)}
-                  elementType={selectedElement.type}
-                  onSubmit={handleSave}
-                  initialData={selectedElement}
-                  mode="edit"
+          <Box
+            sx={{...backgroundObject, width: '100%', height: '100%'}}
+          >
+            {/* Render text elements on the slide */}
+            {slide.elements &&
+              slide.elements.map((element, index) =>
+                <DisplayElement
+                  key={`${element.elementId}-${index}`}
+                  element={element}
+                  doubleClickFunc={handleDoubleClick}
+                  onUpdateElement={onUpdateElement}
+                  parentWidth={slideWidth}
+                  parentHeight={slideHeight}
+                  onOpenDeleteModal={handleOpenDeleteModal}
+                  isPreview={isPreview}
+                  presentation={presentation}
                 />
               )}
-              <PopupModal
-                open={isDeleteModalOpen}
-                onClose={() => setIsDeleteModalOpen(false)}
-                instruction="Are you sure you want to delete this element?"
-                onSubmit={handleDelete}
-                confirmMsg="Yes"
-                cancelMsg="No"
-              />
-            </>
-          )}
+
+            {/* Modal to edit text box properties */}
+            {!isPreview && (
+              <>
+                {isEditing && selectedElement && (
+                  <ElementModal
+                    open={isEditing}
+                    onClose={() => setIsEditing(false)}
+                    elementType={selectedElement.type}
+                    onSubmit={handleSave}
+                    initialData={selectedElement}
+                    mode="edit"
+                  />
+                )}
+                <PopupModal
+                  open={isDeleteModalOpen}
+                  onClose={() => setIsDeleteModalOpen(false)}
+                  instruction="Are you sure you want to delete this element?"
+                  onSubmit={handleDelete}
+                  confirmMsg="Yes"
+                  cancelMsg="No"
+                />
+              </>
+            )}
+          </Box>
         </motion.div>
       </AnimatePresence>
       
