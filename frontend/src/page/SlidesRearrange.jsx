@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import PresentationContext from '../PresentationContext';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
 import {
   DndContext,
   closestCenter,
@@ -16,6 +18,7 @@ import {
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Save } from '@mui/icons-material';
 
 function SlidesRearrange() {
   const navigate = useNavigate();
@@ -101,10 +104,19 @@ function SlidesRearrange() {
             Rearrange Slides
           </Typography>
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between'}}>
-            <Button variant="contained" onClick={handleSave}>
+            <Button 
+              variant="contained"
+              onClick={handleSave}
+              endIcon={<SaveIcon/>}
+            >
               Save Changes
             </Button>
-            <Button variant="contained" onClick={handleCancel} color='error'>
+            <Button 
+              variant="contained"
+              onClick={handleCancel}
+              color='error'
+              endIcon={<CloseIcon/>}
+            >
               Cancel
             </Button>
           </Box>
