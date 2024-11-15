@@ -39,6 +39,16 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
     else if (presentation.backgroundColor !== 'none') {
       return {background: presentation.backgroundColor };
     }
+    else if (presentation.backgroundImage !== '') {
+      return {
+        backgroundImage: `url(${presentation.backgroundImage})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+      };
+    }
+    else {
+      return { background: 'white' };
+    }
   }, [slide.backgroundColor, slide.backgroundImage, presentation.backgroundColor, presentation.backgroundImage]);
   
 
