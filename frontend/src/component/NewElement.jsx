@@ -3,7 +3,7 @@ import {Menu, Button, MenuItem} from '@mui/material/';
 import ElementModal from './ElementModal';
 import AddIcon from '@mui/icons-material/Add';
 
-export default function NewElement({ presentation, setPresentation, currentSlideIndex, savePresentationsToStore, presentations }) {
+export default function NewElement({ presentation, setPresentation, currentSlideIndex, savePresentationsToStore, presentations, inMenu }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [elementType, setElementType] = useState('');
@@ -41,8 +41,9 @@ export default function NewElement({ presentation, setPresentation, currentSlide
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        endIcon={<AddIcon/>}
-        sx={{my: 2, color: 'black'}}
+        endIcon={inMenu? null : <AddIcon/>}
+        startIcon={inMenu? <AddIcon/> : null}
+        sx={{my: inMenu? 0 : 2, color: 'black'}}
       >
         New Element
       </Button>

@@ -13,7 +13,7 @@ import PresentationContext from '../PresentationContext';
 import FontFamilyModal from '../component/FontFamilyModal';
 import FontIcon from '@mui/icons-material/TextFields';
 import ThemeModal from '../component/ThemeModal';
-import AdbIcon from '@mui/icons-material/Adb';
+import AddIcon from '@mui/icons-material/Add';
 import MenuIcon from '@mui/icons-material/Menu';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -327,11 +327,11 @@ function Presentation({ token }) {
                 <Container maxWidth="xl">
                   <Toolbar disableGutters>
                     {/* Hamb */}
-                    <Box sx={{ flexGrow: 1, display: {xs: 'flex', md: 'none'} }}>
-                      {/* Puts all the buttons in a menu when the screen size gets small. */}
+                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                      {/* Mobile menu icon */}
                       <IconButton
                         size="large"
-                        aria-label="account of current user"
+                        aria-label="app menu"
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
                         onClick={handleOpenNavMenu}
@@ -353,13 +353,60 @@ function Presentation({ token }) {
                         }}
                         open={Boolean(anchorElNav)}
                         onClose={handleCloseNavMenu}
-                        sx={{ display: { xs: 'block', md: 'none' } }}
                       >
-                        {/* {pages.map((page) => (
-                          <MenuItem key={page} onClick={handleCloseNavMenu}>
-                            <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-                          </MenuItem>
-                        ))} */}
+                        <MenuItem>
+                          <NewElement
+                            presentation={presentation}
+                            setPresentation={setPresentation}
+                            currentSlideIndex={currentSlideIndex}
+                            savePresentationsToStore={savePresentationsToStore}
+                            presentations={presentations}
+                            inMenu={true}
+                          />
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          setIsUpdateThumbnailOpen(true)
+                          handleCloseNavMenu()
+                        }}>
+                          <Button startIcon={<InsertPhotoIcon />} color="secondary">Update Thumbnail</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          setIsFontFamilyModalOpen(true);
+                          handleCloseNavMenu();
+                        }}>
+                          <Button startIcon={<FontIcon />} color="secondary">Font Family</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          createNewSlide();
+                          handleCloseNavMenu();
+                        }}>
+                          <Button startIcon={<AddBoxIcon />} color="secondary">New Slide</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          handlePreview();
+                          handleCloseNavMenu();
+                        }}>
+                          <Button startIcon={<SlideshowIcon />} color="secondary">Preview</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          setIsRearranging(true);
+                          navigate('rearrange');
+                          handleCloseNavMenu();
+                        }}>
+                          <Button startIcon={<LowPriorityIcon />} color="secondary">Rearrange Slides</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          setIsThemeModalOpen(true);
+                          handleCloseNavMenu();
+                        }}>
+                          <Button startIcon={<DeleteIcon />} color="secondary">Theme</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          deleteSlide();
+                          handleCloseNavMenu();
+                        }}>
+                          <Button startIcon={<DeleteIcon />} color="error">Delete Slide</Button>
+                        </MenuItem>
                       </Menu>
                     </Box>
                     {/* The buttons of the app bar. */}
@@ -407,6 +454,7 @@ function Presentation({ token }) {
                         currentSlideIndex={currentSlideIndex}
                         savePresentationsToStore={savePresentationsToStore}
                         presentations={presentations}
+                        inMenu={false}
                       />
                       <Button
                         onClick={() => {
@@ -516,7 +564,7 @@ function Presentation({ token }) {
                     sx={{
                       textAlign: 'center',
                     }}
-                    overflow="scroll"
+                    overflow="auto"
                     whiteSpace="nowrap"
                   >
                     {presentation ? presentation.title : 'Loading...'}

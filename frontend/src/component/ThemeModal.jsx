@@ -19,6 +19,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '30%',
+  minWidth: 300,
   bgcolor: 'background.paper',
   border: '1px solid black',
   borderRadius: '5px',
@@ -124,7 +125,7 @@ const ThemeModal = ({ updateTheme, open, onClose }) => {
             </ToggleButton>
           </ToggleButtonGroup>
 
-          <FormControl component="fieldset" sx={{ mt: 2, ml: 3 }}>
+          <FormControl component="fieldset" sx={{ mt: 2, mx: 3 }}>
             <FormLabel component="legend">Background Theme Type</FormLabel>
             <RadioGroup
               value={backgroundType}

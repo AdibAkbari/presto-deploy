@@ -43,6 +43,7 @@ function Login({handleSuccess}) {
           maxWidth: 400,
           margin: 'auto',
           mt: 4,
+          px: 2
         }}
         noValidate
         autoComplete="off"
