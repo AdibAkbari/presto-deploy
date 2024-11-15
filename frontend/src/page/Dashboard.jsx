@@ -69,15 +69,6 @@ function Dashboard({ token }) {
       {/* List of presentations  */}
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={4} sx={{ mt: 3 }}>
-          {
-            presentations.length === 0 &&
-            (
-              <Box
-                sx={{display: 'flex'}}>
-                <Typography variant="h2" overflow="hidden">Create your first presentation to see it here.</Typography>
-              </Box>
-            )
-          }
           {presentations.map(presentation => (
             <Grid
               item = "true"

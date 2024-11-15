@@ -497,15 +497,17 @@ function Presentation({ token }) {
                           Delete Slide
                         </Button>
                       </Tooltip>
-                      <Button
-                        variant="text"
-                        onClick={() => setIsDeleteModalOpen(true)}
-                        endIcon={<DeleteForeverIcon/>}
-                        color="error"
-                        sx={{ my: 2, display: {xs: "flex", sm: "none"}}}
-                      >
-                        Delete Presentation
-                      </Button>
+                      <Tooltip title="Delete this presentation and return to the dashboard." placement="bottom">
+                        <Button
+                          variant="text"
+                          onClick={() => setIsDeleteModalOpen(true)}
+                          endIcon={<DeleteForeverIcon/>}
+                          color="error"
+                          sx={{ my: 2, display: {xs: "flex", sm: "none"}}}
+                        >
+                          Delete Presentation
+                        </Button>
+                      </Tooltip>
                     </Box>
                     {/* The buttons of the app bar. */}
                     <Box sx={{ flexGrow: 1, display: {xxs: "none", md: "flex" }, justifyContent: "space-evenly" }}>
@@ -651,7 +653,8 @@ function Presentation({ token }) {
                   display: "flex",
                   justifyContent: "space-between",
                   width: "100%",
-                  px: "12px"
+                  px: "12px",
+                  my: 1
                 }}>
                 <Button
                   variant="text"
@@ -681,25 +684,28 @@ function Presentation({ token }) {
                   >
                     {presentation ? presentation.title : "Loading..."}
                   </Typography>
-                  <IconButton
-                    key={"edit-title"}
-                    onClick={() => setIsEditModalOpen(true)}
-                    variant="text"
-                    color="secondary"
-                    sx={{ my: 2 }}
-                  >
-                    {<EditIcon/>}
-                  </IconButton>
+                  <Tooltip title="Edit the title of the presentation." placement="right">
+                    <IconButton
+                      key={"edit-title"}
+                      onClick={() => setIsEditModalOpen(true)}
+                      variant="text"
+                      color="secondary"
+                    >
+                      {<EditIcon/>}
+                    </IconButton>
+                  </Tooltip>
                 </Box>
-                <Button
-                  variant="text"
-                  onClick={() => setIsDeleteModalOpen(true)}
-                  endIcon={<DeleteForeverIcon/>}
-                  color="error"
-                  sx={{ my: 2, display: {xxs: "none", sm: "flex"}}}
-                >
-                  Delete Presentation
-                </Button>
+                <Tooltip title="Delete this presentation and return to the dashboard." placement="bottom">
+                  <Button
+                    variant="text"
+                    onClick={() => setIsDeleteModalOpen(true)}
+                    endIcon={<DeleteForeverIcon/>}
+                    color="error"
+                    sx={{ my: 2, display: {xxs: "none", sm: "flex"}}}
+                  >
+                    Delete Presentation
+                  </Button>
+                </Tooltip>
               </Box>
               {/* Box for slide and slide navigation buttons */}
               <Box sx={{
@@ -714,6 +720,7 @@ function Presentation({ token }) {
                   onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
                   sx={{
                     fontSize: "2rem",
+                    display: {xxs: "none", xs: "flex"}
                   }}
                 >
                   <ArrowBack fontSize="inherit" />
@@ -732,7 +739,10 @@ function Presentation({ token }) {
                 <IconButton
                   disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
                   onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
-                  sx={{fontSize: "2rem"}}
+                  sx={{
+                    fontSize: "2rem",
+                    display: {xxs: "none", xs: "flex"}
+                  }}
                 >
                   <ArrowForward fontSize="inherit" />
                 </IconButton>
@@ -755,13 +765,32 @@ function Presentation({ token }) {
                 sx={{
                   p: 3,
                   display: "flex",
-                  width: "1000px",
-                  flexDirection: "row",
+                  width: "100%",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  justifyContent: "space-around",
                   alignContent: "center"
                 }}
               >
+                <IconButton
+                  disabled={presentation && currentSlideIndex === 0}
+                  onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
+                  sx={{
+                    fontSize: "2rem",
+                    display: {xxs: "flex", xs: "none"}
+                  }}
+                >
+                  <ArrowBack fontSize="inherit" />
+                </IconButton>
+                <IconButton
+                  disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
+                  onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
+                  sx={{
+                    fontSize: "2rem",
+                    display: {xxs: "flex", xs: "none"}
+                  }}
+                >
+                  <ArrowForward fontSize="inherit" />
+                </IconButton>
               </Box>
             </Box>
           }
