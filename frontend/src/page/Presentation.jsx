@@ -370,25 +370,29 @@ function Presentation({ token }) {
                             inMenu={true}
                           />
                         </MenuItem>
-                        <MenuItem 
-                          onClick={() => {
-                            setIsFontFamilyModalOpen(true);
-                            handleCloseNavMenu();
-                          }}
-                        >
-                          <Button startIcon={<FontIcon />} color="secondary">Font Family</Button>
-                        </MenuItem>
-                        <MenuItem 
-                        onClick={() => {
-                          createNewSlide();
-                          handleCloseNavMenu();
-                        }}
-                          sx={{
-                            display: {xxs: "flex", sm: "none"}
-                          }}
-                        >
-                          <Button startIcon={<AddBoxIcon />} color="secondary">New Slide</Button>
-                        </MenuItem>
+                        <Tooltip title="Change the font family of the entire presentaiton" placement="bottom">
+                          <MenuItem 
+                            onClick={() => {
+                              setIsFontFamilyModalOpen(true);
+                              handleCloseNavMenu();
+                            }}
+                          >
+                            <Button startIcon={<FontIcon />} color="secondary">Font Family</Button>
+                          </MenuItem>
+                        </Tooltip>
+                        <Tooltip title="Add a new slide to the presentation" placement="bottom">
+                          <MenuItem 
+                            onClick={() => {
+                              createNewSlide();
+                              handleCloseNavMenu();
+                            }}
+                            sx={{
+                              display: {xxs: "flex", sm: "none"}
+                            }}
+                          >
+                            <Button startIcon={<AddBoxIcon />} color="secondary">New Slide</Button>
+                          </MenuItem>
+                        </Tooltip>
                         <MenuItem 
                           onClick={() => {
                             setIsRearranging(true);
@@ -450,15 +454,17 @@ function Presentation({ token }) {
                           inMenu={false}
                         />
                       </Box>
-                      <Button
-                        onClick={() => createNewSlide()}
-                        variant="text"
-                        endIcon={<AddBoxIcon/>}
-                        color="secondary"
-                        sx={{ my: 2, display: {xxs: "none", sm: "flex", md: "none"} }}
-                      >
-                      New Slide
-                      </Button>
+                      <Tooltip title="Add a new slide to the presentation" placement="bottom">
+                        <Button
+                          onClick={() => createNewSlide()}
+                          variant="text"
+                          endIcon={<AddBoxIcon/>}
+                          color="secondary"
+                          sx={{ my: 2, display: {xxs: "none", sm: "flex", md: "none"} }}
+                        >
+                        New Slide
+                        </Button>
+                      </Tooltip>
                       <Button
                         onClick={handlePreview}
                         variant="text"
@@ -509,63 +515,75 @@ function Presentation({ token }) {
                           Font Family
                         </Button>
                       </Tooltip>
-                      <Button
-                        onClick={() => createNewSlide()}
-                        variant="text"
-                        endIcon={<AddBoxIcon/>}
-                        color="secondary"
-                        sx={{ my: 2 }}
-                      >
-                      New Slide
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setIsRearranging(true)
-                          navigate("rearrange")
-                        }}
-                        variant="text"
-                        endIcon={<LowPriorityIcon/>}
-                        color="secondary"
-                        sx={{ my: 2 }}
-                      >
-                      Rearrange Slides
-                      </Button>
-                      <Button
-                        onClick={handlePreview}
-                        variant="text"
-                        endIcon={<SlideshowIcon/>}
-                        color="secondary"
-                        sx={{ my: 2 }}
-                      >
-                        Preview
-                      </Button>
-                      <Button
-                        variant="text"
-                        onClick={() => setIsThemeModalOpen(true)}
-                        endIcon={<ColorLensIcon/>}
-                        color="secondary"
-                        sx={{my: 2}}
-                      >
-                      Theme
-                      </Button>
-                      <Button
-                          onClick={() => setIsEditModalOpen(true)}
+                      <Tooltip title="Add a new slide to the presentation" placement="bottom">
+                        <Button
+                          onClick={() => createNewSlide()}
                           variant="text"
-                          endIcon={<InsertPhotoIcon/>}
+                          endIcon={<AddBoxIcon/>}
                           color="secondary"
                           sx={{ my: 2 }}
                         >
-                        Update Thumbnail
-                      </Button>
-                      <Button
-                        variant="text"
-                        onClick={() => deleteSlide()}
-                        endIcon={<DeleteIcon/>}
-                        sx={{ my: 2 }}
-                        color="error"
-                      >
-                        Delete Slide
-                      </Button>
+                        New Slide
+                        </Button>
+                      </Tooltip>
+                      <Tooltip title="Rearrange the slides in the presentation" placement="bottom">
+                        <Button
+                          onClick={() => {
+                            setIsRearranging(true)
+                            navigate("rearrange")
+                          }}
+                          variant="text"
+                          endIcon={<LowPriorityIcon/>}
+                          color="secondary"
+                          sx={{ my: 2 }}
+                        >
+                        Rearrange Slides
+                        </Button>
+                      </Tooltip>
+                      <Tooltip title="Preview the presentation (Opens in a new tab)" placement="bottom">
+                        <Button
+                          onClick={handlePreview}
+                          variant="text"
+                          endIcon={<SlideshowIcon/>}
+                          color="secondary"
+                          sx={{ my: 2 }}
+                        >
+                          Preview
+                        </Button>
+                      </Tooltip>
+                      <Tooltip title="Change the background style of the slide or the presentaiton's default style" placement="bottom">
+                        <Button
+                          variant="text"
+                          onClick={() => setIsThemeModalOpen(true)}
+                          endIcon={<ColorLensIcon/>}
+                          color="secondary"
+                          sx={{my: 2}}
+                        >
+                        Theme
+                        </Button>
+                      </Tooltip>
+                      <Tooltip title="Change the thumbnail of the presentation">
+                        <Button
+                            onClick={() => setIsEditModalOpen(true)}
+                            variant="text"
+                            endIcon={<InsertPhotoIcon/>}
+                            color="secondary"
+                            sx={{ my: 2 }}
+                          >
+                          Update Thumbnail
+                        </Button>
+                      </Tooltip>
+                      <Tooltip title="Delete this slide and move back to the previous slide">
+                        <Button
+                          variant="text"
+                          onClick={() => deleteSlide()}
+                          endIcon={<DeleteIcon/>}
+                          sx={{ my: 2 }}
+                          color="error"
+                        >
+                          Delete Slide
+                        </Button>
+                      </Tooltip>
                     </Box>
                   </Toolbar>
                 </Container>
