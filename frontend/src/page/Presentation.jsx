@@ -319,6 +319,14 @@ function Presentation({ token }) {
                     >
                       {presentation ? presentation.title : 'Loading...'}
                   </Typography>
+                  <IconButton
+                      key={"edit-title"}
+                      onClick={() => setIsEditModalOpen(true)}
+                      variant="text"
+                      sx={{ my: 2, color: 'black' }}
+                    >
+                      {<EditIcon/>}
+                  </IconButton>
                  </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                       {/* Puts all the buttons in a menu when the screen size gets small. */}
@@ -357,15 +365,6 @@ function Presentation({ token }) {
                     </Box>
                     {/* The buttons of the app bar. */}
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    <Button
-                      key={"edit-title"}
-                      onClick={() => setIsEditModalOpen(true)}
-                      variant="text"
-                      endIcon={<EditIcon/>}
-                      sx={{ my: 2, color: 'black' }}
-                    >
-                      Edit Title
-                    </Button>
                     <Button
                       onClick={() => setIsEditModalOpen(true)}
                       variant="text"
@@ -433,6 +432,13 @@ function Presentation({ token }) {
                     >
                       Delete Presentation
                     </Button>
+                    <Button
+                      variant="text"
+                      onClick={() => setIsThemeModalOpen(true)}
+                      sx={{my: 2, color: 'black'}}
+                    >
+                      Theme
+                    </Button>
                     </Box>
                   </Toolbar>
                 </Container>
@@ -480,19 +486,23 @@ function Presentation({ token }) {
                 confirmMsg="Yes"
                 cancelMsg="No"
               />
+              {/* Box for title, edit title button, back button and delete presentation button */}
+              {/* Box for slide and slide navigation buttons */}
               <Box sx={{
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'space-evenly',
-                alignItems: 'center'
+                alignContent: 'center'
               }}>
                 <IconButton
-                    disabled={presentation && currentSlideIndex === 1}
-                    onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
-                    sx={{fontSize: '2rem'}}
-                  >
-                    <ArrowBack fontSize="inherit" />
-                </IconButton> 
+                  disabled={presentation && currentSlideIndex === 1}
+                  onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
+                  sx={{
+                    fontSize: '2rem',
+                  }}
+                >
+                  <ArrowBack fontSize="inherit" />
+                </IconButton>
                 {/* Displaying first slide */}
                 {presentation && presentation.slides && presentation.slides.length > 0 && (
                     <Slide
@@ -524,12 +534,6 @@ function Presentation({ token }) {
                   alignContent: 'center'
                 }}
               >
-                <Button
-                  variant="contained"
-                  onClick={() => setIsThemeModalOpen(true)}
-                >
-                  Theme
-                </Button>
               </Box>
               {/* Sub-footer controls */}
               <Box
@@ -543,12 +547,6 @@ function Presentation({ token }) {
                   alignContent: 'center'
                 }}
               >
-                <Button
-                  variant="contained"
-                  onClick={() => navigate('/dashboard')}
-                >
-                  Back
-                </Button>
               </Box>
             </Box>
           }
