@@ -14,10 +14,19 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
   const [borderStyle, setborderStyle] = useState('grey');
   const elementRef = useRef(null);
 
+  // positions for 4 boxes for resizing handling
+  const boxPositions = [
+    { top: -3, left: -3 },
+    { left: -3, bottom: -3 },
+    { right: -3, bottom: -3 },
+    { top: -3, right: -3 }
+  ]
+
+  // puts blue border and four boxes when clicked
   useEffect(() => {
     if (isClicked && !isPreview) {
       setResizeHandleDisplay('inline');
-      setborderStyle('blue');
+      setborderStyle('#1976d3');
     }
   }, [isClicked]);
 
@@ -41,6 +50,8 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
   };
 
   const handleResizeStop = (e, direction, ref, delta, newPosition) => {
+    // calculates percentage width and height based on offset in pixels 
+    // from top left of parent
     const newWidth = (ref.offsetWidth / parentWidth) * 100;
     const newHeight = (ref.offsetHeight / parentHeight) * 100;
 
@@ -74,7 +85,8 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
         height: `${size.height}%`,
       }}
       position={{
-        x: (position.x * parentWidth) / 100,
+        // converts percentage position to pixels
+        x: (position.x * parentWidth) / 100, 
         y: (position.y * parentHeight) / 100
       }}
       disableDragging={isPreview || !isClicked}
@@ -89,50 +101,20 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       }}
       ref={elementRef}
     >
-      <Box
-        sx={{
-          backgroundColor: 'blue',
-          position: 'absolute',
-          width: '5px',
-          height: '5px',
-          top: -3,
-          left: -3
-        }}
-        display={resizeHandleDisplay}
-      ></Box>
-      <Box
-        sx={{
-          backgroundColor: 'blue',
-          position: 'absolute',
-          width: '5px',
-          height: '5px',
-          left: -3,
-          bottom: -3
-        }}
-        display={resizeHandleDisplay}
-      ></Box>
-      <Box
-        sx={{
-          backgroundColor: 'blue',
-          position: 'absolute',
-          width: '5px',
-          height: '5px',
-          right: -3,
-          bottom: -3
-        }}
-        display={resizeHandleDisplay}
-      ></Box>
-      <Box
-        sx={{
-          backgroundColor: 'blue',
-          position: 'absolute',
-          width: '5px',
-          height: '5px',
-          top: -3,
-          right: -3
-        }}
-        display={resizeHandleDisplay}
-      ></Box>
+      {/* Boxes for resize handling */}
+      {boxPositions.map((pos, index) => (
+        <Box
+          key={index}
+          sx={{
+            backgroundColor: '#1976d3',
+            position: 'absolute',
+            width: '5px',
+            height: '5px',
+            ...pos,
+          }}
+          display={resizeHandleDisplay}
+        ></Box>
+      ))}
 
       {element.type === 'text' && (
         <TextElement 
