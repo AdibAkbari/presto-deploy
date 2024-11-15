@@ -38,3 +38,5 @@ We used the same font family for all buttons and tooltips. This font is Poppins
 which is a sans-serif font. This geometric typeface produces and organic feel
 which is inviting to the users. It is almost monolinear and easy to read.
 
+For long presentation titles, we truncate and add ellipsis, but also have a tooltip
+that shows the full title if the user wants to see it.
