@@ -59,7 +59,7 @@ const DisplayElement = (
   const handleDelete = (event) => {
     if (!isPreview) {
       event.preventDefault();
-      onOpenDeleteModal();
+      onOpenDeleteModal(element);
     }
   };
 
