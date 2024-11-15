@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import axios from 'axios';
-import BACKEND_PORT from '../../backend.config.json';
 import { Box, Typography, IconButton } from '@mui/material';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import Slide from '../component/Slide';
+import { getStore } from '../helpers/ApiDatastore';
 
 const PreviewPresentation = ({ token }) => {
   const { presentationId } = useParams();
@@ -54,10 +53,7 @@ const PreviewPresentation = ({ token }) => {
   // gets presentation information from backend
   useEffect(() => {
     if (token) {
-      axios
-        .get(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+      getStore(token)
         .then((response) => {
           const presentations = response.data.store || [];
           const currentPresentation = presentations.find(

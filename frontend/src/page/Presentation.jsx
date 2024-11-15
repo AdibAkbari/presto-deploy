@@ -8,9 +8,6 @@ import {
 
 import { useEffect, useState } from "react";
 
-import axios from "axios";
-import BACKEND_PORT from "../../backend.config.json";
-
 import {
   Box, 
   Typography, 
@@ -39,6 +36,7 @@ import {
   ColorLens as ColorLensIcon 
 } from "@mui/icons-material";
 
+import { getStore, updateStore } from "../helpers/ApiDatastore";
 import PopupModal from "../component/PopupModal";
 import Slide from "../component/Slide";
 import NewElement from "../component/NewElement";
@@ -199,8 +197,7 @@ function Presentation({ token }) {
 
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
-    axios
-      .put(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
+    updateStore(token, updatedData)
       .then(() => console.log("Presentation edited successfully", updatedData))
       .catch(error => console.error("Error editing presentations:", error));
   };
@@ -233,7 +230,7 @@ function Presentation({ token }) {
 
   useEffect(() => {
     if (token) {
-      axios.get(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, { headers: { Authorization: `Bearer ${token}` } })
+      getStore(token)
         .then(response => {
           setPresentations(response.data.store || []);
           const currentPresentation = presentations.find(p => p.presentationId === presentationId);
@@ -244,12 +241,7 @@ function Presentation({ token }) {
   }, [token, presentationId, presentations]);
 
   const handleDelete = () => {
-    axios.put(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`,
-      {
-        store: presentations.filter(p => p.presentationId !== presentationId)
-      },
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
+    updateStore(token, presentations.filter(p => p.presentationId !== presentationId))
       .then(() => {
         navigate("/dashboard");
       })
