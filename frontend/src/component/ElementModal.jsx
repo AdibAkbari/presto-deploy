@@ -18,6 +18,7 @@ const style = {
 const defaultBlockSize = 30;
 const errorMessage = "All fields are required.";
 
+// modal that works for creating and editing all element types
 const ElementModal = ({ 
   open, 
   onClose, 
@@ -26,6 +27,7 @@ const ElementModal = ({
   initialData = {},
   mode = "new" // "new" for new element, "edit" for edit element
 }) => {
+  // sets state variables based on initial data or default values
   const [blockWidth, setBlockWidth] = useState(initialData.width || defaultBlockSize);
   const [blockHeight, setBlockHeight] = useState(initialData.height || defaultBlockSize);
   const [contentValue, setContentValue] = useState(initialData.content || "");
@@ -38,6 +40,7 @@ const ElementModal = ({
 
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
+  // title based on element type
   const modalTitle = () => {
     switch (elementType) {
     case "text": return mode === "new"? "New Text Box": "Edit Text Box";
@@ -88,7 +91,7 @@ const ElementModal = ({
       height: blockHeight,
       position: initialData.position || { x: 0, y: 0 },
     };
-
+    // sets element data based on element type
     switch (elementType) {
     case "text":
       if (!contentValue || !fontSizeValue || !fontColorValue) {

@@ -7,9 +7,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPreview }) {
   const slide = presentation.slides[slideIndex];
+  const slideRef = useRef(null);
+
   const [selectedElement, setSelectedElement] = useState(null); // Track the element to edit
   const [isEditing, setIsEditing] = useState(false);
-  const slideRef = useRef(null);
   const [slideWidth, setSlideWidth] = useState(0);
   const [slideHeight, setSlideHeight] = useState(0);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -19,12 +20,15 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
     setIsDeleteModalOpen(true);
   };
 
+  // deletes select element from database
   const handleDelete = () => {
     deleteElement(selectedElement.elementId);
     setIsDeleteModalOpen(false);
     setSelectedElement(null);
   };
 
+  // sets background to slide background if it exists, 
+  // otherwise to default presentation background - otherwise white
   const backgroundObject = useMemo(() => {
     if (!presentation || !slide) return { background: 'white' };
     if (slide.backgroundColor !== 'none') {
@@ -93,6 +97,7 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
   return (
     <Box
       ref={slideRef}
+      // vary slide size depending on if preview mode
       sx={{
         position: 'relative',
         width: isPreview? '94%' : '70%',
@@ -101,6 +106,7 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
         mt: isPreview? '1%': '0%',
       }}
     >
+      {/* Only has transition for preview mode */}
       {isPreview ? (
         <AnimatePresence mode="wait">
           <motion.div
@@ -109,10 +115,12 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
               height: '100%',
             }}
             key={slide.slideId}
+            // fade in
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            // fade out
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
           >
             <Box sx={{ ...backgroundObject, width: '100%', height: '100%' }}>
               {slide.elements &&
