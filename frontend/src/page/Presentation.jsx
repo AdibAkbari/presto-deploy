@@ -13,7 +13,6 @@ import PresentationContext from '../PresentationContext';
 import FontFamilyModal from '../component/FontFamilyModal';
 import FontIcon from '@mui/icons-material/TextFields';
 import ThemeModal from '../component/ThemeModal';
-import AddIcon from '@mui/icons-material/Add';
 import MenuIcon from '@mui/icons-material/Menu';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -326,9 +325,12 @@ function Presentation({ token }) {
               <AppBar position="static" color="#ffffff">
                 <Container maxWidth="xl">
                   <Toolbar disableGutters>
-                    {/* Hamb */}
-                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                      {/* Mobile menu icon */}
+                    <Box sx={{
+                    display: { xxs: 'flex', md: 'none' },
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%'}}>
+                      {/* Mobile menu icon */}  
                       <IconButton
                         size="large"
                         aria-label="app menu"
@@ -354,7 +356,11 @@ function Presentation({ token }) {
                         open={Boolean(anchorElNav)}
                         onClose={handleCloseNavMenu}
                       >
-                        <MenuItem>
+                        <MenuItem
+                          sx={{
+                            display: {xxs: 'flex', sm: 'none'}
+                          }}
+                        >
                           <NewElement
                             presentation={presentation}
                             setPresentation={setPresentation}
@@ -364,62 +370,133 @@ function Presentation({ token }) {
                             inMenu={true}
                           />
                         </MenuItem>
+                        <MenuItem 
+                          onClick={() => {
+                            setIsFontFamilyModalOpen(true);
+                            handleCloseNavMenu();
+                          }}
+                        >
+                          <Button startIcon={<FontIcon />} color="secondary">Font Family</Button>
+                        </MenuItem>
+                        <MenuItem 
+                        onClick={() => {
+                          createNewSlide();
+                          handleCloseNavMenu();
+                        }}
+                          sx={{
+                            display: {xxs: 'flex', sm: 'none'}
+                          }}
+                        >
+                          <Button startIcon={<AddBoxIcon />} color="secondary">New Slide</Button>
+                        </MenuItem>
+                        <MenuItem 
+                          onClick={() => {
+                            setIsRearranging(true);
+                            navigate('rearrange');
+                            handleCloseNavMenu();
+                          }}
+                          sx={{
+                            display: {xxs: 'flex', sm: 'none'}
+                          }}
+                        >
+                          <Button startIcon={<LowPriorityIcon />} color="secondary">Rearrange Slides</Button>
+                        </MenuItem>
+                        <MenuItem 
+                          onClick={() => {
+                            handlePreview();
+                            handleCloseNavMenu();
+                          }}
+                          sx={{
+                            display: {xxs: 'flex', sm: 'none'}
+                          }}
+                        >
+                          <Button startIcon={<SlideshowIcon />} color="secondary">Preview</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          setIsThemeModalOpen(true);
+                          handleCloseNavMenu();
+                        }}>
+                          <Button startIcon={<ColorLensIcon />} color="secondary">Theme</Button>
+                        </MenuItem>
                         <MenuItem onClick={() => {
                           setIsUpdateThumbnailOpen(true)
                           handleCloseNavMenu()
                         }}>
                           <Button startIcon={<InsertPhotoIcon />} color="secondary">Update Thumbnail</Button>
                         </MenuItem>
-                        <MenuItem onClick={() => {
-                          setIsFontFamilyModalOpen(true);
-                          handleCloseNavMenu();
-                        }}>
-                          <Button startIcon={<FontIcon />} color="secondary">Font Family</Button>
-                        </MenuItem>
-                        <MenuItem onClick={() => {
-                          createNewSlide();
-                          handleCloseNavMenu();
-                        }}>
-                          <Button startIcon={<AddBoxIcon />} color="secondary">New Slide</Button>
-                        </MenuItem>
-                        <MenuItem onClick={() => {
-                          handlePreview();
-                          handleCloseNavMenu();
-                        }}>
-                          <Button startIcon={<SlideshowIcon />} color="secondary">Preview</Button>
-                        </MenuItem>
-                        <MenuItem onClick={() => {
-                          setIsRearranging(true);
-                          navigate('rearrange');
-                          handleCloseNavMenu();
-                        }}>
-                          <Button startIcon={<LowPriorityIcon />} color="secondary">Rearrange Slides</Button>
-                        </MenuItem>
-                        <MenuItem onClick={() => {
-                          setIsThemeModalOpen(true);
-                          handleCloseNavMenu();
-                        }}>
-                          <Button startIcon={<DeleteIcon />} color="secondary">Theme</Button>
-                        </MenuItem>
-                        <MenuItem onClick={() => {
-                          deleteSlide();
-                          handleCloseNavMenu();
-                        }}>
+                        <MenuItem 
+                          onClick={() => {
+                            deleteSlide();
+                            handleCloseNavMenu();
+                          }}
+                          sx={{
+                            display: {xxs: 'flex', sm: 'none'}
+                          }}
+                        >
                           <Button startIcon={<DeleteIcon />} color="error">Delete Slide</Button>
                         </MenuItem>
                       </Menu>
+                      <Box
+                      sx={{
+                        my: 2,
+                        display: {xxs: 'none', sm: 'flex', md: 'none'}
+                      }}>
+                        <NewElement
+                          presentation={presentation}
+                          setPresentation={setPresentation}
+                          currentSlideIndex={currentSlideIndex}
+                          savePresentationsToStore={savePresentationsToStore}
+                          presentations={presentations}
+                          inMenu={false}
+                        />
+                      </Box>
+                      <Button
+                        onClick={() => createNewSlide()}
+                        variant="text"
+                        endIcon={<AddBoxIcon/>}
+                        color="secondary"
+                        sx={{ my: 2, display: {xxs: 'none', sm: 'flex', md: 'none'} }}
+                      >
+                      New Slide
+                      </Button>
+                      <Button
+                        onClick={handlePreview}
+                        variant="text"
+                        endIcon={<SlideshowIcon/>}
+                        color="secondary"
+                        sx={{ my: 2, display: {xxs: 'none', sm: 'flex', md: 'none'} }}
+                      >
+                        Preview
+                      </Button>
+                      <Button
+                        variant="text"
+                        onClick={() => deleteSlide()}
+                        endIcon={<DeleteIcon/>}
+                        sx={{ my: 2, display: {xxs: 'none', sm: 'flex', md: 'none'} }}
+                        color='error'
+                      >
+                        Delete Slide
+                      </Button>
+                      <Button
+                        variant="text"
+                        onClick={() => setIsDeleteModalOpen(true)}
+                        endIcon={<DeleteForeverIcon/>}
+                        color='error'
+                        sx={{ my: 2, display: {xs: 'flex', sm: 'none'}}}
+                      >
+                        Delete Presentation
+                      </Button>
                     </Box>
                     {/* The buttons of the app bar. */}
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'space-evenly' }}>
-                      <Button
-                        onClick={() => setIsEditModalOpen(true)}
-                        variant="text"
-                        endIcon={<InsertPhotoIcon/>}
-                        color="secondary"
-                        sx={{ my: 2 }}
-                      >
-                      Update Thumbnail
-                      </Button>
+                    <Box sx={{ flexGrow: 1, display: {xxs: 'none', md: 'flex' }, justifyContent: 'space-evenly' }}>
+                      <NewElement
+                        presentation={presentation}
+                        setPresentation={setPresentation}
+                        currentSlideIndex={currentSlideIndex}
+                        savePresentationsToStore={savePresentationsToStore}
+                        presentations={presentations}
+                        inMenu={false}
+                      />
                       <Button
                         key={"update-font-family"}
                         onClick={() => setIsFontFamilyModalOpen(true)}
@@ -440,23 +517,6 @@ function Presentation({ token }) {
                       New Slide
                       </Button>
                       <Button
-                        onClick={handlePreview}
-                        variant="text"
-                        endIcon={<SlideshowIcon/>}
-                        color="secondary"
-                        sx={{ my: 2 }}
-                      >
-                      Preview
-                      </Button>
-                      <NewElement
-                        presentation={presentation}
-                        setPresentation={setPresentation}
-                        currentSlideIndex={currentSlideIndex}
-                        savePresentationsToStore={savePresentationsToStore}
-                        presentations={presentations}
-                        inMenu={false}
-                      />
-                      <Button
                         onClick={() => {
                           setIsRearranging(true)
                           navigate('rearrange')
@@ -469,6 +529,15 @@ function Presentation({ token }) {
                       Rearrange Slides
                       </Button>
                       <Button
+                        onClick={handlePreview}
+                        variant="text"
+                        endIcon={<SlideshowIcon/>}
+                        color="secondary"
+                        sx={{ my: 2 }}
+                      >
+                        Preview
+                      </Button>
+                      <Button
                         variant="text"
                         onClick={() => setIsThemeModalOpen(true)}
                         endIcon={<ColorLensIcon/>}
@@ -476,6 +545,15 @@ function Presentation({ token }) {
                         sx={{my: 2}}
                       >
                       Theme
+                      </Button>
+                      <Button
+                          onClick={() => setIsEditModalOpen(true)}
+                          variant="text"
+                          endIcon={<InsertPhotoIcon/>}
+                          color="secondary"
+                          sx={{ my: 2 }}
+                        >
+                        Update Thumbnail
                       </Button>
                       <Button
                         variant="text"
@@ -584,7 +662,7 @@ function Presentation({ token }) {
                   onClick={() => setIsDeleteModalOpen(true)}
                   endIcon={<DeleteForeverIcon/>}
                   color='error'
-                  sx={{ my: 2}}
+                  sx={{ my: 2, display: {xxs: 'none', sm: 'flex'}}}
                 >
                   Delete Presentation
                 </Button>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {Menu, Button, MenuItem} from '@mui/material/';
+import {Menu, Button, MenuItem, Tooltip} from '@mui/material/';
 import ElementModal from './ElementModal';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -35,18 +35,20 @@ export default function NewElement({ presentation, setPresentation, currentSlide
 
   return (
     <>
-      <Button
-        variant="text"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        endIcon={inMenu? null : <AddIcon/>}
-        startIcon={inMenu? <AddIcon/> : null}
-        sx={{my: inMenu? 0 : 2, color: 'black'}}
-      >
-        New Element
-      </Button>
+      <Tooltip title="Create a new Text, Image, Video or Code element" placement="bottom">
+        <Button
+          variant="text"
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          endIcon={inMenu? null : <AddIcon/>}
+          startIcon={inMenu? <AddIcon/> : null}
+          sx={{my: inMenu? 0 : 2, color: 'black'}}
+        >
+          New Element
+        </Button>
+      </Tooltip>
       <Menu
         id="new-element-menu"
         anchorEl={anchorEl}

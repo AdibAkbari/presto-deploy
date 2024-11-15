@@ -13,6 +13,16 @@ const theme = createTheme({
     secondary: {
       main: '#000000'
     }
+  },
+  breakpoints: {
+    values: {
+      xxs: 0,      
+      xs: 650,
+      sm: 800,
+      md: 1100,
+      lg: 1280,
+      xl: 1920
+    }
   }
 });
 
