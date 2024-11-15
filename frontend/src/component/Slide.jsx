@@ -26,6 +26,7 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
   };
 
   const backgroundObject = useMemo(() => {
+    if (!presentation || !slide) return { background: 'white' };
     if (slide.backgroundColor !== 'none') {
       return { background: slide.backgroundColor };
     }
@@ -49,7 +50,12 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
     else {
       return { background: 'white' };
     }
-  }, [slide.backgroundColor, slide.backgroundImage, presentation.backgroundColor, presentation.backgroundImage]);
+  }, [
+    slide?.backgroundColor,
+    slide?.backgroundImage,
+    presentation?.backgroundColor,
+    presentation?.backgroundImage
+  ]);
   
 
   // Use ResizeObserver to watch for changes in slide dimensions
@@ -71,7 +77,6 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
 
     return () => resizeObserver.disconnect();
   }, []);
-
 
   if (!slide) return null;
 
@@ -126,34 +131,34 @@ function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPre
                   presentation={presentation}
                 />
               )}
-
-            {/* Modal to edit text box properties */}
-            {!isPreview && (
-              <>
-                {isEditing && selectedElement && (
-                  <ElementModal
-                    open={isEditing}
-                    onClose={() => setIsEditing(false)}
-                    elementType={selectedElement.type}
-                    onSubmit={handleSave}
-                    initialData={selectedElement}
-                    mode="edit"
-                  />
-                )}
-                <PopupModal
-                  open={isDeleteModalOpen}
-                  onClose={() => setIsDeleteModalOpen(false)}
-                  instruction="Are you sure you want to delete this element?"
-                  onSubmit={handleDelete}
-                  confirmMsg="Yes"
-                  cancelMsg="No"
-                />
-              </>
-            )}
           </Box>
         </motion.div>
       </AnimatePresence>
-      
+
+      {/* Modal to edit text box properties */}
+      {!isPreview && (
+        <>
+          {isEditing && selectedElement && (
+            <ElementModal
+              open={isEditing}
+              onClose={() => setIsEditing(false)}
+              elementType={selectedElement.type}
+              onSubmit={handleSave}
+              initialData={selectedElement}
+              mode="edit"
+            />
+          )}
+          {/* Modal for confirming slide delete */}
+          <PopupModal
+            open={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            instruction="Are you sure you want to delete this element?"
+            onSubmit={handleDelete}
+            confirmMsg="Yes"
+            cancelMsg="No"
+          />
+        </>
+      )}
       {/* Slide number */}
       <Typography variant="subtitle1" sx={{ position: 'absolute', bottom: '0px', fontSize: '1em', ml: '0.8%' }}>
         {slideIndex + 1}

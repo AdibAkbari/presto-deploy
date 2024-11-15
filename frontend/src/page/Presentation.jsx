@@ -4,7 +4,6 @@ import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
 import { Box, Typography, AppBar, Container, Toolbar, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, Divider } from '@mui/material';
 import { ArrowBack, ArrowForward, Delete } from '@mui/icons-material';
-import theme from '../theme';
 import PopupModal from '../component/PopupModal';
 import Slide from '../component/Slide';
 import EditIcon from '@mui/icons-material/Edit';
@@ -15,7 +14,7 @@ import FontFamilyModal from '../component/FontFamilyModal';
 import FontIcon from '@mui/icons-material/TextFields';
 import ThemeModal from '../component/ThemeModal';
 import AdbIcon from '@mui/icons-material/Adb';
-import MenuIcon from '@mui/icons-material/menu';
+import MenuIcon from '@mui/icons-material/Menu';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
@@ -122,16 +121,14 @@ function Presentation({ token }) {
       const newSlide = {
         slideId: `slide_${Date.now()}`,
         elements: [],
-        backgroundImage: 'none',
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
+        backgroundColor: 'none',
+        backgroundImage: ''
       }
       const updatedPresentation = { ...presentation, slides: [...presentation.slides, newSlide] };
       setPresentation(updatedPresentation);
       savePresentationsToStore(
         presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
       );
-      setCurrentSlideIndex(updatedPresentation.slides.length - 1);
     }
   }
 
@@ -150,11 +147,22 @@ function Presentation({ token }) {
         savePresentationsToStore(
           presentations.map(p => p.presentationId === presentationId ? updatedPresentation : p)
         );
-        // Show the previous slide
-        setCurrentSlideIndex(currentSlideIndex - 1);
+        // If deleting the last slide, move to the new last slide
+        if (currentSlideIndex >= updatedSlides.length) {
+          setCurrentSlideIndex(updatedSlides.length - 1);
+        }
+        else if (currentSlideIndex === 0 && updatedSlides.length > 0) {
+          setCurrentSlideIndex(0); // Stay on the first slide if it’s the first
+        }
+        // If there are slides left, go to the previous index
+        else {
+          setCurrentSlideIndex(currentSlideIndex - 1);
+        }
+  
       }
     }
   }
+
   // Function to change the font family of the entire presentation.
   const updateFont = (newFont) => {
     const updatedPresentation = {...presentation, fontFamily: `${newFont}`};
@@ -176,10 +184,19 @@ function Presentation({ token }) {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === "ArrowLeft" && currentSlideIndex > 0) {
-        setCurrentSlideIndex(currentSlideIndex - 1);
-      } else if (event.key === "ArrowRight" && currentSlideIndex < presentation.slides.length - 1) {
-        setCurrentSlideIndex(currentSlideIndex + 1);
+      // only allows slide change when not typing in an input field
+      const activeElement = document.activeElement;
+      const isInputField =
+        activeElement.tagName === "INPUT" ||
+        activeElement.tagName === "TEXTAREA" ||
+        activeElement.isContentEditable;
+
+      if (!isInputField) {
+        if (event.key === "ArrowLeft" && currentSlideIndex > 0) {
+          setCurrentSlideIndex(currentSlideIndex - 1);
+        } else if (event.key === "ArrowRight" && currentSlideIndex < presentation.slides.length - 1) {
+          setCurrentSlideIndex(currentSlideIndex + 1);
+        }
       }
     };
 
@@ -231,7 +248,7 @@ function Presentation({ token }) {
     setIsRearranging
   };
 
-  const updateSlideTheme = (themeObject) => {
+  const updateTheme = (themeObject) => {
     console.log('updating theme', themeObject);
     const { themeScope, backgroundType, solidColor, gradient, imageUrl } = themeObject;
 
@@ -348,80 +365,80 @@ function Presentation({ token }) {
                     </Box>
                     {/* The buttons of the app bar. */}
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'space-evenly' }}>
-                    <Button
-                      onClick={() => setIsEditModalOpen(true)}
-                      variant="text"
-                      endIcon={<InsertPhotoIcon/>}
-                      color="secondary"
-                      sx={{ my: 2 }}
-                    >
+                      <Button
+                        onClick={() => setIsEditModalOpen(true)}
+                        variant="text"
+                        endIcon={<InsertPhotoIcon/>}
+                        color="secondary"
+                        sx={{ my: 2 }}
+                      >
                       Update Thumbnail
-                    </Button>
-                    <Button
-                      key={"update-font-family"}
-                      onClick={() => setIsFontFamilyModalOpen(true)}
-                      variant="text"
-                      endIcon={<FontIcon/>}
-                      color="secondary"
-                      sx={{ my: 2 }}
-                    >
+                      </Button>
+                      <Button
+                        key={"update-font-family"}
+                        onClick={() => setIsFontFamilyModalOpen(true)}
+                        variant="text"
+                        endIcon={<FontIcon/>}
+                        color="secondary"
+                        sx={{ my: 2 }}
+                      >
                       Font Family
-                    </Button>
-                    <Button
-                      onClick={() => createNewSlide()}
-                      variant="text"
-                      endIcon={<AddBoxIcon/>}
-                      color="secondary"
-                      sx={{ my: 2 }}
-                    >
+                      </Button>
+                      <Button
+                        onClick={() => createNewSlide()}
+                        variant="text"
+                        endIcon={<AddBoxIcon/>}
+                        color="secondary"
+                        sx={{ my: 2 }}
+                      >
                       New Slide
-                    </Button>
-                    <Button
-                      onClick={handlePreview}
-                      variant="text"
-                      endIcon={<SlideshowIcon/>}
-                      color="secondary"
-                      sx={{ my: 2 }}
-                    >
+                      </Button>
+                      <Button
+                        onClick={handlePreview}
+                        variant="text"
+                        endIcon={<SlideshowIcon/>}
+                        color="secondary"
+                        sx={{ my: 2 }}
+                      >
                       Preview
-                    </Button>
-                    <NewElement
-                      presentation={presentation}
-                      setPresentation={setPresentation}
-                      currentSlideIndex={currentSlideIndex}
-                      savePresentationsToStore={savePresentationsToStore}
-                      presentations={presentations}
-                    />
-                    <Button
-                      onClick={() => {
-                        setIsRearranging(true)
-                        navigate('rearrange')
-                      }}
-                      variant="text"
-                      endIcon={<LowPriorityIcon/>}
-                      color="secondary"
-                      sx={{ my: 2 }}
-                    >
+                      </Button>
+                      <NewElement
+                        presentation={presentation}
+                        setPresentation={setPresentation}
+                        currentSlideIndex={currentSlideIndex}
+                        savePresentationsToStore={savePresentationsToStore}
+                        presentations={presentations}
+                      />
+                      <Button
+                        onClick={() => {
+                          setIsRearranging(true)
+                          navigate('rearrange')
+                        }}
+                        variant="text"
+                        endIcon={<LowPriorityIcon/>}
+                        color="secondary"
+                        sx={{ my: 2 }}
+                      >
                       Rearrange Slides
-                    </Button>
-                    <Button
-                      variant="text"
-                      onClick={() => setIsThemeModalOpen(true)}
-                      endIcon={<ColorLensIcon/>}
-                      color="secondary"
-                      sx={{my: 2}}
-                    >
+                      </Button>
+                      <Button
+                        variant="text"
+                        onClick={() => setIsThemeModalOpen(true)}
+                        endIcon={<ColorLensIcon/>}
+                        color="secondary"
+                        sx={{my: 2}}
+                      >
                       Theme
-                    </Button>
-                    <Button
-                      variant="text"
-                      onClick={() => deleteSlide()}
-                      endIcon={<DeleteIcon/>}
-                      sx={{ my: 2 }}
-                      color='error'
-                    >
-                      Delete Slide
-                    </Button>
+                      </Button>
+                      <Button
+                        variant="text"
+                        onClick={() => deleteSlide()}
+                        endIcon={<DeleteIcon/>}
+                        sx={{ my: 2 }}
+                        color='error'
+                      >
+                        Delete Slide
+                      </Button>
                     </Box>
                   </Toolbar>
                 </Container>
@@ -454,12 +471,12 @@ function Presentation({ token }) {
                 confirmMsg={"Update"}
               />
 		          <ThemeModal
-                  open={isThemeModalOpen}
-                  onClose={() => setIsThemeModalOpen(false)}
-                  onSubmit={updateSlideTheme}
-                  presentation={presentation}
-                >
-                </ThemeModal>
+                open={isThemeModalOpen}
+                onClose={() => setIsThemeModalOpen(false)}
+                updateTheme={updateTheme}
+                presentation={presentation}
+              >
+              </ThemeModal>
               {/* Delete confirmation modal */}
               <PopupModal
                 open={isDeleteModalOpen}
@@ -471,59 +488,59 @@ function Presentation({ token }) {
               />
               {/* Box for title, edit title button, back button and delete presentation button */}
               <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                width: '100%',
-                px: '12px'
-              }}>
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  px: '12px'
+                }}>
                 <Button
+                  variant="text"
+                  color="primary"
+                  onClick={() => navigate('/dashboard')}
+                  startIcon={<ArrowBack/>}
+                  sx={{ my: 2 }}
+                >
+                  Back
+                </Button>
+                <Box
+                  sx={{
+                    width: '30%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Typography
+                    variant="h5"
+                    align="center"
+                    sx={{
+                      textAlign: 'center',
+                    }}
+                    overflow="scroll"
+                    whiteSpace="nowrap"
+                  >
+                    {presentation ? presentation.title : 'Loading...'}
+                  </Typography>
+                  <IconButton
+                    key={"edit-title"}
+                    onClick={() => setIsEditModalOpen(true)}
                     variant="text"
-                    color="primary"
-                    onClick={() => navigate('/dashboard')}
-                    startIcon={<ArrowBack/>}
+                    color="secondary"
                     sx={{ my: 2 }}
                   >
-                    Back
-                  </Button>
-                  <Box
-                    sx={{
-                      width: '30%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Typography
-                        variant="h5"
-                        align="center"
-                        sx={{
-                          textAlign: 'center',
-                        }}
-                        overflow="scroll"
-                        whiteSpace="nowrap"
-                      >
-                        {presentation ? presentation.title : 'Loading...'}
-                    </Typography>
-                    <IconButton
-                        key={"edit-title"}
-                        onClick={() => setIsEditModalOpen(true)}
-                        variant="text"
-                        color="secondary"
-                        sx={{ my: 2 }}
-                      >
-                        {<EditIcon/>}
-                    </IconButton>
-                  </Box>
-                 <Button
-                    variant="text"
-                    onClick={() => setIsDeleteModalOpen(true)}
-                    endIcon={<DeleteForeverIcon/>}
-                    color='error'
-                    sx={{ my: 2}}
-                  >
-                    Delete Presentation
-                  </Button>
+                    {<EditIcon/>}
+                  </IconButton>
+                </Box>
+                <Button
+                  variant="text"
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  endIcon={<DeleteForeverIcon/>}
+                  color='error'
+                  sx={{ my: 2}}
+                >
+                  Delete Presentation
+                </Button>
               </Box>
               {/* Box for slide and slide navigation buttons */}
               <Box sx={{
@@ -544,21 +561,21 @@ function Presentation({ token }) {
                 </IconButton>
                 {/* Displaying first slide */}
                 {presentation && presentation.slides && presentation.slides.length > 0 && (
-                    <Slide
-                      slide={presentation.slides[currentSlideIndex]} 
-                      slideIndex={currentSlideIndex} 
-                      onUpdateElement={updateElement}
-                      deleteElement={deleteElement}
-                      isPreview={false}
-                      presentation={presentation}
-                    />
+                  <Slide
+                    slide={presentation.slides[currentSlideIndex]} 
+                    slideIndex={currentSlideIndex} 
+                    onUpdateElement={updateElement}
+                    deleteElement={deleteElement}
+                    isPreview={false}
+                    presentation={presentation}
+                  />
                 )}
                 <IconButton
-                    disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
-                    onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
-                    sx={{fontSize: '2rem'}}
-                  >
-                    <ArrowForward fontSize="inherit" />
+                  disabled={presentation && currentSlideIndex === presentation.slides.length - 1}
+                  onClick={() => setCurrentSlideIndex(currentSlideIndex + 1)}
+                  sx={{fontSize: '2rem'}}
+                >
+                  <ArrowForward fontSize="inherit" />
                 </IconButton>
               </Box>
               {/* Footer controls */}
