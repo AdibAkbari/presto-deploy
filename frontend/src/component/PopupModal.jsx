@@ -13,7 +13,15 @@ const style = {
   p: 4,
 };
 // generic modal that works for basic inputs and error message
-const PopupModal = ({ instruction, nameOfInput, onSubmit, open, onClose, confirmMsg, cancelMsg}) => {
+const PopupModal = (
+  { instruction, 
+    nameOfInput, 
+    onSubmit, 
+    open, 
+    onClose, 
+    confirmMsg, 
+    cancelMsg
+  }) => {
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {

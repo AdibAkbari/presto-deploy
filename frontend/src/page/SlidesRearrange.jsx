@@ -18,9 +18,8 @@ import {
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Save } from '@mui/icons-material';
 
-function SlidesRearrange() {
+const SlidesRearrange = () => {
   const navigate = useNavigate();
   const {
     presentation,
@@ -48,6 +47,8 @@ function SlidesRearrange() {
     useSensor(PointerSensor)
   );
 
+  // dnd kit required function to swap position of starting slide with position
+  // of ending slide in slidesOrder array after drag
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
@@ -65,9 +66,10 @@ function SlidesRearrange() {
   };
 
   const handleSave = () => {
+    // saves slide order to backend and navigates back to presentation page
     const updatedPresentation = {
       ...presentation,
-      slides: slidesOrder,
+      slides: slidesOrder
     };
 
     setPresentation(updatedPresentation);
@@ -77,7 +79,6 @@ function SlidesRearrange() {
     );
 
     savePresentationsToStore(updatedPresentations);
-
     setOriginalSlidesOrder(slidesOrder);
 
     navigate(-1);
@@ -131,6 +132,7 @@ function SlidesRearrange() {
               strategy={rectSortingStrategy}
             >
               <Box
+                // css grid with dnd kit drag and drop
                 sx={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fill, minmax(20%, 1fr))',
@@ -156,7 +158,8 @@ function SlidesRearrange() {
 
 export default SlidesRearrange;
 
-function SortableSlide({ id, originalIndex }) {
+// required component for sortable dnd kit drag and drop compatibility
+const SortableSlide = ({ id, originalIndex }) => {
   const {
     attributes,
     listeners,
@@ -182,6 +185,7 @@ function SortableSlide({ id, originalIndex }) {
   };
 
   return (
+    // has index of slide cards as original index so user can see changes
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <Typography variant="h4">{originalIndex + 1}</Typography>
     </div>

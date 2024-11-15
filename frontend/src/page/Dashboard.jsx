@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid2';
 import PopupModal from '../component/PopupModal';
 import CreateIcon from '@mui/icons-material/Create';
 
-function Dashboard({ token }) {
+const Dashboard = ({ token }) => {
   const [presentations, setPresentations] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // Controls the PopupModal
   const navigate = useNavigate();
@@ -15,7 +15,10 @@ function Dashboard({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, { headers: { Authorization: `Bearer ${token}` } })
+        .get(
+          `http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, 
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
         .then(response => {
           let newPresentations;
           if (!response.data.store || Object.keys(response.data.store).length === 0) {
@@ -66,23 +69,15 @@ function Dashboard({ token }) {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>Dashboard</Typography>
-      {/* List of presentations  */}
+      {/* Presentation represented in a grid*/}
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={4} sx={{ mt: 3 }}>
-          {
-            presentations.length === 0 &&
-            (
-              <Box
-                sx={{display: 'flex'}}>
-                <Typography variant="h2" overflow="hidden">Create your first presentation to see it here.</Typography>
-              </Box>
-            )
-          }
           {presentations.map(presentation => (
             <Grid
               item = "true"
               size={{xs: 12, sm: 6, md:4}} 
               key={presentation.presentationId}
+              // navigate to the presentation page of presentation clicked
               onClick={() => navigate(`/presentation/${presentation.presentationId}`)}
             >
               <Card

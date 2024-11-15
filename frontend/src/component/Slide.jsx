@@ -5,7 +5,14 @@ import DisplayElement from '../elements/DisplayElement';
 import PopupModal from './PopupModal';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function Slide({ presentation, slideIndex, onUpdateElement, deleteElement, isPreview }) {
+const Slide = (
+  { 
+    presentation, 
+    slideIndex, 
+    onUpdateElement, 
+    deleteElement, 
+    isPreview 
+  }) => {
   const slide = presentation.slides[slideIndex];
   const slideRef = useRef(null);
 

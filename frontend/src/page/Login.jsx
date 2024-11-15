@@ -11,6 +11,7 @@ const Login = ({handleSuccess}) => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // logs in with email and password from inputs and adds token using handleSuccess
   const login = () => {
     if (!email || !password) {
       setErrorMessage('Please fill in all fields');

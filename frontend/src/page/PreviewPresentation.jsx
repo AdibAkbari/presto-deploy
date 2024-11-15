@@ -6,7 +6,7 @@ import { Box, Typography, IconButton } from '@mui/material';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import Slide from '../component/Slide';
 
-function PreviewPresentation({ token }) {
+const PreviewPresentation = ({ token }) => {
   const { presentationId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ function PreviewPresentation({ token }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentSlideIndex, presentation?.slides?.length]);
 
-
+  // gets presentation information from backend
   useEffect(() => {
     if (token) {
       axios
@@ -75,6 +75,7 @@ function PreviewPresentation({ token }) {
 
   return (
     <>
+      {/* Slide box */}
       <Box
         sx={{
           display: 'flex',
@@ -85,10 +86,12 @@ function PreviewPresentation({ token }) {
           <Slide
             presentation={presentation}
             slideIndex={currentSlideIndex}
-            isPreview={true}
+            isPreview={true} // set to true so slide is bigger for preview 
           />
         )}
       </Box>
+
+      {/* Left and right slide buttons */}
       <Box
         sx={{
           display: 'flex',

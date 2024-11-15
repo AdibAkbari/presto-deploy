@@ -3,7 +3,14 @@ import flourite from 'flourite';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coy } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-function CodeElement({ element, handleDoubleClick, handleClick, handleBlur, handleDelete }) {
+const CodeElement = (
+  { 
+    element, 
+    handleDoubleClick, 
+    handleClick, 
+    handleBlur, 
+    handleDelete 
+  }) => {
   return (
     <Box
       tabIndex={-1}

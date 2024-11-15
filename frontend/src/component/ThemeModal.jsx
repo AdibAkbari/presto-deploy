@@ -46,6 +46,7 @@ const ThemeModal = ({ updateTheme, open, onClose }) => {
   }, [themeScope]);
 
   const handleAction = () => {
+    // requires all inputs to allow submit
     if (themeScope === '' || themeScope === null) {
       setIsErrorModalOpen(true);
       return;
@@ -62,7 +63,7 @@ const ThemeModal = ({ updateTheme, open, onClose }) => {
       setIsErrorModalOpen(true);
       return;
     }
-    
+    // return object that updateTheme function uses to update database with theme
     const returnObject = {
       themeScope,
       backgroundType,
@@ -74,6 +75,7 @@ const ThemeModal = ({ updateTheme, open, onClose }) => {
     setFirstColor('#000000');
     setSecondColor('#ffffff');
     setImageUrl('');
+
     updateTheme(returnObject);
     onClose();
   };
@@ -101,7 +103,8 @@ const ThemeModal = ({ updateTheme, open, onClose }) => {
         onClose={onClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
-      >
+      > 
+        {/* Toggle buttons for whether theme for presentation or current slide */}
         <Box sx={style}>
           <ToggleButtonGroup
             color="primary"
@@ -125,6 +128,7 @@ const ThemeModal = ({ updateTheme, open, onClose }) => {
             </ToggleButton>
           </ToggleButtonGroup>
 
+          {/* Form with radios for theme type that expand with input fields */}
           <FormControl component="fieldset" sx={{ mt: 2, mx: 3 }}>
             <FormLabel component="legend">Background Theme Type</FormLabel>
             <RadioGroup

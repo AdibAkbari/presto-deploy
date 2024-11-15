@@ -3,7 +3,7 @@ import Router from './Router';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme';
 
-function App() {
+const App = () => {
 
   return (
     <>

@@ -1,7 +1,14 @@
 import { Box } from '@mui/material';
 import ReactPlayer from 'react-player/lazy';
 
-function VideoElement({ element, handleDoubleClick, handleClick, handleBlur, handleDelete }) {
+const VideoElement = (
+  {
+    element, 
+    handleDoubleClick, 
+    handleClick, 
+    handleBlur, 
+    handleDelete 
+  }) => {
   return (
     <Box
       tabIndex={-1}

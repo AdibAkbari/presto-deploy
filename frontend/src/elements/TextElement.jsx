@@ -2,7 +2,15 @@ import { Box } from '@mui/material';
 import '@fontsource/open-sans';
 import '@fontsource/poppins';
 
-function TextElement({ element, handleDoubleClick, handleClick, handleDelete, handleBlur, presentation }) {
+const TextElement = (
+  { 
+    element, 
+    handleDoubleClick, 
+    handleClick, 
+    handleDelete,
+    handleBlur, 
+    presentation 
+  }) => {
   return (
     <Box
       onDoubleClick={handleDoubleClick}

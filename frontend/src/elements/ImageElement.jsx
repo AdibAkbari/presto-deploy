@@ -1,6 +1,13 @@
 import { Box } from '@mui/material';
 
-function ImageElement({ element, handleDoubleClick, handleClick, handleBlur, handleDelete }) {
+const ImageElement = (
+  { 
+    element, 
+    handleDoubleClick, 
+    handleClick, 
+    handleBlur, 
+    handleDelete 
+  }) => {
   return (
     <>
       <Box
