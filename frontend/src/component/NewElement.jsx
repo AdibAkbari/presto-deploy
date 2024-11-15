@@ -35,7 +35,7 @@ export default function NewElement({ presentation, setPresentation, currentSlide
 
   return (
     <>
-      <Tooltip title="Create a new Text, Image, Video or Code element" placement="bottom">
+      <Tooltip title="Create a new Text, Image, Video or Code element" placement= {inMenu? "right" : "bottom"}>
         <Button
           variant="text"
           aria-controls={open ? 'basic-menu' : undefined}
