@@ -15,7 +15,7 @@ const Dashboard = ({ token }) => {
     if (token) {
       axios
         .get(
-          `https://cgi.cse.unsw.edu.au/~cs6080/presto/`, 
+          `https://cgi.cse.unsw.edu.au/~cs6080/presto/store`, 
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then(response => {
@@ -60,7 +60,7 @@ const Dashboard = ({ token }) => {
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
     axios
-      .put(`https://cgi.cse.unsw.edu.au/~cs6080/presto/`, { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
+      .put(`https://cgi.cse.unsw.edu.au/~cs6080/presto/store`, { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
       .then(() => console.log("Presentations saved successfully"))
       .catch(error => console.error("Error saving presentations:", error));
   };

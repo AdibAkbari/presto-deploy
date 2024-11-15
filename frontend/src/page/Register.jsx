@@ -18,7 +18,7 @@ const Register = ({handleSuccess}) => {
       setIsErrorModalOpen(true);
       return;
     }
-    axios.post(`https://cgi.cse.unsw.edu.au/~cs6080/presto/`, {
+    axios.post(`https://cgi.cse.unsw.edu.au/~cs6080/presto/admin/auth/register`, {
       email: email,
       password: password,
       name: name,

@@ -17,7 +17,7 @@ const Login = ({handleSuccess}) => {
       setIsErrorModalOpen(true);
       return;
     }
-    axios.post(`https://cgi.cse.unsw.edu.au/~cs6080/presto/`, {
+    axios.post(`https://cgi.cse.unsw.edu.au/~cs6080/presto/admin/auth/login`, {
       email: email,
       password: password
     })

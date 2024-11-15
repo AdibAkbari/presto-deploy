@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = `https://cgi.cse.unsw.edu.au/~cs6080/presto/`;
+const API_URL = `https://cgi.cse.unsw.edu.au/~cs6080/presto`;
 
 export const getStore = (token) => {
   return axios.get(`${API_URL}/store`, {

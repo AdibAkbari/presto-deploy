@@ -5,10 +5,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 const Logout = ({token, setToken}) => {
   const navigate = useNavigate();
-
+  
   const logout = () => {
     console.log("logout");
-    axios.post(`https://cgi.cse.unsw.edu.au/~cs6080/presto/`, {},
+    axios.post(`https://cgi.cse.unsw.edu.au/~cs6080/presto/admin/auth/logout`, {},
       {
         headers: { Authorization: `Bearer ${token}` }
       })
