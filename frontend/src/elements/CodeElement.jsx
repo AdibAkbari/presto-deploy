@@ -3,20 +3,7 @@ import flourite from 'flourite';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coy } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-function CodeElement({ element, doubleClickFunc, handleClick, handleBlur, onOpenDeleteModal, isPreview }) {
-  const handleDoubleClick = () => {
-    if (!isPreview) {
-      doubleClickFunc(element);
-    }
-  };
-
-  const handleDelete = (event) => {
-    if (!isPreview) {
-      event.preventDefault();
-      onOpenDeleteModal();
-    }
-  };
-
+function CodeElement({ element, handleDoubleClick, handleClick, handleBlur, handleDelete }) {
   return (
     <Box
       tabIndex={-1}
@@ -31,6 +18,7 @@ function CodeElement({ element, doubleClickFunc, handleClick, handleBlur, onOpen
       }}
     >
       <SyntaxHighlighter
+        // Infers language of code block
         language={flourite(element.content).language.toLowerCase()}
         style={coy}
         useInlineStyles={true}

@@ -40,6 +40,20 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
     setborderStyle('grey');
   };
 
+  // only allows double click and delete if not in preview mode
+  const handleDoubleClick = () => {
+    if (!isPreview) {
+      doubleClickFunc(element);
+    }
+  }
+  
+  const handleDelete = (event) => {
+    if (!isPreview) {
+      event.preventDefault();
+      onOpenDeleteModal();
+    }
+  };
+
   const handleDragStop = (e, data) => {
     const updatedPosition = {
       x: (data.x / parentWidth) * 100,
@@ -119,11 +133,10 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       {element.type === 'text' && (
         <TextElement 
           element={element} 
-          doubleClickFunc={doubleClickFunc}
-          handleClick={handleClick} 
+          handleClick={handleClick}
           handleBlur={handleBlur}
-          onOpenDeleteModal={() => onOpenDeleteModal(element)}
-          isPreview={isPreview}
+          handleDoubleClick={handleDoubleClick}
+          handleDelete={handleDelete}
           presentation={presentation}
         />
       )}
@@ -131,33 +144,30 @@ function DisplayElement({ element, doubleClickFunc, onUpdateElement, parentWidth
       {element.type === 'image' && (
         <ImageElement 
           element={element} 
-          doubleClickFunc={doubleClickFunc}
           handleClick={handleClick} 
           handleBlur={handleBlur}
-          onOpenDeleteModal={() => onOpenDeleteModal(element)}
-          isPreview={isPreview}
+          handleDoubleClick={handleDoubleClick}
+          handleDelete={handleDelete}
         />
       )}
 
       {element.type === 'video' && (
         <VideoElement 
           element={element}
-          doubleClickFunc={doubleClickFunc}
           handleClick={handleClick} 
           handleBlur={handleBlur}
-          onOpenDeleteModal={() => onOpenDeleteModal(element)}
-          isPreview={isPreview}
+          handleDoubleClick={handleDoubleClick}
+          handleDelete={handleDelete}
         />
       )}
 
       {element.type === 'code' && (
         <CodeElement
           element={element}
-          doubleClickFunc={doubleClickFunc}
           handleClick={handleClick} 
           handleBlur={handleBlur}
-          onOpenDeleteModal={() => onOpenDeleteModal(element)}
-          isPreview={isPreview}
+          handleDoubleClick={handleDoubleClick}
+          handleDelete={handleDelete}
         />
       )}
     </Rnd>
