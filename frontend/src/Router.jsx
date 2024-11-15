@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navigate, useLocation, Routes, Route, useNavigate } from 'react-router-dom';
 
 import Register from './page/Register';
@@ -25,7 +25,7 @@ const Router = () => {
 
   // check if token is present and redirect to dashboard if it is, otherwise
   // redirect to login page
-  React.useEffect(() => {
+  useEffect(() => {
     if (token && ['/login', '/register'].includes(location.pathname)) {
       navigate('/dashboard');
     } if (!token && !(['/login', '/register'].includes(location.pathname))) {

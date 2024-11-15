@@ -1,26 +1,51 @@
-import { useNavigate, useParams, useLocation, Routes, Route } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { 
+  useNavigate, 
+  useParams, 
+  useLocation, 
+  Routes, 
+  Route 
+} from "react-router-dom";
+
+import { useEffect, useState } from "react";
+
 import axios from "axios";
 import BACKEND_PORT from "../../backend.config.json";
-import { Box, Typography, AppBar, Container, Toolbar, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, Divider } from "@mui/material";
-import { ArrowBack, ArrowForward, Delete } from "@mui/icons-material";
+
+import {
+  Box, 
+  Typography, 
+  AppBar, 
+  Container, 
+  Toolbar, 
+  IconButton, 
+  Menu, 
+  MenuItem, 
+  Button, 
+  Tooltip 
+} from "@mui/material";
+
+import { 
+  ArrowBack, 
+  ArrowForward, 
+  Edit as EditIcon, 
+  Menu as MenuIcon, 
+  TextFields as FontIcon, 
+  InsertPhoto as InsertPhotoIcon, 
+  AddBox as AddBoxIcon, 
+  Slideshow as SlideshowIcon, 
+  LowPriority as LowPriorityIcon, 
+  Delete as DeleteIcon, 
+  DeleteForever as DeleteForeverIcon, 
+  ColorLens as ColorLensIcon 
+} from "@mui/icons-material";
+
 import PopupModal from "../component/PopupModal";
 import Slide from "../component/Slide";
-import EditIcon from "@mui/icons-material/Edit";
 import NewElement from "../component/NewElement";
 import SlidesRearrange from "./SlidesRearrange";
-import PresentationContext from "../PresentationContext";
 import FontFamilyModal from "../component/FontFamilyModal";
-import FontIcon from "@mui/icons-material/TextFields";
 import ThemeModal from "../component/ThemeModal";
-import MenuIcon from "@mui/icons-material/Menu";
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import SlideshowIcon from "@mui/icons-material/Slideshow";
-import LowPriorityIcon from "@mui/icons-material/LowPriority";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
+import PresentationContext from "../PresentationContext";
 
 function Presentation({ token }) {
   const { presentationId } = useParams();
@@ -37,7 +62,7 @@ function Presentation({ token }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
+
   // Function to handle editing the title of a presentation
   const editPresentationTitle = (newTitle) => {
     if (presentation) {
@@ -293,20 +318,12 @@ function Presentation({ token }) {
     }
   };
 
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   return (
@@ -326,10 +343,10 @@ function Presentation({ token }) {
                 <Container maxWidth="xl">
                   <Toolbar disableGutters>
                     <Box sx={{
-                    display: { xxs: "flex", md: "none" },
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%"}}>
+                      display: { xxs: "flex", md: "none" },
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%"}}>
                       {/* Mobile menu icon */}  
                       <IconButton
                         size="large"
@@ -451,10 +468,10 @@ function Presentation({ token }) {
                         </Tooltip>
                       </Menu>
                       <Box
-                      sx={{
-                        my: 2,
-                        display: {xxs: "none", sm: "flex", md: "none"}
-                      }}>
+                        sx={{
+                          my: 2,
+                          display: {xxs: "none", sm: "flex", md: "none"}
+                        }}>
                         <NewElement
                           presentation={presentation}
                           setPresentation={setPresentation}
@@ -580,13 +597,13 @@ function Presentation({ token }) {
                       </Tooltip>
                       <Tooltip title="Change the thumbnail of the presentation" placement="bottom">
                         <Button
-                            onClick={() => setIsEditModalOpen(true)}
-                            variant="text"
-                            endIcon={<InsertPhotoIcon/>}
-                            color="secondary"
-                            sx={{ my: 2 }}
-                          >
-                          Update Thumbnail
+                          onClick={() => setIsEditModalOpen(true)}
+                          variant="text"
+                          endIcon={<InsertPhotoIcon/>}
+                          color="secondary"
+                          sx={{ my: 2 }}
+                        >
+                        Update Thumbnail
                         </Button>
                       </Tooltip>
                       <Tooltip title="Delete this slide and move back to the previous slide" placement="bottom">
@@ -673,17 +690,20 @@ function Presentation({ token }) {
                     justifyContent: "center",
                   }}
                 >
-                  <Typography
-                    variant="h5"
-                    align="center"
-                    sx={{
-                      textAlign: "center",
-                    }}
-                    overflow="auto"
-                    whiteSpace="nowrap"
-                  >
-                    {presentation ? presentation.title : "Loading..."}
-                  </Typography>
+                  <Tooltip title={presentation?.title || "Loading..."} arrow>
+                    <Typography
+                      variant="h5"
+                      align="center"
+                      sx={{
+                        textAlign: "center",
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {presentation ? presentation.title : "Loading..."}
+                    </Typography>
+                  </Tooltip>
                   <Tooltip title="Edit the title of the presentation." placement="right">
                     <IconButton
                       key={"edit-title"}
@@ -803,6 +823,4 @@ function Presentation({ token }) {
 }
 
 export default Presentation;
-
-
 
