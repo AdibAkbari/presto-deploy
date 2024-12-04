@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Typography, Card, CardContent, Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import BACKEND_PORT from '../../backend.config.json';
 import Grid from '@mui/material/Grid2';
 import PopupModal from '../component/PopupModal';
 import CreateIcon from '@mui/icons-material/Create';
@@ -15,7 +16,7 @@ const Dashboard = ({ token }) => {
     if (token) {
       axios
         .get(
-          `https://cgi.cse.unsw.edu.au/~cs6080/presto/store`, 
+          `http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, 
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then(response => {
@@ -60,7 +61,7 @@ const Dashboard = ({ token }) => {
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
     axios
-      .put(`https://cgi.cse.unsw.edu.au/~cs6080/presto/store`, { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
+      .put(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
       .then(() => console.log("Presentations saved successfully"))
       .catch(error => console.error("Error saving presentations:", error));
   };
