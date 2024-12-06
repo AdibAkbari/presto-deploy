@@ -9,7 +9,7 @@ const Logout = ({token, setToken}) => {
   
   const logout = () => {
     console.log("logout");
-    axios.post(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/admin/auth/logout`, {},
+    axios.post('https://z5488768-presto-deploy-wfti.vercel.app/admin/auth/logout', {},
       {
         headers: { Authorization: `Bearer ${token}` }
       })
