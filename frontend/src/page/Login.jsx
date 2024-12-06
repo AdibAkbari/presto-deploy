@@ -18,7 +18,7 @@ const Login = ({handleSuccess}) => {
       setIsErrorModalOpen(true);
       return;
     }
-    axios.post(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/admin/auth/login`, {
+    axios.post('https://z5488768-presto-deploy-wfti.vercel.app/admin/auth/login', {
       email: email,
       password: password
     })
