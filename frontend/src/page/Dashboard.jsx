@@ -16,7 +16,7 @@ const Dashboard = ({ token }) => {
     if (token) {
       axios
         .get(
-          `http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, 
+          `https://z5488768-presto-deploy-wfti.vercel.app/store`, 
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then(response => {
@@ -61,7 +61,7 @@ const Dashboard = ({ token }) => {
   // Function to save presentations to the backend
   const savePresentationsToStore = (updatedData) => {
     axios
-      .put(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
+      .put('https://z5488768-presto-deploy-wfti.vercel.app/store', { store: updatedData }, { headers: { Authorization: `Bearer ${token}` } })
       .then(() => console.log("Presentations saved successfully"))
       .catch(error => console.error("Error saving presentations:", error));
   };
