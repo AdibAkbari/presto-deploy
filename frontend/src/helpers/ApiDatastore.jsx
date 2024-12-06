@@ -1,7 +1,7 @@
 import axios from 'axios';
 import BACKEND_PORT from '../../backend.config.json';
 
-const API_URL = `http://localhost:${BACKEND_PORT.BACKEND_PORT}`;
+const API_URL = 'https://z5488768-presto-deploy-wfti.vercel.app';
 
 export const getStore = (token) => {
   return axios.get(`${API_URL}/store`, {
