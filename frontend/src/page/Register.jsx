@@ -19,7 +19,7 @@ const Register = ({handleSuccess}) => {
       setIsErrorModalOpen(true);
       return;
     }
-    axios.post(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/admin/auth/register`, {
+    axios.post('https://z5488768-presto-deploy-wfti.vercel.app/admin/auth/register', {
       email: email,
       password: password,
       name: name,
