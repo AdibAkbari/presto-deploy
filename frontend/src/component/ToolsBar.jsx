@@ -301,7 +301,7 @@ const ToolsBar = ({
             </Tooltip>
             <Tooltip title="Change the thumbnail of the presentation" placement="bottom">
               <Button
-                onClick={() => setIsEditModalOpen(true)}
+                onClick={() => setIsUpdateThumbnailOpen(true)}
                 variant="text"
                 endIcon={<InsertPhotoIcon/>}
                 color="secondary"
